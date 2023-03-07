@@ -1,16 +1,5 @@
 # software_design
 
-A new Flutter project.
+This is what it should look like:
+![image](https://user-images.githubusercontent.com/60558136/223490754-df38fde8-c57c-457c-9119-6476e336733b.png)
 
-## Getting Started
-
-This project is a starting point for a Flutter application.
-
-A few resources to get you started if this is your first Flutter project:
-
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
-
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
