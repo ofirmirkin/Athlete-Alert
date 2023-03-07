@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "132409283837",
+    "firebase_url": "https://sportsmeet-softdesinganalysis-default-rtdb.europe-west1.firebasedatabase.app",
+    "project_id": "sportsmeet-softdesinganalysis",
+    "storage_bucket": "sportsmeet-softdesinganalysis.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:132409283837:android:4b2ca5ca913b5f7da05a94",
+        "android_client_info": {
+          "package_name": "com.example.software_design"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "132409283837-u8blm1d4nuosp1nhdn5mlbht608e42e8.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDR0EbT0Nd0WFRAxJFr1vVc4BRUtWNLpHg"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "132409283837-u8blm1d4nuosp1nhdn5mlbht608e42e8.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "132409283837-kjg1djod5ajl88ashggocsvvip6g0t8s.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.softwareDesign"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

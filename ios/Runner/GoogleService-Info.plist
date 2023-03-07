@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>CLIENT_ID</key>
+	<string>132409283837-kjg1djod5ajl88ashggocsvvip6g0t8s.apps.googleusercontent.com</string>
+	<key>REVERSED_CLIENT_ID</key>
+	<string>com.googleusercontent.apps.132409283837-kjg1djod5ajl88ashggocsvvip6g0t8s</string>
+	<key>API_KEY</key>
+	<string>AIzaSyBuIN9qIi_oUq0wGyWe08k9xyHYcFRprPc</string>
+	<key>GCM_SENDER_ID</key>
+	<string>132409283837</string>
+	<key>PLIST_VERSION</key>
+	<string>1</string>
+	<key>BUNDLE_ID</key>
+	<string>com.example.softwareDesign</string>
+	<key>PROJECT_ID</key>
+	<string>sportsmeet-softdesinganalysis</string>
+	<key>STORAGE_BUCKET</key>
+	<string>sportsmeet-softdesinganalysis.appspot.com</string>
+	<key>IS_ADS_ENABLED</key>
+	<false></false>
+	<key>IS_ANALYTICS_ENABLED</key>
+	<false></false>
+	<key>IS_APPINVITE_ENABLED</key>
+	<true></true>
+	<key>IS_GCM_ENABLED</key>
+	<true></true>
+	<key>IS_SIGNIN_ENABLED</key>
+	<true></true>
+	<key>GOOGLE_APP_ID</key>
+	<string>1:132409283837:ios:8fefeeb93fc2fb2ca05a94</string>
+	<key>DATABASE_URL</key>
+	<string>https://sportsmeet-softdesinganalysis-default-rtdb.europe-west1.firebasedatabase.app</string>
+</dict>
+</plist>
