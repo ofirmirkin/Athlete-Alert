@@ -1,68 +1,174 @@
+import 'dart:async';
 import 'package:flutter/material.dart';
+// ignore: depend_on_referenced_packages
+import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:never_surf_alone/location_services.dart';
+import 'timer.dart';
+import 'package:geolocator/geolocator.dart';
 
-void main() {
-  runApp(const MyApp());
-}
+void main() => runApp(MyApp());
 
 class MyApp extends StatelessWidget {
-  const MyApp({super.key});
-
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Flutter Demo',
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
-      ),
-      home: const MyHomePage(title: 'Flutter Demo Home Page'),
+      title: 'Flutter Google Maps Demo',
+      home: MapSample(),
     );
   }
 }
 
-class MyHomePage extends StatefulWidget {
-  const MyHomePage({super.key, required this.title});
-
-  final String title;
-
+class MapSample extends StatefulWidget {
   @override
-  State<MyHomePage> createState() => _MyHomePageState();
+  State<MapSample> createState() => MapSampleState();
 }
 
-class _MyHomePageState extends State<MyHomePage> {
-  int _counter = 0;
+class MapSampleState extends State<MapSample> {
+  // Completer<GoogleMapController> _controller = Completer();
+  TextEditingController _searchController = TextEditingController();
 
-  void _incrementCounter() {
+  Set<Marker> _markers = Set<Marker>();
+
+  // static final CameraPosition _kGooglePlex = CameraPosition(
+  //   target: LatLng(53.343667, -6.2544447),
+  //   zoom: 14.4746,
+  // );
+  late GoogleMapController _controller;
+
+  // Initial position of the map
+  static const initialCameraPosition = CameraPosition(
+    target: LatLng(53.343973854161774, -6.254634551749251),
+    zoom: 16,
+  );
+
+  @override
+  void initState() {
+    super.initState();
+
+    _setMarker(LatLng(53.343667, -6.2544447));
+  }
+
+  void _setMarker(LatLng point) {
     setState(() {
-      _counter++;
+      _markers.add(
+        Marker(
+            markerId: MarkerId('marker'),
+            position: point,
+            consumeTapEvents: true,
+            onTap: () {
+              _navigateToNextScreen(context);
+            }),
+      );
     });
+  }
+
+  void _navigateToNextScreen(BuildContext context) {
+    Navigator.of(context)
+        .push(MaterialPageRoute(builder: (context) => CountdownPage()));
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text(widget.title),
-      ),
-      body: Center(
-
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            const Text(
-              'You have pushed the button this many times:',
+      appBar: AppBar(title: Text('Never Surf Alone')),
+      body: Column(
+        children: [
+          Row(
+            children: [
+              Expanded(
+                  child: TextFormField(
+                controller: _searchController,
+                textCapitalization: TextCapitalization.words,
+                decoration: InputDecoration(hintText: 'Search for Beaches'),
+                onChanged: (value) {
+                  print(
+                      value); //Debugging console tool to help see whats going on..
+                },
+              )),
+              IconButton(
+                onPressed: () async {
+                  var place =
+                      await LocationService().getPlace(_searchController.text);
+                  _goToPlace(place);
+                },
+                icon: Icon(Icons.search),
+              ),
+            ],
+          ),
+          Expanded(
+            child: GoogleMap(
+              mapType: MapType.normal,
+              markers: _markers,
+              myLocationEnabled: true,
+              myLocationButtonEnabled: true,
+              initialCameraPosition: initialCameraPosition,
+              onMapCreated: (GoogleMapController controller) {
+                _controller = controller;
+              },
+              // onMapCreated: (GoogleMapController controller) {
+              //   _controller.complete(controller);
+              // },
+              onTap: (point) {
+                setState(() {
+                  _setMarker(
+                      point); //could be an issue but should be dynamic enough...
+                });
+              },
             ),
-            Text(
-              '$_counter',
-              style: Theme.of(context).textTheme.headlineMedium,
-            ),
-          ],
-        ),
+          ),
+        ],
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: _incrementCounter,
-        tooltip: 'Increment',
-        child: const Icon(Icons.add),
+      floatingActionButton: FloatingActionButton.extended(
+        onPressed: () async {
+          Position position = await _determinePosition();
+        },
+        label: const Text('Get location?'),
+        icon: const Icon(Icons.location_pin),
       ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
     );
   }
+
+  Future<Position> _determinePosition() async {
+    bool serviceEnabled;
+    LocationPermission permission;
+
+    serviceEnabled = await Geolocator.isLocationServiceEnabled();
+    if (!serviceEnabled) {
+      return Future.error('Location services are disabled.');
+    }
+
+    permission = await Geolocator.checkPermission();
+    if (permission == LocationPermission.denied) {
+      permission = await Geolocator.requestPermission();
+      if (permission == LocationPermission.denied) {
+        return Future.error('Location permissions are denied');
+      }
+    }
+
+    if (permission == LocationPermission.deniedForever) {
+      return Future.error(
+          'Location permissions are permanently denied, we cannot request permissions.');
+    }
+
+    return await Geolocator.getCurrentPosition();
+  }
+
+  Future<void> _goToPlace(Map<String, dynamic> place) async {
+    final double lat = place['geometry']['location']['lat'];
+    final double lng = place['geometry']['location']['lng'];
+
+    final GoogleMapController controller = await _controller;
+    controller.animateCamera(CameraUpdate.newCameraPosition(
+      CameraPosition(target: LatLng(lat, lng), zoom: 12),
+    ));
+
+    _setMarker(LatLng(lat,
+        lng)); //not Ideal outcome but an when pressed function can be added to do same result...
+  }
+
+  // Future<void> _goToTheLake() async {
+  //   final GoogleMapController controller = await _controller.future;
+  //   controller.animateCamera(CameraUpdate.newCameraPosition(_kLake));
+  // }
 }
