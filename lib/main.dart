@@ -5,6 +5,7 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:never_surf_alone/location_services.dart';
 import 'timer.dart';
 import 'package:geolocator/geolocator.dart';
+import 'marker_manager.dart';
 
 void main() => runApp(MyApp());
 
@@ -27,12 +28,8 @@ class MapSampleState extends State<MapSample> {
   // Completer<GoogleMapController> _controller = Completer();
   TextEditingController _searchController = TextEditingController();
 
-  Set<Marker> _markers = Set<Marker>();
+  MarkerManager markerManager = MarkerManager();
 
-  // static final CameraPosition _kGooglePlex = CameraPosition(
-  //   target: LatLng(53.343667, -6.2544447),
-  //   zoom: 14.4746,
-  // );
   late GoogleMapController _controller;
 
   // Initial position of the map
@@ -45,40 +42,13 @@ class MapSampleState extends State<MapSample> {
   void initState() {
     super.initState();
 
-    _setMarker(LatLng(53.343667, -6.2544447));
+    markerManager.addUserMarker(const LatLng(53.343667, -6.2544447), 'marker',
+        _navigateToNextScreen, context);
     // Temporary example marker
-    _addMarkerToSet(
+    markerManager.addMarker(
         const LatLng(53.34327727028038, -6.250793787367582), 'Marker1');
-    _addMarkerToSet(
+    markerManager.addMarker(
         const LatLng(53.34647802009742, -6.256285970820735), 'Marker2');
-  }
-
-  void _addMarkerToSet(LatLng point, String markerId) {
-    setState(() {
-      _markers.add(
-        Marker(
-          markerId: MarkerId(markerId),
-          position: point,
-          icon: BitmapDescriptor.defaultMarkerWithHue(
-            BitmapDescriptor.hueViolet,
-          ),
-        ),
-      );
-    });
-  }
-
-  void _setMarker(LatLng point) {
-    setState(() {
-      _markers.add(
-        Marker(
-            markerId: MarkerId('marker'),
-            position: point,
-            consumeTapEvents: true,
-            onTap: () {
-              _navigateToNextScreen(context);
-            }),
-      );
-    });
   }
 
   void _navigateToNextScreen(BuildContext context) {
@@ -92,33 +62,12 @@ class MapSampleState extends State<MapSample> {
       appBar: AppBar(title: Text('Never Surf Alone')),
       body: Column(
         children: [
-          // Row(
-          //   children: [
-          //     Expanded(
-          //         child: TextFormField(
-          //       controller: _searchController,
-          //       textCapitalization: TextCapitalization.words,
-          //       decoration: InputDecoration(hintText: 'Search for Beaches'),
-          //       onChanged: (value) {
-          //         print(
-          //             value); //Debugging console tool to help see whats going on..
-          //       },
-          //     )),
-          //     IconButton(
-          //       onPressed: () async {
-          //         var place =
-          //             await LocationService().getPlace(_searchController.text);
-          //         _goToPlace(place);
-          //       },
-          //       icon: Icon(Icons.search),
-          //     ),
-          //   ],
-          // ),
           Expanded(
             child: GoogleMap(
               // mapType: MapType.normal,
               mapType: MapType.satellite,
-              markers: _markers,
+              // markers: _markers,
+              markers: markerManager.markers,
               myLocationEnabled: true,
               myLocationButtonEnabled: true,
 
@@ -131,8 +80,8 @@ class MapSampleState extends State<MapSample> {
               // },
               onTap: (point) {
                 setState(() {
-                  _setMarker(
-                      point); //could be an issue but should be dynamic enough...
+                  markerManager.addUserMarker(
+                      point, 'marker', _navigateToNextScreen, context);
                 });
               },
             ),
@@ -184,8 +133,8 @@ class MapSampleState extends State<MapSample> {
       CameraPosition(target: LatLng(lat, lng), zoom: 12),
     ));
 
-    _setMarker(LatLng(lat,
-        lng)); //not Ideal outcome but an when pressed function can be added to do same result...
+    // _setUserMarker(LatLng(lat,
+    //     lng)); //not Ideal outcome but an when pressed function can be added to do same result...
   }
 
   // Future<void> _goToTheLake() async {
