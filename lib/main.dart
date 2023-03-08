@@ -26,7 +26,7 @@ class MapSample extends StatefulWidget {
 
 class MapSampleState extends State<MapSample> {
   // Completer<GoogleMapController> _controller = Completer();
-  TextEditingController _searchController = TextEditingController();
+  // TextEditingController _searchController = TextEditingController();
 
   MarkerManager markerManager = MarkerManager();
 
@@ -59,7 +59,7 @@ class MapSampleState extends State<MapSample> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text('Never Surf Alone')),
+      appBar: AppBar(title: const Text('Never Surf Alone')),
       body: Column(
         children: [
           Expanded(
