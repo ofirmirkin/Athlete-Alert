@@ -46,6 +46,25 @@ class MapSampleState extends State<MapSample> {
     super.initState();
 
     _setMarker(LatLng(53.343667, -6.2544447));
+    // Temporary example marker
+    _addMarkerToSet(
+        const LatLng(53.34327727028038, -6.250793787367582), 'Marker1');
+    _addMarkerToSet(
+        const LatLng(53.34647802009742, -6.256285970820735), 'Marker2');
+  }
+
+  void _addMarkerToSet(LatLng point, String markerId) {
+    setState(() {
+      _markers.add(
+        Marker(
+          markerId: MarkerId(markerId),
+          position: point,
+          icon: BitmapDescriptor.defaultMarkerWithHue(
+            BitmapDescriptor.hueViolet,
+          ),
+        ),
+      );
+    });
   }
 
   void _setMarker(LatLng point) {
@@ -73,34 +92,36 @@ class MapSampleState extends State<MapSample> {
       appBar: AppBar(title: Text('Never Surf Alone')),
       body: Column(
         children: [
-          Row(
-            children: [
-              Expanded(
-                  child: TextFormField(
-                controller: _searchController,
-                textCapitalization: TextCapitalization.words,
-                decoration: InputDecoration(hintText: 'Search for Beaches'),
-                onChanged: (value) {
-                  print(
-                      value); //Debugging console tool to help see whats going on..
-                },
-              )),
-              IconButton(
-                onPressed: () async {
-                  var place =
-                      await LocationService().getPlace(_searchController.text);
-                  _goToPlace(place);
-                },
-                icon: Icon(Icons.search),
-              ),
-            ],
-          ),
+          // Row(
+          //   children: [
+          //     Expanded(
+          //         child: TextFormField(
+          //       controller: _searchController,
+          //       textCapitalization: TextCapitalization.words,
+          //       decoration: InputDecoration(hintText: 'Search for Beaches'),
+          //       onChanged: (value) {
+          //         print(
+          //             value); //Debugging console tool to help see whats going on..
+          //       },
+          //     )),
+          //     IconButton(
+          //       onPressed: () async {
+          //         var place =
+          //             await LocationService().getPlace(_searchController.text);
+          //         _goToPlace(place);
+          //       },
+          //       icon: Icon(Icons.search),
+          //     ),
+          //   ],
+          // ),
           Expanded(
             child: GoogleMap(
-              mapType: MapType.normal,
+              // mapType: MapType.normal,
+              mapType: MapType.satellite,
               markers: _markers,
               myLocationEnabled: true,
               myLocationButtonEnabled: true,
+
               initialCameraPosition: initialCameraPosition,
               onMapCreated: (GoogleMapController controller) {
                 _controller = controller;
