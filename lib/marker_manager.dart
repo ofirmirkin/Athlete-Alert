@@ -3,12 +3,20 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 class MarkerManager {
   late Set<Marker> _markers;
+  int _counter = 0;
 
   MarkerManager() {
     _markers = Set<Marker>();
   }
 
   Set<Marker> get markers => _markers;
+
+  int get counter => _counter;
+
+  void removeAll() {
+    _markers.clear();
+    _counter = 0;
+  }
 
   void addMarker(LatLng point, String markerId) {
     _markers.add(
@@ -20,6 +28,7 @@ class MarkerManager {
         ),
       ),
     );
+    _counter++;
   }
 
   void addUserMarker(

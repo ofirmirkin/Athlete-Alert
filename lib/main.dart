@@ -6,8 +6,20 @@ import 'package:never_surf_alone/location_services.dart';
 import 'timer.dart';
 import 'package:geolocator/geolocator.dart';
 import 'marker_manager.dart';
+import 'firebase_options.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_database/firebase_database.dart';
+import 'firebase_options.dart';
 
-void main() => runApp(MyApp());
+// void main() => runApp(MyApp());
+
+Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
+  runApp(MyApp());
+}
 
 class MyApp extends StatelessWidget {
   @override
@@ -45,10 +57,10 @@ class MapSampleState extends State<MapSample> {
     markerManager.addUserMarker(const LatLng(53.343667, -6.2544447), 'marker',
         _navigateToNextScreen, context);
     // Temporary example marker
-    markerManager.addMarker(
-        const LatLng(53.34327727028038, -6.250793787367582), 'Marker1');
-    markerManager.addMarker(
-        const LatLng(53.34647802009742, -6.256285970820735), 'Marker2');
+    // markerManager.addMarker(const LatLng(53.34327727028038, -6.250793787367582),
+    //     'Marker${markerManager.counter}');
+    // markerManager.addMarker(const LatLng(53.34647802009742, -6.256285970820735),
+    //     'Marker${markerManager.counter}');
   }
 
   void _navigateToNextScreen(BuildContext context) {
@@ -75,14 +87,19 @@ class MapSampleState extends State<MapSample> {
               onMapCreated: (GoogleMapController controller) {
                 _controller = controller;
               },
-              // onMapCreated: (GoogleMapController controller) {
-              //   _controller.complete(controller);
-              // },
               onTap: (point) {
                 setState(() {
                   markerManager.addUserMarker(
                       point, 'marker', _navigateToNextScreen, context);
                 });
+                _sendData(point, 'redPin');
+              },
+              onLongPress: (point) {
+                setState(() {
+                  markerManager.addMarker(
+                      point, "marker${markerManager.counter}");
+                });
+                _sendData(point, 'marker${markerManager.counter}');
               },
             ),
           ),
@@ -90,6 +107,10 @@ class MapSampleState extends State<MapSample> {
       ),
       floatingActionButton: FloatingActionButton.extended(
         onPressed: () async {
+          _deleteData();
+          setState(() {
+            markerManager.removeAll();
+          });
           Position position = await _determinePosition();
         },
         label: const Text('Get location?'),
@@ -141,4 +162,30 @@ class MapSampleState extends State<MapSample> {
   //   final GoogleMapController controller = await _controller.future;
   //   controller.animateCamera(CameraUpdate.newCameraPosition(_kLake));
   // }
+
+  // ******* DB *********
+  //We are storing the first pin with id = 1,
+  DatabaseReference ref = FirebaseDatabase.instance.ref("pins/0");
+
+  Future<void> _sendData(LatLng point, String name) async {
+    // setState(() async {
+    await ref.set({
+      "name": name,
+      "lat": point.latitude,
+      "long": point.longitude,
+      "users": {"1": true}
+      // });
+    });
+    ref = FirebaseDatabase.instance.ref("pins/${markerManager.counter}");
+  }
+
+  // Function to delete data from the database
+  Future<void> _deleteData() async {
+    for (var i = 0; i < 50; i++) {
+      // ref = FirebaseDatabase.instance.ref("pins/$i");
+      // await ref.remove();
+      await FirebaseDatabase.instance.ref("pins/$i").remove();
+    }
+    ref = FirebaseDatabase.instance.ref("pins/0");
+  }
 }
