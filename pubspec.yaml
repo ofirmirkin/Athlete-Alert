@@ -26,7 +26,7 @@ dev_dependencies:
   location: ^4.4.0
   firebase_core: ^2.7.1 
   firebase_database: ^10.0.15
-  #firebase_auth: ^3.3.14
+ 
 flutter:
 
   uses-material-design: true
