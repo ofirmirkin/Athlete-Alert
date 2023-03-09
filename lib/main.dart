@@ -2,6 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:software_design/login_page.dart';
 
 void main() {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp();
+
   runApp(const MainApp());
 }
 

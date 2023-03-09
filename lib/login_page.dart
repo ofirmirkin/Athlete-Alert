@@ -18,7 +18,11 @@ class _LoginPageState extends State<LoginPage> {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              SizedBox(height: 25),
+              Icon(
+                Icons.add_location_alt_sharp,
+                size: 90,
+              ),
+              SizedBox(height: 100),
 //TODO Touch up spacing and colour theme for phone version
               //Welcome
               Text(
@@ -35,11 +39,10 @@ class _LoginPageState extends State<LoginPage> {
               Text(
                 'Great to see your alive and well',
                 style: TextStyle(
-                  fontSize: 26,
-                ),
+                  fontSize: 20
               ),
               //Signup Button Goes to @KUNAL
-              SizedBox(height: 50),
+              SizedBox(height: 25),
 
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 25.0),
