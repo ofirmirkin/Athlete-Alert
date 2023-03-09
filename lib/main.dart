@@ -53,7 +53,7 @@ class MapSampleState extends State<MapSample> {
   @override
   void initState() {
     super.initState();
-
+    _dataOnChange2();
     markerManager.addUserMarker(const LatLng(53.343667, -6.2544447), 'marker',
         _navigateToNextScreen, context);
     // Temporary example marker
@@ -70,6 +70,7 @@ class MapSampleState extends State<MapSample> {
 
   @override
   Widget build(BuildContext context) {
+    _dataOnChange2();
     return Scaffold(
       appBar: AppBar(title: const Text('Never Surf Alone')),
       body: Column(
@@ -103,20 +104,40 @@ class MapSampleState extends State<MapSample> {
               },
             ),
           ),
+          Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [
+            IconButton(
+                onPressed: (() {
+                  _determinePosition();
+                }),
+                icon: const Icon(Icons.location_pin)),
+            IconButton(
+                onPressed: () async {
+                  _deleteData();
+                  setState(() {
+                    markerManager.removeAll();
+                  });
+                },
+                icon: const Icon(Icons.refresh)),
+            IconButton(
+                onPressed: () {
+                  _readData();
+                },
+                icon: const Icon(Icons.arrow_downward))
+          ]),
         ],
       ),
-      floatingActionButton: FloatingActionButton.extended(
-        onPressed: () async {
-          _deleteData();
-          setState(() {
-            markerManager.removeAll();
-          });
-          Position position = await _determinePosition();
-        },
-        label: const Text('Get location?'),
-        icon: const Icon(Icons.location_pin),
-      ),
-      floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
+      //   floatingActionButton: FloatingActionButton.extended(
+      //     onPressed: () async {
+      //       _deleteData();
+      //       setState(() {
+      //         markerManager.removeAll();
+      //       });
+      //       Position position = await _determinePosition();
+      //     },
+      //     label: const Text('Get location?'),
+      //     icon: const Icon(Icons.location_pin),
+      //   ),
+      //   floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
     );
   }
 
@@ -177,6 +198,61 @@ class MapSampleState extends State<MapSample> {
       // });
     });
     ref = FirebaseDatabase.instance.ref("pins/${markerManager.counter}");
+  }
+
+  // Function to read data from the database
+  Future<void> _dataOnChange() async {
+    DatabaseReference ref = FirebaseDatabase.instance.ref("pins/");
+
+// Get the Stream
+    Stream<DatabaseEvent> stream = ref.onValue;
+
+// Subscribe to the stream!
+    stream.listen((DatabaseEvent event) {
+      print("*************************************");
+      print('Event Type: ${event.type}'); // DatabaseEventType.value;
+      print('Snapshot: ${event.snapshot}'); // DataSnapshot
+    });
+    // stream.first
+  }
+
+  Future<void> _dataOnChange2() async {
+    DatabaseReference ref = FirebaseDatabase.instance.ref("pins/");
+    ref.onChildAdded.listen((event) {
+      print("*************************************");
+      print(event.snapshot.value);
+      if (event.snapshot.value == null) {
+        return;
+      }
+      Map data = event.snapshot.value as Map;
+      setState(() {
+        markerManager.addMarker(
+            LatLng(data['lat'], data['long']), data['name']);
+      });
+    });
+  }
+
+  void _readData() async {
+    DatabaseEvent event = await ref.once();
+    // Print the data of the snapshot
+    print("*************************************");
+    Map data = event.snapshot.value as Map;
+    markerManager.addMarker(LatLng(data['lat'], data['long']), data['name']);
+    print(event.snapshot.value);
+    if (event.snapshot.value == null) {
+      return;
+    }
+    // event.snapshot.value.forEach((key, value) {
+    //   // print("*************************************");
+    //   // print(key);
+    //   // print(value);
+    //   // print(value['lat']);
+    //   // print(value['long']);
+    //   // print(value['name']);
+    //   // print(value['users']);
+    //   markerManager.addMarker(
+    //       LatLng(value['lat'], value['long']), value['name']);
+    // });
   }
 
   // Function to delete data from the database
