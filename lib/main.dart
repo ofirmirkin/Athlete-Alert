@@ -113,9 +113,9 @@ class MapSampleState extends State<MapSample> {
             IconButton(
                 onPressed: () async {
                   _deleteData();
-                  setState(() {
-                    markerManager.removeAll();
-                  });
+                  // setState(() {
+                  //   markerManager.removeAll();
+                  // });
                 },
                 icon: const Icon(Icons.refresh)),
             IconButton(
@@ -126,18 +126,6 @@ class MapSampleState extends State<MapSample> {
           ]),
         ],
       ),
-      //   floatingActionButton: FloatingActionButton.extended(
-      //     onPressed: () async {
-      //       _deleteData();
-      //       setState(() {
-      //         markerManager.removeAll();
-      //       });
-      //       Position position = await _determinePosition();
-      //     },
-      //     label: const Text('Get location?'),
-      //     icon: const Icon(Icons.location_pin),
-      //   ),
-      //   floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
     );
   }
 
@@ -179,11 +167,6 @@ class MapSampleState extends State<MapSample> {
     //     lng)); //not Ideal outcome but an when pressed function can be added to do same result...
   }
 
-  // Future<void> _goToTheLake() async {
-  //   final GoogleMapController controller = await _controller.future;
-  //   controller.animateCamera(CameraUpdate.newCameraPosition(_kLake));
-  // }
-
   // ******* DB *********
   //We are storing the first pin with id = 1,
   DatabaseReference ref = FirebaseDatabase.instance.ref("pins/0");
@@ -203,8 +186,6 @@ class MapSampleState extends State<MapSample> {
   Future<void> _dataOnChange() async {
     DatabaseReference ref = FirebaseDatabase.instance.ref("pins/");
     ref.onChildAdded.listen((event) {
-      // print("*************************************");
-      // print(event.snapshot.value);
       if (event.snapshot.value == null) {
         return;
       }
@@ -215,32 +196,28 @@ class MapSampleState extends State<MapSample> {
       });
     });
     ref.onChildRemoved.listen((event) {
-      setState(() {
-        _deleteData();
-      });
+      // setState(() {
+      _deleteData();
+      // });
     });
   }
 
   void _readData() async {
     DatabaseEvent event = await ref.once();
     // Print the data of the snapshot
-    print("*************************************");
     if (event.snapshot.value == null) {
       return;
     }
     Map data = event.snapshot.value as Map;
     markerManager.addMarker(LatLng(data['lat'], data['long']), data['name']);
-    print(event.snapshot.value);
   }
 
   // Function to delete data from the database
   Future<void> _deleteData() async {
-    // for (var i = 0; i < 50; i++) {
-    //   // ref = FirebaseDatabase.instance.ref("pins/$i");
-    //   // await ref.remove();
-    //   await FirebaseDatabase.instance.ref("pins/").remove();
-    // }
     await FirebaseDatabase.instance.ref("pins/").remove();
     ref = FirebaseDatabase.instance.ref("pins/0");
+    setState(() {
+      markerManager.removeAll();
+    });
   }
 }
