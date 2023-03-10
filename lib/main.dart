@@ -67,7 +67,7 @@ class MapSampleState extends State<MapSample> {
   Widget build(BuildContext context) {
     _dataOnChange();
     return Scaffold(
-      appBar: AppBar(title: const Text('Never Surf Alone')),
+      appBar: AppBar(title: const Center(child: Text('Never Surf Alone'))),
       body: Column(
         children: [
           Expanded(
@@ -81,19 +81,23 @@ class MapSampleState extends State<MapSample> {
               onMapCreated: (GoogleMapController controller) {
                 _controller = controller;
               },
+              // onLongPress: (point) {
+              //   setState(() {
+              //     markerManager.addUserMarker(
+              //         point, 'marker', _navigateToNextScreen, context);
+              //   });
+              //   _sendData(point, 'redPin');
+              // },
               onTap: (point) {
-                setState(() {
-                  markerManager.addUserMarker(
-                      point, 'marker', _navigateToNextScreen, context);
-                });
-                _sendData(point, 'redPin');
-              },
-              onLongPress: (point) {
+                print("---------In On Tap----------");
+                print(markerManager.counter);
                 setState(() {
                   markerManager.addMarker(
                       point, "marker${markerManager.counter}");
                 });
                 _sendData(point, 'marker${markerManager.counter}');
+                print("--------After send data -----------");
+                print(markerManager.counter);
               },
             ),
           ),
@@ -110,7 +114,7 @@ class MapSampleState extends State<MapSample> {
                 icon: const Icon(Icons.refresh)),
             IconButton(
                 onPressed: () {
-                  _readData();
+                  // _readData();
                 },
                 icon: const Icon(Icons.arrow_downward))
           ]),
@@ -163,6 +167,8 @@ class MapSampleState extends State<MapSample> {
 
   Future<void> _sendData(LatLng point, String name) async {
     // setState(() async {
+    print("-------- In send Data -----------");
+    print(markerManager.counter);
     DatabaseReference ref =
         FirebaseDatabase.instance.ref("pins/${markerManager.counter}");
     await ref.set({
@@ -182,7 +188,7 @@ class MapSampleState extends State<MapSample> {
       }
       Map data = event.snapshot.value as Map;
       setState(() {
-        markerManager.addMarker(
+        markerManager.addMarkerFromDB(
             LatLng(data['lat'], data['long']), data['name']);
       });
     });
@@ -202,13 +208,13 @@ class MapSampleState extends State<MapSample> {
     });
   }
 
-  void _readData() async {
-    DatabaseReference ref = FirebaseDatabase.instance.ref("pins/");
-    DatabaseEvent event = await ref.once();
-    if (event.snapshot.value == null) {
-      return;
-    }
-    Map data = event.snapshot.value as Map;
-    markerManager.addMarker(LatLng(data['lat'], data['long']), data['name']);
-  }
+  // void _readData() async {
+  //   DatabaseReference ref = FirebaseDatabase.instance.ref("pins/");
+  //   DatabaseEvent event = await ref.once();
+  //   if (event.snapshot.value == null) {
+  //     return;
+  //   }
+  //   Map data = event.snapshot.value as Map;
+  //   markerManager.addMarker(LatLng(data['lat'], data['long']), data['name']);
+  // }
 }

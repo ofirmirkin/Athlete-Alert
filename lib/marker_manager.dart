@@ -31,6 +31,18 @@ class MarkerManager {
     _counter++;
   }
 
+  void addMarkerFromDB(LatLng point, String markerId) {
+    _markers.add(
+      Marker(
+        markerId: MarkerId(markerId),
+        position: point,
+        icon: BitmapDescriptor.defaultMarkerWithHue(
+          BitmapDescriptor.hueViolet,
+        ),
+      ),
+    );
+  }
+
   void addUserMarker(
       LatLng point, String markerId, Function onTapFunc, BuildContext context) {
     _markers.add(
