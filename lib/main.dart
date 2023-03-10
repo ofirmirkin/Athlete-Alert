@@ -53,7 +53,7 @@ class MapSampleState extends State<MapSample> {
   @override
   void initState() {
     super.initState();
-    _dataOnChange2();
+    _dataOnChange();
     markerManager.addUserMarker(const LatLng(53.343667, -6.2544447), 'marker',
         _navigateToNextScreen, context);
     // Temporary example marker
@@ -70,7 +70,7 @@ class MapSampleState extends State<MapSample> {
 
   @override
   Widget build(BuildContext context) {
-    _dataOnChange2();
+    _dataOnChange();
     return Scaffold(
       appBar: AppBar(title: const Text('Never Surf Alone')),
       body: Column(
@@ -200,27 +200,11 @@ class MapSampleState extends State<MapSample> {
     ref = FirebaseDatabase.instance.ref("pins/${markerManager.counter}");
   }
 
-  // Function to read data from the database
   Future<void> _dataOnChange() async {
     DatabaseReference ref = FirebaseDatabase.instance.ref("pins/");
-
-// Get the Stream
-    Stream<DatabaseEvent> stream = ref.onValue;
-
-// Subscribe to the stream!
-    stream.listen((DatabaseEvent event) {
-      print("*************************************");
-      print('Event Type: ${event.type}'); // DatabaseEventType.value;
-      print('Snapshot: ${event.snapshot}'); // DataSnapshot
-    });
-    // stream.first
-  }
-
-  Future<void> _dataOnChange2() async {
-    DatabaseReference ref = FirebaseDatabase.instance.ref("pins/");
     ref.onChildAdded.listen((event) {
-      print("*************************************");
-      print(event.snapshot.value);
+      // print("*************************************");
+      // print(event.snapshot.value);
       if (event.snapshot.value == null) {
         return;
       }
@@ -251,11 +235,12 @@ class MapSampleState extends State<MapSample> {
 
   // Function to delete data from the database
   Future<void> _deleteData() async {
-    for (var i = 0; i < 50; i++) {
-      // ref = FirebaseDatabase.instance.ref("pins/$i");
-      // await ref.remove();
-      await FirebaseDatabase.instance.ref("pins/$i").remove();
-    }
+    // for (var i = 0; i < 50; i++) {
+    //   // ref = FirebaseDatabase.instance.ref("pins/$i");
+    //   // await ref.remove();
+    //   await FirebaseDatabase.instance.ref("pins/").remove();
+    // }
+    await FirebaseDatabase.instance.ref("pins/").remove();
     ref = FirebaseDatabase.instance.ref("pins/0");
   }
 }
