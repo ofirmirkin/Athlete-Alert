@@ -37,9 +37,6 @@ class MapSample extends StatefulWidget {
 }
 
 class MapSampleState extends State<MapSample> {
-  // Completer<GoogleMapController> _controller = Completer();
-  // TextEditingController _searchController = TextEditingController();
-
   MarkerManager markerManager = MarkerManager();
 
   late GoogleMapController _controller;
@@ -89,15 +86,11 @@ class MapSampleState extends State<MapSample> {
               //   _sendData(point, 'redPin');
               // },
               onTap: (point) {
-                print("---------In On Tap----------");
-                print(markerManager.counter);
                 setState(() {
                   markerManager.addMarker(
                       point, "marker${markerManager.counter}");
                 });
                 _sendData(point, 'marker${markerManager.counter}');
-                print("--------After send data -----------");
-                print(markerManager.counter);
               },
             ),
           ),
@@ -112,16 +105,67 @@ class MapSampleState extends State<MapSample> {
                   _deleteData();
                 },
                 icon: const Icon(Icons.refresh)),
-            IconButton(
-                onPressed: () {
-                  // _readData();
-                },
-                icon: const Icon(Icons.arrow_downward))
+            // IconButton(
+            //     onPressed: () {
+            //       // _readData();
+            //     },
+            //     icon: const Icon(Icons.arrow_downward))
           ]),
         ],
       ),
     );
   }
+
+  // ******* DB *********
+  Future<void> _sendData(LatLng point, String name) async {
+    DatabaseReference ref =
+        FirebaseDatabase.instance.ref("pins/${markerManager.counter}");
+    await ref.set({
+      "name": name,
+      "lat": point.latitude,
+      "long": point.longitude,
+      "users": {"1": true}
+    });
+  }
+
+  Future<void> _dataOnChange() async {
+    DatabaseReference ref = FirebaseDatabase.instance.ref("pins/");
+    ref.onChildAdded.listen((event) {
+      if (event.snapshot.value == null) {
+        return;
+      }
+      Map data = event.snapshot.value as Map;
+      setState(() {
+        markerManager.addMarkerFromDB(
+            LatLng(data['lat'], data['long']), data['name']);
+      });
+    });
+    ref.onChildRemoved.listen((event) {
+      setState(() {
+        markerManager.removeAll();
+      });
+    });
+  }
+
+  // Function to delete data from the database
+  Future<void> _deleteData() async {
+    await FirebaseDatabase.instance.ref("pins/").remove();
+    setState(() {
+      markerManager.removeAll();
+    });
+  }
+
+  // void _readData() async {
+  //   DatabaseReference ref = FirebaseDatabase.instance.ref("pins/");
+  //   DatabaseEvent event = await ref.once();
+  //   if (event.snapshot.value == null) {
+  //     return;
+  //   }
+  //   Map data = event.snapshot.value as Map;
+  //   markerManager.addMarker(LatLng(data['lat'], data['long']), data['name']);
+  // }
+
+// --------------- Ask for location permission -----------------
 
   Future<Position> _determinePosition() async {
     bool serviceEnabled;
@@ -160,61 +204,4 @@ class MapSampleState extends State<MapSample> {
     // _setUserMarker(LatLng(lat,
     //     lng)); //not Ideal outcome but an when pressed function can be added to do same result...
   }
-
-  // ******* DB *********
-  //We are storing the first pin with id = 1,
-  // DatabaseReference ref = FirebaseDatabase.instance.ref("pins/");
-
-  Future<void> _sendData(LatLng point, String name) async {
-    // setState(() async {
-    print("-------- In send Data -----------");
-    print(markerManager.counter);
-    DatabaseReference ref =
-        FirebaseDatabase.instance.ref("pins/${markerManager.counter}");
-    await ref.set({
-      "name": name,
-      "lat": point.latitude,
-      "long": point.longitude,
-      "users": {"1": true}
-      // });
-    });
-  }
-
-  Future<void> _dataOnChange() async {
-    DatabaseReference ref = FirebaseDatabase.instance.ref("pins/");
-    ref.onChildAdded.listen((event) {
-      if (event.snapshot.value == null) {
-        return;
-      }
-      Map data = event.snapshot.value as Map;
-      setState(() {
-        markerManager.addMarkerFromDB(
-            LatLng(data['lat'], data['long']), data['name']);
-      });
-    });
-    ref.onChildRemoved.listen((event) {
-      // _deleteData();
-      setState(() {
-        markerManager.removeAll();
-      });
-    });
-  }
-
-  // Function to delete data from the database
-  Future<void> _deleteData() async {
-    await FirebaseDatabase.instance.ref("pins/").remove();
-    setState(() {
-      markerManager.removeAll();
-    });
-  }
-
-  // void _readData() async {
-  //   DatabaseReference ref = FirebaseDatabase.instance.ref("pins/");
-  //   DatabaseEvent event = await ref.once();
-  //   if (event.snapshot.value == null) {
-  //     return;
-  //   }
-  //   Map data = event.snapshot.value as Map;
-  //   markerManager.addMarker(LatLng(data['lat'], data['long']), data['name']);
-  // }
 }
