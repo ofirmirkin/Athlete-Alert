@@ -231,7 +231,9 @@ class MapSampleState extends State<MapSample> {
       });
     });
     ref.onChildRemoved.listen((event) {
-      _deleteData();
+      setState(() {
+        _deleteData();
+      });
     });
   }
 
@@ -239,23 +241,12 @@ class MapSampleState extends State<MapSample> {
     DatabaseEvent event = await ref.once();
     // Print the data of the snapshot
     print("*************************************");
-    Map data = event.snapshot.value as Map;
-    markerManager.addMarker(LatLng(data['lat'], data['long']), data['name']);
-    print(event.snapshot.value);
     if (event.snapshot.value == null) {
       return;
     }
-    // event.snapshot.value.forEach((key, value) {
-    //   // print("*************************************");
-    //   // print(key);
-    //   // print(value);
-    //   // print(value['lat']);
-    //   // print(value['long']);
-    //   // print(value['name']);
-    //   // print(value['users']);
-    //   markerManager.addMarker(
-    //       LatLng(value['lat'], value['long']), value['name']);
-    // });
+    Map data = event.snapshot.value as Map;
+    markerManager.addMarker(LatLng(data['lat'], data['long']), data['name']);
+    print(event.snapshot.value);
   }
 
   // Function to delete data from the database
