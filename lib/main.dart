@@ -230,6 +230,9 @@ class MapSampleState extends State<MapSample> {
             LatLng(data['lat'], data['long']), data['name']);
       });
     });
+    ref.onChildRemoved.listen((event) {
+      _deleteData();
+    });
   }
 
   void _readData() async {
