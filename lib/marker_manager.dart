@@ -1,5 +1,8 @@
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+
+import 'timer.dart';
 
 class MarkerManager {
   late Set<Marker> _markers;
@@ -13,12 +16,16 @@ class MarkerManager {
 
   int get counter => _counter;
 
+  void setCounter(int counter) {
+    _counter = counter;
+  }
+
   void removeAll() {
     _markers.clear();
     _counter = 0;
   }
 
-  void addMarker(LatLng point, String markerId) {
+  void addMarker(LatLng point, String markerId, BuildContext context) {
     _markers.add(
       Marker(
         markerId: MarkerId(markerId),
@@ -26,12 +33,16 @@ class MarkerManager {
         icon: BitmapDescriptor.defaultMarkerWithHue(
           BitmapDescriptor.hueViolet,
         ),
+          /*onTap: () {
+            Navigator.of(context)
+                .push(MaterialPageRoute(builder: (context) => CountdownPage()));
+          },*/
       ),
     );
     _counter++;
   }
 
-  void addMarkerFromDB(LatLng point, String markerId) {
+  void addMarkerFromDB(LatLng point, String markerId, BuildContext context) {
     _markers.add(
       Marker(
         markerId: MarkerId(markerId),
@@ -39,6 +50,10 @@ class MarkerManager {
         icon: BitmapDescriptor.defaultMarkerWithHue(
           BitmapDescriptor.hueViolet,
         ),
+        onTap: () {
+          Navigator.of(context)
+              .push(MaterialPageRoute(builder: (context) => CountdownPage()));
+        },
       ),
     );
   }
