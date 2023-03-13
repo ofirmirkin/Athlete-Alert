@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:never_surf_alone/main_page.dart';
 import 'map.dart';
 
 // Everything is hard coded at the moment
@@ -46,7 +47,7 @@ class CustomAppBar extends StatelessWidget {
                   backgroundColor: Colors.white,
                   child: FloatingActionButton.small(
                       onPressed: () {
-                        Navigator.pushReplacement(context,
+                        Navigator.push(context,
                             MaterialPageRoute(builder: (context) {
                           return const AccDetailsHome();
                         }));
@@ -58,6 +59,11 @@ class CustomAppBar extends StatelessWidget {
                             'https://marketplace.canva.com/EAFEits4-uw/1/0/1600w/canva-boy-cartoon-gamer-animated-twitch-profile-photo-oEqs2yqaL8s.jpg'),
                         backgroundColor: Colors.cyanAccent,
                       )),
+                ),
+                const Spacer(),
+                const Text(
+                  "Never Surf Alone",
+                  style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 20),
                 ),
                 const Spacer(),
                 // Menu icon in top right corner, change to icon button in future
@@ -95,9 +101,9 @@ class MenuAppBar extends StatelessWidget {
               children: [
                 IconButton(
                     onPressed: () {
-                      Navigator.pushReplacement(context,
+                      Navigator.push(context,
                           MaterialPageRoute(builder: (context) {
-                        return MapSample();
+                        return const MainPage();
                       }));
                     },
                     icon: const Icon(
