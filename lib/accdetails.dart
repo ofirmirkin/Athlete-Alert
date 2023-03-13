@@ -19,7 +19,7 @@ class AccDetailsHome extends StatelessWidget {
         backgroundColor: Colors.cyan,
         flexibleSpace: const MenuAppBar(),
       ),
-      body: const AccSettings(),
+      body: const AccountDetailList(),
     );
   }
 }
@@ -127,67 +127,78 @@ class MenuAppBar extends StatelessWidget {
   }
 }
 
-class AccSettings extends StatelessWidget {
-  const AccSettings({super.key});
-  // Will Need to be stateful when pulling from database
+class AccountDetailList extends StatefulWidget {
+  const AccountDetailList({super.key});
+  @override
+  _AccountDetailListState createState() => _AccountDetailListState();
+}
+
+class _AccountDetailListState extends State<AccountDetailList> {
+  List<String> fieldNames = ['Name', 'Username', 'Birthday', 'Mobile Number', 'Email'];
+  List<String> userData = ['John Doe', 'bigJD_123', '29 February 2030', '189 022 2222', 'JohnDoe@hotmail.ie'];
+
   @override
   Widget build(BuildContext context) {
-    return ListView(
-      children: [
-        Card(
-          child: ListTile(
-            title: const Text("Name"),
-            subtitle: const Text("Brian Barrett"),
-            onTap: () {},
-            trailing: const Icon(Icons.arrow_forward_ios_rounded),
-            tileColor: const Color.fromARGB(255, 158, 245, 238),
-          )
-        ),
-        Card(
-          child: ListTile(
-            title: const Text("Username"),
-            subtitle: const Text("barretbr"),
-            onTap: () {},
-            trailing: const Icon(Icons.arrow_forward_ios_rounded),
-            tileColor: const Color.fromARGB(255, 158, 245, 238),
-          )
-        ),
-        Card(
-          child: ListTile(
-            title: const Text("Birthday"),
-            subtitle: const Text("20 November 2001"),
-            onTap: () {},
-            trailing: const Icon(Icons.arrow_forward_ios_rounded),
-            tileColor: const Color.fromARGB(255, 158, 245, 238),
-          )
-        ),
-        Card(
-          child: ListTile(
-            title: const Text("Mobile Number"),
-            subtitle: const Text("083 696 6969"),
-            onTap: () {},
-            trailing: const Icon(Icons.arrow_forward_ios_rounded),
-            tileColor: const Color.fromARGB(255, 158, 245, 238),
-          )
-        ),
-        Card(
-          child: ListTile(
-            title: const Text("Email"),
-            subtitle: const Text("barretbr@tcd.ie"),
-            onTap: () {},
-            trailing: const Icon(Icons.arrow_forward_ios_rounded),
-            tileColor: const Color.fromARGB(255, 158, 245, 238),
-          )
-        ),
-        Card(
-          child: ListTile(
-            title: const Text("Profile Picture"),
-            onTap: () {},
-            trailing: const Icon(Icons.arrow_forward_ios_rounded),
-            tileColor: const Color.fromARGB(255, 158, 245, 238),
-          )
-        ),
-      ],
+    return ListView.builder(
+      itemCount: userData.length,
+      itemBuilder: (BuildContext context, int index) {
+        return Card(
+            child: ListTile(
+              title: Text(
+                fieldNames[index],
+                style: TextStyle(
+                  color: Colors.grey[700],
+                  fontWeight: FontWeight.bold,
+                ),
+                ),
+              subtitle: Text(userData[index]),
+              onTap: () {
+                _editUserName(context, index);
+              },
+              trailing: const Icon(Icons.arrow_forward_ios_rounded),
+              tileColor: const Color.fromARGB(255, 198, 248, 244),
+            )
+          );
+      },
     );
+  }
+
+  void _editUserName(BuildContext context, int index) async {
+    String newUserName = await showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        TextEditingController controller =
+            TextEditingController(text: userData[index]);
+        return AlertDialog(
+          title: Text('Edit ${fieldNames[index]}'),
+          backgroundColor: const Color.fromARGB(255, 198, 248, 244),
+          content: TextField(
+            controller: controller,
+            decoration: InputDecoration(
+              labelText: 'New ${fieldNames[index]}',
+            ),
+          ),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.pop(context);
+              },
+              child: const Text('Cancel'),
+            ),
+            ElevatedButton(
+              onPressed: () {
+                Navigator.pop(context, controller.text);
+              },
+              child: const Text('Save'),
+            ),
+          ],
+        );
+      },
+    );
+    if (newUserName != null) {
+      setState(() {
+        userData[index] = newUserName;
+      });
+    }
   }
 }
