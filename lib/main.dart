@@ -11,13 +11,20 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'firebase_options.dart';
 
-// void main() => runApp(MyApp());
+import 'package:firebase_core/firebase_core.dart';
+import 'package:never_surf_alone/main_page.dart';
+import 'firebase_options.dart';
+import 'login_page.dart';
+
+
 
 Future<void> main() async {
+
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
+
   runApp(MyApp());
 }
 
@@ -113,6 +120,7 @@ class MapSampleState extends State<MapSample> {
           ]),
         ],
       ),
+
     );
   }
 
