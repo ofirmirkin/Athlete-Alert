@@ -24,9 +24,12 @@ dev_dependencies:
   google_maps_flutter: ^2.2.3
   geolocator: ^9.0.2
   location: ^4.4.0
+
+  http: ^0.13.5 
   firebase_core: ^2.7.1 
   firebase_database: ^10.0.15
- 
+
 flutter:
 
   uses-material-design: true
+
