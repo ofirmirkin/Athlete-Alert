@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 // ignore: depend_on_referenced_packages
 import 'package:google_maps_flutter/google_maps_flutter.dart';
@@ -23,7 +24,7 @@ class MapSample extends StatefulWidget {
 
 class MapSampleState extends State<MapSample> {
   MarkerManager markerManager = MarkerManager();
-
+  final user = FirebaseAuth.instance.currentUser!;
   late GoogleMapController _controller;
 
   // Initial position of the map
@@ -73,7 +74,7 @@ class MapSampleState extends State<MapSample> {
               onTap: (point) {
                 setState(() {
                   markerManager.addMarker(
-                      point, "marker${markerManager.counter}");
+                      point, "marker${markerManager.counter}", context);
                 });
                 _sendData(point, 'marker${markerManager.counter}');
               },
@@ -122,7 +123,7 @@ class MapSampleState extends State<MapSample> {
       Map data = event.snapshot.value as Map;
       setState(() {
         markerManager.addMarkerFromDB(
-            LatLng(data['lat'], data['long']), data['name']);
+            LatLng(data['lat'], data['long']), data['name'], context);
       });
     });
     ref.onChildRemoved.listen((event) {
