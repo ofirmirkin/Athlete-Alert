@@ -7,6 +7,7 @@ import 'timer.dart';
 class MarkerManager {
   late Set<Marker> _markers;
   int _counter = 0;
+  //TODO: store counter in the database and fix the bug that downloaded markers are rewritten
 
   MarkerManager() {
     _markers = Set<Marker>();
