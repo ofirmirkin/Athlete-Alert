@@ -15,6 +15,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:never_surf_alone/main_page.dart';
 import 'firebase_options.dart';
 import 'login_page.dart';
+import 'accdetails.dart';
 
 class MapSample extends StatefulWidget {
   @override
@@ -49,7 +50,11 @@ class MapSampleState extends State<MapSample> {
   Widget build(BuildContext context) {
     _dataOnChange();
     return Scaffold(
-      appBar: AppBar(title: const Center(child: Text('Never Surf Alone'))),
+      appBar: AppBar(
+        automaticallyImplyLeading: false,
+        backgroundColor: Colors.cyan,
+        flexibleSpace: const CustomAppBar(),
+      ),
       body: Column(
         children: [
           Expanded(
