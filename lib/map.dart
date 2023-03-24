@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:math';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 // ignore: depend_on_referenced_packages
@@ -42,10 +43,10 @@ class MapSampleState extends State<MapSample> {
     //     _navigateToNextScreen, context);
   }
 
-  void _navigateToNextScreen(BuildContext context) {
-    Navigator.of(context)
-        .push(MaterialPageRoute(builder: (context) => CountdownPage()));
-  }
+  // void _navigateToNextScreen(BuildContext context) {
+  //   Navigator.of(context)
+  //       .push(MaterialPageRoute(builder: (context) => CountdownPage()));
+  // }
 
   @override
   Widget build(BuildContext context) {

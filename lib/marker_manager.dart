@@ -34,7 +34,7 @@ class MarkerManager {
         icon: BitmapDescriptor.defaultMarkerWithHue(
           BitmapDescriptor.hueViolet,
         ),
-          /*onTap: () {
+        /*onTap: () {
             Navigator.of(context)
                 .push(MaterialPageRoute(builder: (context) => CountdownPage()));
           },*/
@@ -52,8 +52,8 @@ class MarkerManager {
           BitmapDescriptor.hueViolet,
         ),
         onTap: () {
-          Navigator.of(context)
-              .push(MaterialPageRoute(builder: (context) => CountdownPage()));
+          Navigator.of(context).push(
+              MaterialPageRoute(builder: (context) => CountdownPage(point)));
         },
       ),
     );

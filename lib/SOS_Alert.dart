@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:twilio_flutter/twilio_flutter.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 class SOS_Alert extends StatelessWidget {
   final twilioFlutter = TwilioFlutter(
@@ -8,14 +9,15 @@ class SOS_Alert extends StatelessWidget {
     authToken: '5b126bd6cebb44829c7865cf5864eeb6',
     twilioNumber: '+12762779251',
   );
-  int _timerDuration = 0;
-  int _minutesleft = 0;
-  void sendSMS() async {
+
+  void sendSMS(int timerDuration, LatLng location) async {
+    double _lat = location.latitude;
+    double _long = location.longitude;
     await twilioFlutter.sendSMS(
       toNumber: '+353892152983', // emergency phone number
       messageBody: '''Hello, you are listed as an emergency contact for.
        They were let seen at the following location __. 
-       This message is automated as they have not been active on their device for $_timerDuration hours and $_minutesleft minutes.''',
+       This message is automated as they have not been active on their device for $timerDuration seconds. Last seen at coordinates $_lat, $_long ''',
     );
   }
 
@@ -110,4 +112,3 @@ class _TimerScreenState extends State<TimerScreen> {
   // [4] - Text editing controller for user input
   final textController = TextEditingController(text: '');
 }
-
