@@ -53,32 +53,42 @@ class WatchMapState extends State<WatchMap> {
     return Scaffold(
       body: SafeArea(
         child: GoogleMap(
-          // mapType: MapType.normal,
-          mapType: MapType.satellite,
-          markers: markerManager.markers,
-          myLocationEnabled: true,
-          myLocationButtonEnabled: true,
-          initialCameraPosition: initialCameraPosition,
-          onMapCreated: (GoogleMapController controller) {
-            _controller = controller;
-          },
-          // onLongPress: (point) {
-          //   setState(() {
-          //     markerManager.addUserMarker(
-          //         point, 'marker', _navigateToNextScreen, context);
-          //   });
-          //   _sendData(point, 'redPin');
-          // },
-          // onTap: (point) {
-          //   setState(() {
-          //     markerManager.addMarker(
-          //         point, "marker${markerManager.counter}", context);
-          //   });
-          //   _sendData(point, 'marker${markerManager.counter}');
-          // },
+        // mapType: MapType.normal,
+        mapType: MapType.satellite,
+        markers: markerManager.markers,
+        myLocationEnabled: true,
+        myLocationButtonEnabled: true,
+        initialCameraPosition: initialCameraPosition,
+        onMapCreated: (GoogleMapController controller) {
+          _controller = controller;
+        },
+        // onLongPress: (point) {
+        //   setState(() {
+        //     markerManager.addUserMarker(
+        //         point, 'marker', _navigateToNextScreen, context);
+        //   });
+        //   _sendData(point, 'redPin');
+        // },
+        // onTap: (point) {
+        //   setState(() {
+        //     markerManager.addMarker(
+        //         point, "marker${markerManager.counter}", context);
+        //   });
+        //   _sendData(point, 'marker${markerManager.counter}');
+        // },
         ),
       ),
-    );
+      bottomNavigationBar: TextButton(
+          style: TextButton.styleFrom(
+            primary: Colors.red,
+            textStyle: const TextStyle(fontWeight: FontWeight.bold),
+          ),
+          onPressed: () {
+
+          },
+          child: const Text('SOS'),
+        ),
+      );
   }
 
   // ******* DB *********
