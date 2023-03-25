@@ -86,20 +86,21 @@ class WatchMapState extends State<WatchMap> {
           ),
           onPressed: () {
             showDialog(
-                context: context,
-                builder: (BuildContext context) => const CupertinoAlertDialog(
-                  title: Text("Are you sure?"),
-                  content: Text(""),
+              context: context,
+              builder: (BuildContext context) {
+                return AlertDialog(
+                  title: Text('Alert'),
+                  content: Text('This is an alert dialog.'),
                   actions: <Widget>[
-                    CupertinoDialogAction(
-                      isDefaultAction: true,
-                        child: Text("Send SOS alert"),
+                    TextButton(
+                      child: Text('OK'),
+                      onPressed: () {
+                        Navigator.of(context).pop();
+                      },
                     ),
-                    CupertinoDialogAction(
-                      child: Text("Cancel"),
-                    )
                   ],
-                )
+                );
+              },
             );
           },
           child: const Text('SOS'),
