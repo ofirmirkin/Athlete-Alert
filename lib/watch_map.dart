@@ -89,15 +89,21 @@ class WatchMapState extends State<WatchMap> {
               context: context,
               builder: (BuildContext context) {
                 return AlertDialog(
-                  title: Text('Alert'),
-                  content: Text('This is an alert dialog.'),
+                  title: const Text('Are you sure?'),
+                  content: const Text('This is a sample.'),
                   actions: <Widget>[
                     TextButton(
-                      child: Text('OK'),
+                      child: const Text('SOS'),
                       onPressed: () {
                         Navigator.of(context).pop();
                       },
                     ),
+                    TextButton(
+                      child: const Text('Cancel'),
+                      onPressed: () {
+                        Navigator.of(context).pop();
+                      },
+                    )
                   ],
                 );
               },
