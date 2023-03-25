@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 // ignore: depend_on_referenced_packages
 import 'package:google_maps_flutter/google_maps_flutter.dart';
@@ -84,23 +85,21 @@ class WatchMapState extends State<WatchMap> {
             textStyle: const TextStyle(fontWeight: FontWeight.bold),
           ),
           onPressed: () {
-            AlertDialog(
-                title: const Text('SOS'),
-                  content: SingleChildScrollView(
-                    child: ListBody(
-                    children: const <Widget>[
-                      Text('Are you sure?'),
-                    ],
-                  ),
-                ),
-              actions: <Widget>[
-                TextButton(
-                  child: const Text('Approve'),
-                  onPressed: () {
-                    Navigator.of(context).pop();
-                  },
-                ),
-              ],
+            showDialog(
+                context: context,
+                builder: (BuildContext context) => const CupertinoAlertDialog(
+                  title: Text("Are you sure?"),
+                  content: Text(""),
+                  actions: <Widget>[
+                    CupertinoDialogAction(
+                      isDefaultAction: true,
+                        child: Text("Send SOS alert"),
+                    ),
+                    CupertinoDialogAction(
+                      child: Text("Cancel"),
+                    )
+                  ],
+                )
             );
           },
           child: const Text('SOS'),
