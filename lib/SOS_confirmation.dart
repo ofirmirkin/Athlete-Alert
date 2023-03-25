@@ -38,5 +38,4 @@ class SOS_confirmation extends StatelessWidget {
       ),
     );
   }
-
 }
