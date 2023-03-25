@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 // ignore: depend_on_referenced_packages
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:never_surf_alone/location_services.dart';
+import 'SOS_confirmation.dart';
 import 'timer.dart';
 import 'package:geolocator/geolocator.dart';
 import 'marker_manager.dart';
@@ -85,29 +86,7 @@ class WatchMapState extends State<WatchMap> {
             textStyle: const TextStyle(fontWeight: FontWeight.bold),
           ),
           onPressed: () {
-            showDialog(
-              context: context,
-              builder: (BuildContext context) {
-                return AlertDialog(
-                  title: const Text('Are you sure?'),
-                  content: const Text('This is a sample.'),
-                  actions: <Widget>[
-                    TextButton(
-                      child: const Text('SOS'),
-                      onPressed: () {
-                        Navigator.of(context).pop();
-                      },
-                    ),
-                    TextButton(
-                      child: const Text('Cancel'),
-                      onPressed: () {
-                        Navigator.of(context).pop();
-                      },
-                    )
-                  ],
-                );
-              },
-            );
+            Navigator.push(context,MaterialPageRoute(builder: (context) => const SOS_confirmation()));
           },
           child: const Text('SOS'),
         ),
