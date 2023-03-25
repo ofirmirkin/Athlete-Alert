@@ -17,6 +17,8 @@ import 'package:never_surf_alone/main_page.dart';
 import 'firebase_options.dart';
 import 'login_page.dart';
 import 'accdetails.dart';
+import 'watchTimer_manager.dart';
+// import 'package:timer_button/timer_button.dart';
 
 class WatchMap extends StatefulWidget {
   @override
@@ -24,6 +26,9 @@ class WatchMap extends StatefulWidget {
 }
 
 class WatchMapState extends State<WatchMap> {
+  int counter = 0;
+  bool timerRunning = false;
+  // WatchTimerManager timerManager = WatchTimerManager();
   MarkerManager markerManager = MarkerManager();
   // final user = FirebaseAuth.instance.currentUser!;
   late GoogleMapController _controller;
@@ -31,21 +36,18 @@ class WatchMapState extends State<WatchMap> {
   // Initial position of the map
   static const initialCameraPosition = CameraPosition(
     target: LatLng(53.343973854161774, -6.254634551749251),
-    zoom: 16,
+    zoom: 15,
   );
 
   @override
   void initState() {
     super.initState();
-    // _dataOnChange();
-    // markerManager.addUserMarker(const LatLng(53.343667, -6.2544447), 'marker',
-    //     _navigateToNextScreen, context);
   }
 
-  void _navigateToNextScreen(BuildContext context) {
-    Navigator.of(context)
-        .push(MaterialPageRoute(builder: (context) => CountdownPage()));
-  }
+  // void _navigateToNextScreen(BuildContext context) {
+  //   Navigator.of(context)
+  //       .push(MaterialPageRoute(builder: (context) => CountdownPage()));
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -62,73 +64,58 @@ class WatchMapState extends State<WatchMap> {
           onMapCreated: (GoogleMapController controller) {
             _controller = controller;
           },
-          // onLongPress: (point) {
-          //   setState(() {
-          //     markerManager.addUserMarker(
-          //         point, 'marker', _navigateToNextScreen, context);
-          //   });
-          //   _sendData(point, 'redPin');
-          // },
-          // onTap: (point) {
-          //   setState(() {
-          //     markerManager.addMarker(
-          //         point, "marker${markerManager.counter}", context);
-          //   });
-          //   _sendData(point, 'marker${markerManager.counter}');
-          // },
         ),
       ),
+      floatingActionButton: FloatingActionButton.extended(
+          onPressed: () {
+            if (timerRunning == false) {
+              timerRunning = true;
+              _startTimer();
+            } else {
+              timerRunning = false;
+              _stopTimer();
+            }
+            print('---- Timer running: $timerRunning ----');
+          },
+          icon: const Icon(Icons.timer),
+          label: Text('${_remainingSeconds}')),
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
     );
   }
 
-  // ******* DB *********
-  Future<void> _sendData(LatLng point, String name) async {
-    DatabaseReference ref =
-        FirebaseDatabase.instance.ref("pins/${markerManager.counter}");
-    await ref.set({
-      "name": name,
-      "lat": point.latitude,
-      "long": point.longitude,
-      "users": {"1": true}
-    });
+  int _remainingSeconds = 0;
+  Timer _timer = Timer.periodic(Duration.zero, (_) {});
+  // final _durationController = TextEditingController();
+  int duration = 15;
+
+  void _startTimer() {
+    // int duration = int.tryParse(_durationController.text) ?? 0;
+    if (duration > 0) {
+      setState(() {
+        _remainingSeconds = duration;
+      });
+      const oneSec = const Duration(seconds: 1);
+      _timer = Timer.periodic(
+        oneSec,
+        (Timer timer) => setState(
+          () {
+            if (_remainingSeconds < 1) {
+              timer.cancel();
+            } else {
+              _remainingSeconds = _remainingSeconds - 1;
+            }
+          },
+        ),
+      );
+    }
   }
 
-  Future<void> _dataOnChange() async {
-    DatabaseReference ref = FirebaseDatabase.instance.ref("pins/");
-    ref.onChildAdded.listen((event) {
-      if (event.snapshot.value == null) {
-        return;
-      }
-      Map data = event.snapshot.value as Map;
-      setState(() {
-        markerManager.addMarkerFromDB(
-            LatLng(data['lat'], data['long']), data['name'], context);
-      });
-    });
-    ref.onChildRemoved.listen((event) {
-      setState(() {
-        markerManager.removeAll();
-      });
-    });
-  }
-
-  // Function to delete data from the database
-  Future<void> _deleteData() async {
-    await FirebaseDatabase.instance.ref("pins/").remove();
+  void _stopTimer() {
+    _timer.cancel();
     setState(() {
-      markerManager.removeAll();
+      _remainingSeconds = 0;
     });
   }
-
-  // void _readData() async {
-  //   DatabaseReference ref = FirebaseDatabase.instance.ref("pins/");
-  //   DatabaseEvent event = await ref.once();
-  //   if (event.snapshot.value == null) {
-  //     return;
-  //   }
-  //   Map data = event.snapshot.value as Map;
-  //   markerManager.addMarker(LatLng(data['lat'], data['long']), data['name']);
-  // }
 
 // --------------- Ask for location permission -----------------
 
