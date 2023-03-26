@@ -3,8 +3,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 // ignore: depend_on_referenced_packages
 import 'package:google_maps_flutter/google_maps_flutter.dart';
-import 'package:never_surf_alone/location_services.dart';
-import 'timer.dart';
+
 import 'package:geolocator/geolocator.dart';
 import 'marker_manager.dart';
 import 'firebase_options.dart';
@@ -13,7 +12,6 @@ import 'package:firebase_database/firebase_database.dart';
 import 'firebase_options.dart';
 
 import 'package:firebase_core/firebase_core.dart';
-import 'package:never_surf_alone/main_page.dart';
 import 'firebase_options.dart';
 import 'login_page.dart';
 import 'accdetails.dart';
@@ -43,59 +41,34 @@ class WatchMapState extends State<WatchMap> {
   void initState() {
     super.initState();
   }
+  // _navigateAndDisplaySelection(BuildContext context) async {
+  // final result = await Navigator.push(
+  //   context,
+  //   MaterialPageRoute(builder: (context) => WatchCountdownPage()),
+  // );
 
-  // void _navigateToNextScreen(BuildContext context) {
-  //   Navigator.of(context)
-  //       .push(MaterialPageRoute(builder: (context) => CountdownPage()));
-  // }
-
-  @override
-  Widget build(BuildContext context) {
-    // _dataOnChange();
-    return Scaffold(
-      body: SafeArea(
-        child: GoogleMap(
-          // mapType: MapType.normal,
-          mapType: MapType.satellite,
-          markers: markerManager.markers,
-          myLocationEnabled: true,
-          myLocationButtonEnabled: true,
-          initialCameraPosition: initialCameraPosition,
-          onMapCreated: (GoogleMapController controller) {
-            _controller = controller;
-          },
-        ),
-      ),
-      floatingActionButton: InkWell(
-        splashColor: Colors.blue,
-        onLongPress: () {
-          print('Log Pressed');
-        },
-        child: FloatingActionButton.extended(
-          icon: const Icon(Icons.timer),
-          onPressed: () {
-            if (timerRunning == false) {
-              timerRunning = true;
-              _startTimer();
-            } else {
-              timerRunning = false;
-              _stopTimer();
-            }
-          },
-          label: Text('${_remainingSeconds}'),
-        ),
-      ),
-      floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
-    );
+  void _navigateToNextScreen(BuildContext context) {
+    Navigator.of(context)
+        .push(MaterialPageRoute(builder: (context) => WatchCountdownPage()));
   }
 
-  int _remainingSeconds = 0;
+  Future<int> nav() async {
+    int result =
+        await Navigator.push(context, MaterialPageRoute(builder: (context) {
+      return WatchCountdownPage();
+    }));
+    return result;
+  }
+  // --------------- Timer -----------------
+
+  int _remainingSeconds = 900;
   Timer _timer = Timer.periodic(Duration.zero, (_) {});
   // final _durationController = TextEditingController();
-  int duration = 15;
+  int defautDuration = 900;
+  int userDurarion = 0;
 
-  void _startTimer() {
-    // int duration = int.tryParse(_durationController.text) ?? 0;
+  void startTimer(int duration) {
+    // int duration = int.tryParse(_durationController.text) ?? 0;;
     if (duration > 0) {
       setState(() {
         _remainingSeconds = duration;
@@ -116,11 +89,74 @@ class WatchMapState extends State<WatchMap> {
     }
   }
 
-  void _stopTimer() {
+  void stopTimer() {
     _timer.cancel();
+  }
+
+  void resetTimer() {
     setState(() {
       _remainingSeconds = 0;
     });
+  }
+
+  void setTimer(int duration) {
+    setState(() {
+      _remainingSeconds = duration;
+    });
+  }
+
+  formatDuration(Duration d) => d.toString().split('.').first.padLeft(8, "0");
+
+  @override
+  Widget build(BuildContext context) {
+    // _dataOnChange();
+    return Scaffold(
+      body: SafeArea(
+        child: GoogleMap(
+          // mapType: MapType.normal,
+          mapType: MapType.satellite,
+          markers: markerManager.markers,
+          myLocationEnabled: true,
+          myLocationButtonEnabled: true,
+          initialCameraPosition: initialCameraPosition,
+          onMapCreated: (GoogleMapController controller) {
+            _controller = controller;
+          },
+        ),
+      ),
+      floatingActionButton: InkWell(
+        splashColor: Colors.blue,
+        onLongPress: () async {
+          // _navigateToNextScreen(context);
+          userDurarion = await nav();
+          print('duration: $userDurarion');
+          setTimer(userDurarion);
+          print('_remainingSeconds: $_remainingSeconds');
+          print('duration: $userDurarion');
+        },
+        child: FloatingActionButton.extended(
+          icon: const Icon(Icons.timer),
+          onPressed: () {
+            int duration;
+            if (userDurarion == 0) {
+              duration = defautDuration;
+            } else {
+              duration = userDurarion;
+            }
+            if (timerRunning == false) {
+              timerRunning = true;
+              startTimer(duration);
+            } else {
+              timerRunning = false;
+              stopTimer();
+            }
+          },
+          label:
+              Text('${formatDuration(Duration(seconds: _remainingSeconds))}'),
+        ),
+      ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
+    );
   }
 
 // --------------- Ask for location permission -----------------

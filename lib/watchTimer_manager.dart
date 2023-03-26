@@ -1,47 +1,86 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 
-class CountdownPage extends StatefulWidget {
+class WatchCountdownPage extends StatefulWidget {
   @override
-  _CountdownPageState createState() => _CountdownPageState();
+  WatchCountdownPageState createState() => WatchCountdownPageState();
 }
 
-class _CountdownPageState extends State<CountdownPage> {
+class WatchCountdownPageState extends State<WatchCountdownPage> {
   int _remainingSeconds = 0;
   Timer _timer = Timer.periodic(Duration.zero, (_) {});
   final _durationController = TextEditingController();
+  int intDuration = 15;
+  Duration duration = Duration(minutes: 15);
 
-  void _startTimer() {
-    int duration = int.tryParse(_durationController.text) ?? 0;
-    if (duration > 0) {
-      setState(() {
-        _remainingSeconds = duration;
-      });
-      const oneSec = const Duration(seconds: 1);
-      _timer = Timer.periodic(
-        oneSec,
-        (Timer timer) => setState(
-          () {
-            if (_remainingSeconds < 1) {
-              timer.cancel();
-            } else {
-              _remainingSeconds = _remainingSeconds - 1;
-            }
-          },
-        ),
-      );
-    }
-  }
-
-  void _stopTimer() {
-    _timer.cancel();
+  void increment() {
     setState(() {
-      _remainingSeconds = 0;
+      duration = duration + const Duration(minutes: 15);
     });
   }
 
+  void decrement() {
+    setState(() {
+      duration = duration - const Duration(minutes: 15);
+    });
+  }
+
+  formatDuration(Duration d) => d.toString().split('.').first.padLeft(8, "0");
+
   @override
   Widget build(BuildContext context) {
-    return Text('$_remainingSeconds');
+    return Scaffold(
+      body: SafeArea(
+        child: Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: <Widget>[
+              const SizedBox(height: 25),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: <Widget>[
+                  Container(
+                    decoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                      color: Theme.of(context).colorScheme.primary,
+                    ),
+                    child: IconButton(
+                      icon: const Icon(Icons.remove),
+                      onPressed: decrement,
+                      color: Colors.white,
+                    ),
+                  ),
+                  const SizedBox(width: 20),
+                  Container(
+                    decoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                      color: Theme.of(context).colorScheme.primary,
+                    ),
+                    child: IconButton(
+                      icon: const Icon(Icons.add),
+                      onPressed: increment,
+                      color: Colors.white,
+                    ),
+                  ),
+                ],
+              ),
+              const SizedBox(height: 10),
+              Text(
+                formatDuration(duration),
+                style: Theme.of(context).textTheme.displayMedium,
+              ),
+            ],
+          ),
+        ),
+      ),
+      floatingActionButton: FloatingActionButton.extended(
+        icon: const Icon(Icons.timer),
+        onPressed: () {
+          Navigator.of(context).pop(duration.inSeconds);
+        },
+        label: const Text('Start'),
+      ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
+    );
   }
 }
