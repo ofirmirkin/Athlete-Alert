@@ -63,17 +63,16 @@ class WatchMapState extends State<WatchMap> {
 
   int _remainingSeconds = 900;
   Timer _timer = Timer.periodic(Duration.zero, (_) {});
-  // final _durationController = TextEditingController();
   int defautDuration = 900;
   int userDurarion = 0;
 
   void startTimer(int duration) {
-    // int duration = int.tryParse(_durationController.text) ?? 0;;
+    timerRunning = true;
     if (duration > 0) {
       setState(() {
         _remainingSeconds = duration;
       });
-      const oneSec = const Duration(seconds: 1);
+      const oneSec = Duration(seconds: 1);
       _timer = Timer.periodic(
         oneSec,
         (Timer timer) => setState(
@@ -90,6 +89,7 @@ class WatchMapState extends State<WatchMap> {
   }
 
   void stopTimer() {
+    timerRunning = false;
     _timer.cancel();
   }
 
@@ -129,10 +129,8 @@ class WatchMapState extends State<WatchMap> {
         onLongPress: () async {
           // _navigateToNextScreen(context);
           userDurarion = await nav();
-          print('duration: $userDurarion');
           setTimer(userDurarion);
-          print('_remainingSeconds: $_remainingSeconds');
-          print('duration: $userDurarion');
+          startTimer(userDurarion);
         },
         child: FloatingActionButton.extended(
           icon: const Icon(Icons.timer),
@@ -144,10 +142,8 @@ class WatchMapState extends State<WatchMap> {
               duration = userDurarion;
             }
             if (timerRunning == false) {
-              timerRunning = true;
               startTimer(duration);
             } else {
-              timerRunning = false;
               stopTimer();
             }
           },
