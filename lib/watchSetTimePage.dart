@@ -1,17 +1,13 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 
-class WatchCountdownPage extends StatefulWidget {
+class WatchSetTimePage extends StatefulWidget {
   @override
-  WatchCountdownPageState createState() => WatchCountdownPageState();
+  WatchSetTimePageState createState() => WatchSetTimePageState();
 }
 
-class WatchCountdownPageState extends State<WatchCountdownPage> {
-  int _remainingSeconds = 0;
-  Timer _timer = Timer.periodic(Duration.zero, (_) {});
-  final _durationController = TextEditingController();
-  int intDuration = 15;
-  Duration duration = Duration(minutes: 15);
+class WatchSetTimePageState extends State<WatchSetTimePage> {
+  Duration duration = const Duration(minutes: 15);
 
   void increment() {
     setState(() {
@@ -21,7 +17,11 @@ class WatchCountdownPageState extends State<WatchCountdownPage> {
 
   void decrement() {
     setState(() {
-      duration = duration - const Duration(minutes: 15);
+      if (duration.inMinutes > 15) {
+        duration = duration - const Duration(minutes: 15);
+      } else {
+        duration = Duration.zero;
+      }
     });
   }
 

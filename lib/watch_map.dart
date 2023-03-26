@@ -15,7 +15,8 @@ import 'package:firebase_core/firebase_core.dart';
 import 'firebase_options.dart';
 import 'login_page.dart';
 import 'accdetails.dart';
-import 'watchTimer_manager.dart';
+import 'watchSetTimePage.dart';
+
 // import 'package:timer_button/timer_button.dart';
 
 class WatchMap extends StatefulWidget {
@@ -41,22 +42,15 @@ class WatchMapState extends State<WatchMap> {
   void initState() {
     super.initState();
   }
-  // _navigateAndDisplaySelection(BuildContext context) async {
-  // final result = await Navigator.push(
-  //   context,
-  //   MaterialPageRoute(builder: (context) => WatchCountdownPage()),
-  // );
-
-  void _navigateToNextScreen(BuildContext context) {
-    Navigator.of(context)
-        .push(MaterialPageRoute(builder: (context) => WatchCountdownPage()));
-  }
 
   Future<int> nav() async {
-    int result =
+    var result =
         await Navigator.push(context, MaterialPageRoute(builder: (context) {
-      return WatchCountdownPage();
+      return WatchSetTimePage();
     }));
+    if (result == null) {
+      return defautDuration;
+    }
     return result;
   }
   // --------------- Timer -----------------
@@ -99,6 +93,11 @@ class WatchMapState extends State<WatchMap> {
     });
   }
 
+  void stopAndReset() {
+    stopTimer();
+    resetTimer();
+  }
+
   void setTimer(int duration) {
     setState(() {
       _remainingSeconds = duration;
@@ -109,7 +108,6 @@ class WatchMapState extends State<WatchMap> {
 
   @override
   Widget build(BuildContext context) {
-    // _dataOnChange();
     return Scaffold(
       body: SafeArea(
         child: GoogleMap(
@@ -127,7 +125,7 @@ class WatchMapState extends State<WatchMap> {
       floatingActionButton: InkWell(
         splashColor: Colors.blue,
         onLongPress: () async {
-          // _navigateToNextScreen(context);
+          stopAndReset();
           userDurarion = await nav();
           setTimer(userDurarion);
           startTimer(userDurarion);
@@ -153,45 +151,5 @@ class WatchMapState extends State<WatchMap> {
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
     );
-  }
-
-// --------------- Ask for location permission -----------------
-
-  Future<Position> _determinePosition() async {
-    bool serviceEnabled;
-    LocationPermission permission;
-
-    serviceEnabled = await Geolocator.isLocationServiceEnabled();
-    if (!serviceEnabled) {
-      return Future.error('Location services are disabled.');
-    }
-
-    permission = await Geolocator.checkPermission();
-    if (permission == LocationPermission.denied) {
-      permission = await Geolocator.requestPermission();
-      if (permission == LocationPermission.denied) {
-        return Future.error('Location permissions are denied');
-      }
-    }
-
-    if (permission == LocationPermission.deniedForever) {
-      return Future.error(
-          'Location permissions are permanently denied, we cannot request permissions.');
-    }
-
-    return await Geolocator.getCurrentPosition();
-  }
-
-  Future<void> _goToPlace(Map<String, dynamic> place) async {
-    final double lat = place['geometry']['location']['lat'];
-    final double lng = place['geometry']['location']['lng'];
-
-    final GoogleMapController controller = await _controller;
-    controller.animateCamera(CameraUpdate.newCameraPosition(
-      CameraPosition(target: LatLng(lat, lng), zoom: 12),
-    ));
-
-    // _setUserMarker(LatLng(lat,
-    //     lng)); //not Ideal outcome but an when pressed function can be added to do same result...
   }
 }
