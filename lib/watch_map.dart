@@ -66,7 +66,13 @@ class WatchMapState extends State<WatchMap> {
           },
         ),
       ),
-      floatingActionButton: FloatingActionButton.extended(
+      floatingActionButton: InkWell(
+        splashColor: Colors.blue,
+        onLongPress: () {
+          print('Log Pressed');
+        },
+        child: FloatingActionButton.extended(
+          icon: const Icon(Icons.timer),
           onPressed: () {
             if (timerRunning == false) {
               timerRunning = true;
@@ -75,10 +81,10 @@ class WatchMapState extends State<WatchMap> {
               timerRunning = false;
               _stopTimer();
             }
-            print('---- Timer running: $timerRunning ----');
           },
-          icon: const Icon(Icons.timer),
-          label: Text('${_remainingSeconds}')),
+          label: Text('${_remainingSeconds}'),
+        ),
+      ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
     );
   }
