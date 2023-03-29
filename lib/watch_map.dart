@@ -25,10 +25,7 @@ class WatchMap extends StatefulWidget {
 
 class WatchMapState extends State<WatchMap> {
   MarkerManager markerManager = MarkerManager();
-  // final user = FirebaseAuth.instance.currentUser!;
   late GoogleMapController _controller;
-
-  // Initial position of the map
   static const initialCameraPosition = CameraPosition(
     target: LatLng(53.343973854161774, -6.254634551749251),
     zoom: 16,
@@ -37,45 +34,44 @@ class WatchMapState extends State<WatchMap> {
   @override
   void initState() {
     super.initState();
-    // _dataOnChange();
-    // markerManager.addUserMarker(const LatLng(53.343667, -6.2544447), 'marker',
-    //     _navigateToNextScreen, context);
-  }
-
-  void _navigateToNextScreen(BuildContext context) {
-    Navigator.of(context)
-        .push(MaterialPageRoute(builder: (context) => CountdownPage()));
   }
 
   @override
   Widget build(BuildContext context) {
-    // _dataOnChange();
     return Scaffold(
       body: SafeArea(
         child: GoogleMap(
-          // mapType: MapType.normal,
           mapType: MapType.satellite,
-          markers: markerManager.markers,
+          markers: {
+            Marker(
+              markerId: MarkerId('blue_dot'),
+              position: LatLng(53.343973854161774, -6.254634551749251),
+              icon: BitmapDescriptor.defaultMarkerWithHue(
+                BitmapDescriptor.hueBlue,
+              ),
+            ),
+            ...markerManager.markers,
+          },
           myLocationEnabled: true,
           myLocationButtonEnabled: true,
           initialCameraPosition: initialCameraPosition,
           onMapCreated: (GoogleMapController controller) {
             _controller = controller;
+            // onLongPress: (point) {
+            //   setState(() {
+            //     markerManager.addUserMarker(
+            //         point, 'marker', _navigateToNextScreen, context);
+            //   });
+            //   _sendData(point, 'redPin');
+            // },
+            // onTap: (point) {
+            //   setState(() {
+            //     markerManager.addMarker(
+            //         point, "marker${markerManager.counter}", context);
+            //   });
+            //   _sendData(point, 'marker${markerManager.counter}');
+            // },
           },
-          // onLongPress: (point) {
-          //   setState(() {
-          //     markerManager.addUserMarker(
-          //         point, 'marker', _navigateToNextScreen, context);
-          //   });
-          //   _sendData(point, 'redPin');
-          // },
-          // onTap: (point) {
-          //   setState(() {
-          //     markerManager.addMarker(
-          //         point, "marker${markerManager.counter}", context);
-          //   });
-          //   _sendData(point, 'marker${markerManager.counter}');
-          // },
         ),
       ),
     );

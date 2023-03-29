@@ -16,6 +16,7 @@ class MapDecision extends StatelessWidget {
         }
         // Phone-sized device
         else {
+          //return WatchMap();
           return MapSample();
         }
       },
