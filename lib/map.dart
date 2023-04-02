@@ -25,7 +25,7 @@ class MapSample extends StatefulWidget {
 
 class MapSampleState extends State<MapSample> {
   MarkerManager markerManager = MarkerManager();
-  //final user = FirebaseAuth.instance.currentUser!;
+  // final user = FirebaseAuth.instance.currentUser!;
   late GoogleMapController _controller;
 
   // Initial position of the map

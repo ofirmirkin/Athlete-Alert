@@ -29,6 +29,7 @@ dev_dependencies:
   firebase_core: ^2.7.1 
   firebase_database: ^10.0.15
   wear: ^1.1.0
+  # timer_button: ^2.0.0
 
 flutter:
 
