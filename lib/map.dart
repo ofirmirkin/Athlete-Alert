@@ -46,17 +46,6 @@ class MapSampleState extends State<MapSample> {
         .push(MaterialPageRoute(builder: (context) => CountdownPage()));
   }
 
-  // int index = 0;
-  // List<String> myImages = {
-
-  // }
-  var markerImage;
-  void _getIcons() async {
-    markerImage = await BitmapDescriptor.fromAssetImage(
-        ImageConfiguration(size: Size(96, 96)), "assets/swimming.png");
-  }
-
-  void _selectSport(BuildContext context) {}
 
   @override
   Widget build(BuildContext context) {
@@ -138,15 +127,29 @@ class MapSampleState extends State<MapSample> {
                                   Navigator.of(context).pop('swimming.png');
                                 },
                               ),
-                              GestureDetector(
-                                child: Text('Magic Mushroom'),
-                                onTap: () {
-                                  Navigator.of(context).pop('mushroom.png');
-                                },
-                              ),
+                              // GestureDetector(
+                              //   child: Text('Magic Mushroom'),
+                              //   onTap: () {
+                              //     Navigator.of(context).pop('mushroom.png');
+                              //   },
+                              // ),
                             ],
                           ),
-                        ));
+                        ),
+                        shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(10),
+                        ),
+                        backgroundColor: Colors.cyan,
+                        titleTextStyle: TextStyle(
+                              color: Colors.white,
+                              fontWeight: FontWeight.bold,
+                              fontSize: 20,
+                        ),
+                        contentTextStyle: TextStyle(
+                              color: Colors.white,
+                              fontSize: 18,
+                        ),
+                    );
                   },
                 ).then((value) {
                   if (value != null) {
@@ -161,13 +164,6 @@ class MapSampleState extends State<MapSample> {
                     });
                   }
                 });
-
-                // setState(() {
-                // markerManager.addCostumeMarker(
-                // point, "marker${markerManager.counter}", _navigateToNextScreen, context,
-                // "bike.png");
-                // });
-                //_sendData(point, 'marker${markerManager.counter}');
               },
             ),
           ),
@@ -177,16 +173,6 @@ class MapSampleState extends State<MapSample> {
                   _determinePosition();
                 }),
                 icon: const Icon(Icons.location_pin)),
-            // IconButton(
-            // onPressed: () async {
-            // _deleteData();
-            // },
-            // icon: const Icon(Icons.refresh)),
-            // IconButton(
-            //     onPressed: () {
-            //       // _readData();
-            //     },
-            //     icon: const Icon(Icons.arrow_downward))
           ]),
         ],
       ),
