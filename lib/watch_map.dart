@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 import 'package:geolocator/geolocator.dart';
+import 'SOS_confirmation.dart';
 import 'marker_manager.dart';
 import 'firebase_options.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -133,6 +134,7 @@ class WatchMapState extends State<WatchMap> {
                 startTimer(userDurarion);
               },
               child: FloatingActionButton.extended(
+                heroTag: "timer",
                 icon: const Icon(Icons.timer),
                 onPressed: () {
                   int duration;
@@ -157,6 +159,7 @@ class WatchMapState extends State<WatchMap> {
           top: 65,
           right: 0,
           child: FloatingActionButton(
+              heroTag: "SOS",
               onPressed: () {
                 Navigator.push(context,MaterialPageRoute(builder: (context) => const SOS_confirmation()));
               },
