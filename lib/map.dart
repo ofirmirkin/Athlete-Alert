@@ -11,7 +11,6 @@ import 'firebase_options.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'firebase_options.dart';
-
 import 'package:firebase_core/firebase_core.dart';
 import 'package:never_surf_alone/main_page.dart';
 import 'firebase_options.dart';
@@ -47,6 +46,18 @@ class MapSampleState extends State<MapSample> {
         .push(MaterialPageRoute(builder: (context) => CountdownPage()));
   }
 
+  // int index = 0;
+  // List<String> myImages = {
+
+  // }
+  var markerImage;
+  void _getIcons() async {
+    markerImage = await BitmapDescriptor.fromAssetImage(
+        ImageConfiguration(size: Size(96, 96)), "assets/swimming.png");
+  }
+
+  void _selectSport(BuildContext context) {}
+
   @override
   Widget build(BuildContext context) {
     _dataOnChange();
@@ -70,18 +81,93 @@ class MapSampleState extends State<MapSample> {
                 _controller = controller;
               },
               // onLongPress: (point) {
-              //   setState(() {
-              //     markerManager.addUserMarker(
-              //         point, 'marker', _navigateToNextScreen, context);
-              //   });
-              //   _sendData(point, 'redPin');
-              // },
+              // setState(() {
+              // markerManager.addUserMarker(
+              // point, 'marker', _navigateToNextScreen, context);
+              // });
+              //_sendData(point, 'redPin');
+              //},
               onTap: (point) {
-                setState(() {
-                  markerManager.addMarker(
-                      point, "marker${markerManager.counter}", context);
+                showDialog(
+                  context: context,
+                  builder: (BuildContext context) {
+                    return AlertDialog(
+                        title: Text('Select your Sport'),
+                        content: SingleChildScrollView(
+                          child: ListBody(
+                            children: <Widget>[
+                              GestureDetector(
+                                child: Text('Mountain Biking'),
+                                onTap: () {
+                                  Navigator.of(context).pop('bike.png');
+                                },
+                              ),
+                              GestureDetector(
+                                child: Text('Hiking'),
+                                onTap: () {
+                                  Navigator.of(context).pop('hiking.png');
+                                },
+                              ),
+                              GestureDetector(
+                                child: Text('Kayaking'),
+                                onTap: () {
+                                  Navigator.of(context).pop('kayaking.png');
+                                },
+                              ),
+                              GestureDetector(
+                                child: Text('Kitesurfing'),
+                                onTap: () {
+                                  Navigator.of(context).pop('kitesurfing.png');
+                                },
+                              ),
+                              GestureDetector(
+                                child: Text('Snowboarding'),
+                                onTap: () {
+                                  Navigator.of(context).pop('snowboarding.png');
+                                },
+                              ),
+                              GestureDetector(
+                                child: Text('Surfing'),
+                                onTap: () {
+                                  Navigator.of(context).pop('surfing.png');
+                                },
+                              ),
+                              GestureDetector(
+                                child: Text('Swimming'),
+                                onTap: () {
+                                  Navigator.of(context).pop('swimming.png');
+                                },
+                              ),
+                              GestureDetector(
+                                child: Text('Magic Mushroom'),
+                                onTap: () {
+                                  Navigator.of(context).pop('mushroom.png');
+                                },
+                              ),
+                            ],
+                          ),
+                        ));
+                  },
+                ).then((value) {
+                  if (value != null) {
+                    setState(() {
+                      markerManager.addCostumeMarker(
+                        point,
+                        "marker${markerManager.counter}",
+                        _navigateToNextScreen,
+                        context,
+                        value,
+                      );
+                    });
+                  }
                 });
-                _sendData(point, 'marker${markerManager.counter}');
+
+                // setState(() {
+                // markerManager.addCostumeMarker(
+                // point, "marker${markerManager.counter}", _navigateToNextScreen, context,
+                // "bike.png");
+                // });
+                //_sendData(point, 'marker${markerManager.counter}');
               },
             ),
           ),
@@ -91,11 +177,11 @@ class MapSampleState extends State<MapSample> {
                   _determinePosition();
                 }),
                 icon: const Icon(Icons.location_pin)),
-            IconButton(
-                onPressed: () async {
-                  _deleteData();
-                },
-                icon: const Icon(Icons.refresh)),
+            // IconButton(
+            // onPressed: () async {
+            // _deleteData();
+            // },
+            // icon: const Icon(Icons.refresh)),
             // IconButton(
             //     onPressed: () {
             //       // _readData();
@@ -138,13 +224,13 @@ class MapSampleState extends State<MapSample> {
     });
   }
 
-  // Function to delete data from the database
-  Future<void> _deleteData() async {
-    await FirebaseDatabase.instance.ref("pins/").remove();
-    setState(() {
-      markerManager.removeAll();
-    });
-  }
+  //Function to delete data from the database
+  // Future<void> _deleteData() async {
+  // await FirebaseDatabase.instance.ref("pins/").remove();
+  // setState(() {
+  // markerManager.removeAll();
+  // });
+  // }
 
   // void _readData() async {
   //   DatabaseReference ref = FirebaseDatabase.instance.ref("pins/");

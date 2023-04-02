@@ -72,4 +72,22 @@ class MarkerManager {
       ),
     );
   }
+
+  void addCostumeMarker(LatLng point, String markerId, Function onTapFunc, BuildContext context,
+                         String iconName) async {
+    _markers.add(
+      Marker(
+        markerId: MarkerId(markerId),
+        position: point,
+        consumeTapEvents: true,
+        onTap: () {
+          onTapFunc(context);
+        },
+        //icon: markerIcon,
+        icon: await BitmapDescriptor.fromAssetImage(
+             const ImageConfiguration(size: Size(32, 32)), "assets/$iconName"),
+      ),
+    );
+    _counter++;
+  }
 }
