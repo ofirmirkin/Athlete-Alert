@@ -47,12 +47,19 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Colors.blueGrey,
+        backgroundColor: Color.fromRGBO(47, 36, 255, 1),
+        title: const Text('Forgotten Password'),
         elevation: 0,
       ),
+       
       body: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
+          Icon(
+                Icons.lock_outline_rounded ,
+                size: 120,
+              ),
+              SizedBox(height: 50),
           Text('Enter your email and we will send you a password reset link:',
           textAlign: TextAlign.center,
           style: TextStyle(fontSize:20)),
@@ -68,15 +75,24 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
               borderSide: BorderSide(color: Colors.deepPurple),
               borderRadius: BorderRadius.circular(12),
             ), // OutlineInputBorder
-            hintText: 'Email', fillColor: Colors.grey [200],
+            hintText: 'Email', fillColor: Color.fromARGB(53, 203, 199, 199),
             filled: true,
           ), // InputDecoration
         ), // TextField
         ), // Padding
+
+        SizedBox(height: 25),
+        
         MaterialButton(
         onPressed: passwordReset,
-        child: Text('Reset Password'),
-        color: Colors.teal,
+        padding: const EdgeInsets.symmetric (horizontal: 25.0),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(12.0))),
+        
+        child: Text('Reset Password', 
+        style: TextStyle(color: Colors.white,)
+        ),
+        color: Color.fromRGBO(47, 36, 255, 1),
+        
         ),// MaterialButton
         ],
       ),
