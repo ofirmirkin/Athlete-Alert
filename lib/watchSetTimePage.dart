@@ -67,7 +67,7 @@ class WatchSetTimePageState extends State<WatchSetTimePage> {
               const SizedBox(height: 10),
               Text(
                 formatDuration(duration),
-                style: Theme.of(context).textTheme.displayMedium,
+                style: Theme.of(context).textTheme.displaySmall,
               ),
             ],
           ),
