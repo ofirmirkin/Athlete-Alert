@@ -1,29 +1,35 @@
 import 'dart:async';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_google_places/flutter_google_places.dart';
 // ignore: depend_on_referenced_packages
 import 'package:google_maps_flutter/google_maps_flutter.dart';
-import 'package:never_surf_alone/location_services.dart';
 import 'timer.dart';
-import 'package:geolocator/geolocator.dart';
 import 'marker_manager.dart';
-import 'firebase_options.dart';
-import 'package:firebase_core/firebase_core.dart';
-import 'package:firebase_database/firebase_database.dart';
-import 'firebase_options.dart';
-
-import 'package:firebase_core/firebase_core.dart';
-import 'package:never_surf_alone/main_page.dart';
-import 'firebase_options.dart';
-import 'login_page.dart';
 import 'accdetails.dart';
+import 'package:geolocator/geolocator.dart';
+import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
+import 'package:google_api_headers/google_api_headers.dart';
+import 'package:google_maps_webservice/places.dart';
+
+import 'package:never_surf_alone/location_services.dart';
+import 'firebase_options.dart';
+import 'package:firebase_core/firebase_core.dart'; 
+import 'package:firebase_database/firebase_database.dart';
+import 'package:never_surf_alone/main_page.dart';
+import 'login_page.dart';
 
 class MapSample extends StatefulWidget {
   @override
   State<MapSample> createState() => MapSampleState();
 }
 
+const kGoogleApiKey = 'AIzaSyCqz6Y9rQo9PnOV33HOpInCSm-2K1ImYLs';  // Api key for use in map 
+final homeScaffoldKey = GlobalKey<ScaffoldState>();
+
 class MapSampleState extends State<MapSample> {
+  final Mode _mode = Mode.overlay;
+
   MarkerManager markerManager = MarkerManager();
   final user = FirebaseAuth.instance.currentUser!;
   late GoogleMapController _controller;
@@ -52,59 +58,126 @@ class MapSampleState extends State<MapSample> {
     _dataOnChange();
     return Scaffold(
       appBar: AppBar(
+        key: homeScaffoldKey,
         automaticallyImplyLeading: false,
         backgroundColor: Colors.cyan,
         flexibleSpace: const CustomAppBar(),
       ),
-      body: Column(
+      //Refactored as stack to allow floating location search button
+      body: Stack(
         children: [
-          Expanded(
-            child: GoogleMap(
-              // mapType: MapType.normal,
-              mapType: MapType.satellite,
-              markers: markerManager.markers,
-              myLocationEnabled: true,
-              myLocationButtonEnabled: true,
-              initialCameraPosition: initialCameraPosition,
-              onMapCreated: (GoogleMapController controller) {
-                _controller = controller;
-              },
-              // onLongPress: (point) {
-              //   setState(() {
-              //     markerManager.addUserMarker(
-              //         point, 'marker', _navigateToNextScreen, context);
-              //   });
-              //   _sendData(point, 'redPin');
-              // },
-              onTap: (point) {
-                setState(() {
-                  markerManager.addMarker(
-                      point, "marker${markerManager.counter}", context);
-                });
-                _sendData(point, 'marker${markerManager.counter}');
-              },
-            ),
+          Column(
+            children: [
+              Expanded(
+                child: GoogleMap(
+                  // mapType: MapType.normal,
+                  onMapCreated: (GoogleMapController controller) {
+                    _controller = controller;
+                  },
+                  mapType: MapType.satellite,
+                  markers: markerManager.markers,
+                  myLocationEnabled: true,
+                  myLocationButtonEnabled: true,
+                  initialCameraPosition: initialCameraPosition,
+                  onTap: (point) {
+                    setState(() {
+                      markerManager.addMarker(
+                          point, "marker${markerManager.counter}", context);
+                    });
+                    _sendData(point, 'marker${markerManager.counter}');
+                  },
+                ),
+              ),
+              Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [
+                IconButton(
+                    onPressed: (() {
+                      _determinePosition();
+                    }),
+                    icon: const Icon(Icons.location_pin)),
+                IconButton(
+                    onPressed: () async {
+                      _deleteData();
+                    },
+                    icon: const Icon(Icons.refresh)),
+                // IconButton(
+                //     onPressed: () {
+                //       // _readData();
+                //     },
+                //     icon: const Icon(Icons.arrow_downward))
+              ]),
+            ],
           ),
-          Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [
-            IconButton(
-                onPressed: (() {
-                  _determinePosition();
-                }),
-                icon: const Icon(Icons.location_pin)),
-            IconButton(
-                onPressed: () async {
-                  _deleteData();
-                },
-                icon: const Icon(Icons.refresh)),
-            // IconButton(
-            //     onPressed: () {
-            //       // _readData();
-            //     },
-            //     icon: const Icon(Icons.arrow_downward))
-          ]),
+          // Elevated button for searching location
+          Positioned(
+            top: 5,     // Postion of button
+            left: 10,
+            child: ElevatedButton(
+              onPressed: searchLocationHandler,   // Call function for searching location when pressed
+              child: const Icon(Icons.search),    // 'Search' Icon
+            ),
+          )
         ],
       ),
     );
+  }
+
+  //For showing autocompletion suggestions
+  Future<void> searchLocationHandler() async {
+    Prediction? p = await PlacesAutocomplete.show(
+      context: context,
+      apiKey: kGoogleApiKey,
+      onError: onError,
+      mode: _mode,
+      language: 'en',
+      strictbounds: false,
+      types: [""],
+      decoration: InputDecoration(
+        hintText: 'Search Location',
+        focusedBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(20),
+          borderSide: const BorderSide(color: Colors.white),
+        ),
+      ),
+      components: [
+        Component(Component.country, 'IE'), //Currently just shows locations in Ireland ('IE')
+      ],
+    );
+
+    displayPrediction(p!, homeScaffoldKey.currentState);
+  }
+
+  void onError(PlacesAutocompleteResponse response) {
+    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+      elevation: 0,
+      behavior: SnackBarBehavior.floating,
+      backgroundColor: Colors.transparent,
+      content: AwesomeSnackbarContent(
+        title: 'Message',
+        message: response.errorMessage!,
+        contentType: ContentType.failure,
+      ),
+    ));
+
+    // homeScaffoldKey.currentState!.showSnackBar(SnackBar(content: Text(response.errorMessage!)));
+  }
+
+// Displays Predictions when searching for location, moves map to location selected
+  Future<void> displayPrediction(
+      Prediction p, ScaffoldState? currentState) async {
+    GoogleMapsPlaces places = GoogleMapsPlaces(
+        apiKey: kGoogleApiKey,
+        apiHeaders: await const GoogleApiHeaders().getHeaders());
+
+    PlacesDetailsResponse detail = await places.getDetailsByPlaceId(p.placeId!);
+
+    final lat = detail.result.geometry!.location.lat;   //Get Lat & Lng from location selected
+    final lng = detail.result.geometry!.location.lng;
+
+    setState(() {});
+
+    //Animate Map camera to given coordinates
+    _controller
+        .animateCamera(CameraUpdate.newLatLngZoom(LatLng(lat, lng), 14.0));
   }
 
   // ******* DB *********

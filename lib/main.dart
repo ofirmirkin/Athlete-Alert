@@ -15,6 +15,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:never_surf_alone/main_page.dart';
 import 'firebase_options.dart';
 import 'login_page.dart';
+import 'package:flutter_typeahead/flutter_typeahead.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();

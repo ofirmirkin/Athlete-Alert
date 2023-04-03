@@ -15,7 +15,7 @@ class LocationService {
     print(placeId);
 
     return placeId;
-  }
+  } 
 
   Future<Map<String, dynamic>> getPlace(String input) async {
     final placeId = getPlaceId(input);
