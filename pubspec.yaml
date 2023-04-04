@@ -16,6 +16,12 @@ dependencies:
   http: ^0.13.5 
   firebase_auth: ^4.2.10
 
+  ##new dependencies
+  geolocator: ^8.2.0
+  geocoding: ^2.0.4
+  twilio_flutter: ^0.0.5
+  flutter_dotenv: ^5.0.0
+
 dev_dependencies:
   flutter_test:
     sdk: flutter

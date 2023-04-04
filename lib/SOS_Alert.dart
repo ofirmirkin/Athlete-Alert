@@ -1,64 +1,129 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:twilio_flutter/twilio_flutter.dart';
+import 'package:geocoding/geocoding.dart';
+import 'package:geolocator/geolocator.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
+
+// void main() async {
+//   await dotenv.load(fileName: '.env');
+//   runApp(MyApp());
+// }
 
 class SOS_Alert extends StatelessWidget {
-  final twilioFlutter = TwilioFlutter(
-    accountSid: 'AC017e75659632309cda5e49192d99e6a4',
-    authToken: '5b126bd6cebb44829c7865cf5864eeb6',
-    twilioNumber: '+12762779251',
-  );
-  int _timerDuration = 0;
-  int _minutesleft = 0;
-  void sendSMS() async {
-    await twilioFlutter.sendSMS(
-      toNumber: '+353892152983', // emergency phone number
-      messageBody: '''Hello, you are listed as an emergency contact for.
-       They were let seen at the following location __. 
-       This message is automated as they have not been active on their device for $_timerDuration hours and $_minutesleft minutes.''',
-    );
-  }
-
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Twilio Timer',
-      home: TimerScreen(sendSMS),
+      home: TimerScreen(),
     );
   }
 }
 
 class TimerScreen extends StatefulWidget {
-  final Function onTimerFinish;
-
-  TimerScreen(this.onTimerFinish);
-
   @override
   _TimerScreenState createState() => _TimerScreenState();
 }
 
 class _TimerScreenState extends State<TimerScreen> {
   late Timer _timer = Timer(Duration(seconds: 0), () {});
-  int _minutesleft = 0; //[1]
+  int _minutesLeft = 0;
   int _timerDuration = 0;
+  String? _currentAddress;
+
+  final twilioFlutter = TwilioFlutter(
+  accountSid: dotenv.env['TWILIO_ACCOUNT_SID']!,
+  authToken: dotenv.env['TWILIO_AUTH_TOKEN']!,
+  twilioNumber: dotenv.env['TWILIO_PHONE_NUMBER']!,
+  );
+
+  Future<void> sendSMS() async {
+    await twilioFlutter.sendSMS(
+      toNumber: '+918800662702',
+      messageBody: '''Hello, you are listed as an emergency contact for. 
+          They were last seen at the following location: $_currentAddress. 
+          This message is automated as they have not been active on their device for $_timerDuration seconds.''',
+    );
+  }
+
+  // Location methods and variables
+  Position? _currentPosition;
+
+  Future<bool> _handleLocationPermission() async {
+    bool serviceEnabled;
+    LocationPermission permission;
+
+    serviceEnabled = await Geolocator.isLocationServiceEnabled();
+    if (!serviceEnabled) {
+      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+          content: Text(
+              'Location services are disabled. Please enable the services')));
+      return false;
+    }
+    permission = await Geolocator.checkPermission();
+    if (permission == LocationPermission.denied) {
+      permission = await Geolocator.requestPermission();
+      if (permission == LocationPermission.denied) {
+        ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(content: Text('Location permissions are denied')));
+        return false;
+      }
+    }
+    if (permission == LocationPermission.deniedForever) {
+      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+          content: Text(
+              'Location permissions are permanently denied, we cannot request permissions.')));
+      return false;
+    }
+    return true;
+  }
+
+  Future<void> _getCurrentPosition() async {
+    final hasPermission = await _handleLocationPermission();
+
+    if (!hasPermission) return;
+    
+    await Geolocator.getCurrentPosition(forceAndroidLocationManager: true,desiredAccuracy: LocationAccuracy.high)
+        .then((Position position) {
+      setState(() => _currentPosition = position);
+      _getAddressFromLatLng(_currentPosition!);
+    }).catchError((e) {
+      debugPrint(e);
+    });
+  }
+
+  Future<void> _getAddressFromLatLng(Position position) async {
+    await placemarkFromCoordinates(
+            _currentPosition!.latitude, _currentPosition!.longitude)
+        .then((List<Placemark> placemarks) {
+      Placemark place = placemarks[0];
+      setState(() {
+        _currentAddress =
+            '${place.street}, ${place.subLocality}, ${place.subAdministrativeArea}, ${place.postalCode}';
+      });
+    }).catchError((e) {
+      debugPrint(e);
+    });
+  }
 
   @override
   void dispose() {
     _timer.cancel();
-    textController.dispose(); //[4]
+    textController.dispose();
     super.dispose();
   }
 
   void startTimer(int secondsRemaining) {
     _timer?.cancel();
-    _timer = Timer(Duration(seconds: secondsRemaining), () {
-      widget.onTimerFinish();
+    _timer = Timer(Duration(seconds: secondsRemaining), () async {
+      await _getCurrentPosition();
+      sendSMS();
       setState(() {
-        _minutesleft = 0;
+        _minutesLeft = 0;
       });
     });
     setState(() {
-      _minutesleft = secondsRemaining;
+      _minutesLeft = secondsRemaining;
     });
   }
 
@@ -72,9 +137,9 @@ class _TimerScreenState extends State<TimerScreen> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            _minutesleft > 0
+            _minutesLeft > 0
                 ? Text(
-                    'timer set for $_minutesleft',
+                    'Timer set for $_minutesLeft',
                     style: TextStyle(fontSize: 24),
                   )
                 : Text(
@@ -82,7 +147,6 @@ class _TimerScreenState extends State<TimerScreen> {
                     style: TextStyle(fontSize: 24),
                   ),
             SizedBox(height: 12),
-            // [3] - user input for timer duration
             TextField(
               controller: textController,
               keyboardType: TextInputType.number,
@@ -95,8 +159,8 @@ class _TimerScreenState extends State<TimerScreen> {
             TextButton(
               onPressed: () {
                 setState(() {
-                  _minutesleft = int.tryParse(textController.text) ?? 0;
-                  startTimer(_minutesleft);
+                  _minutesLeft = int.tryParse(textController.text) ?? 0;
+                  startTimer(_minutesLeft);
                 });
               },
               child: Text('Start timer'),
@@ -107,7 +171,5 @@ class _TimerScreenState extends State<TimerScreen> {
     );
   }
 
-  // [4] - Text editing controller for user input
   final textController = TextEditingController(text: '');
 }
-
