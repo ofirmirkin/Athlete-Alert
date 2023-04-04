@@ -1,5 +1,3 @@
-# software_design
+# Software Design
 
-This is what it should look like:
-![image](https://user-images.githubusercontent.com/60558136/223490754-df38fde8-c57c-457c-9119-6476e336733b.png)
-
+![image](https://user-images.githubusercontent.com/60558136/224795945-bf2ca4f1-093f-468a-9d69-bdd1126acd51.png)
