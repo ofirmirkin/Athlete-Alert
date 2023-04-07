@@ -173,7 +173,7 @@ class WatchMapState extends State<WatchMap> {
         alignment: Alignment.centerRight,
         child: Visibility(
           visible: showButtons,
-          child: FloatingActionButton(
+          child: FloatingActionButton.small(
             heroTag: "SOS",
             onPressed: () {
               Navigator.push(
