@@ -28,6 +28,7 @@ class WatchMap extends StatefulWidget {
 class WatchMapState extends State<WatchMap> {
   int counter = 0;
   bool timerRunning = false;
+  bool showButtons = true;
   // WatchTimerManager timerManager = WatchTimerManager();
   MarkerManager markerManager = MarkerManager();
   // final user = FirebaseAuth.instance.currentUser!;
@@ -109,66 +110,83 @@ class WatchMapState extends State<WatchMap> {
 
   @override
   Widget build(BuildContext context) {
-    return Stack(
-        children: [
-          Scaffold(
-            body: SafeArea(
-              child: GoogleMap(
-                // mapType: MapType.normal,
-                mapType: MapType.satellite,
-                markers: markerManager.markers,
-                myLocationEnabled: true,
-                myLocationButtonEnabled: true,
-                initialCameraPosition: initialCameraPosition,
-                onMapCreated: (GoogleMapController controller) {
-                  _controller = controller;
-                },
-              ),
-            ),
-            floatingActionButton: InkWell(
-              splashColor: Colors.blue,
-              onLongPress: () async {
-                stopAndReset();
-                userDurarion = await nav();
-                setTimer(userDurarion);
-                startTimer(userDurarion);
-              },
-              child: FloatingActionButton.extended(
-                heroTag: "timer",
-                icon: const Icon(Icons.timer),
-                onPressed: () {
-                  int duration;
-                  if (userDurarion == 0) {
-                    duration = defautDuration;
-                  } else {
-                    duration = userDurarion;
-                  }
-                  if (timerRunning == false) {
-                    startTimer(duration);
-                  } else {
-                    stopTimer();
-                  }
-                },
-                label:
-                    Text('${formatDuration(Duration(seconds: _remainingSeconds))}'),
-              ),
-            ),
-            floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
+    return Stack(children: [
+      Scaffold(
+        body: SafeArea(
+          child: GoogleMap(
+            // mapType: MapType.normal,
+            mapType: MapType.satellite,
+            markers: markerManager.markers,
+            myLocationEnabled: true,
+            myLocationButtonEnabled: true,
+            initialCameraPosition: initialCameraPosition,
+            onMapCreated: (GoogleMapController controller) {
+              _controller = controller;
+            },
+            onTap: (LatLng location) {
+              if (showButtons == false) {
+                setState(() {
+                  showButtons = true;
+                });
+              } else {
+                setState(() {
+                  showButtons = false;
+                });
+              }
+            },
           ),
-          Positioned(
-          top: 65,
-          right: 0,
-          child: FloatingActionButton(
-              heroTag: "SOS",
+        ),
+        floatingActionButton: InkWell(
+          splashColor: Colors.blue,
+          onLongPress: () async {
+            stopAndReset();
+            userDurarion = await nav();
+            setTimer(userDurarion);
+            startTimer(userDurarion);
+          },
+          child: Visibility(
+            visible: showButtons,
+            child: FloatingActionButton.extended(
+              heroTag: "timer",
+              icon: const Icon(Icons.timer),
               onPressed: () {
-                Navigator.push(context,MaterialPageRoute(builder: (context) => const SOS_confirmation()));
+                int duration;
+                if (userDurarion == 0) {
+                  duration = defautDuration;
+                } else {
+                  duration = userDurarion;
+                }
+                if (timerRunning == false) {
+                  startTimer(duration);
+                } else {
+                  stopTimer();
+                }
               },
-              backgroundColor: Colors.red,
-              child: const Icon(Icons.sos),
-              ),
-          )
-        ]
-    );
+              label: Text(
+                  '${formatDuration(Duration(seconds: _remainingSeconds))}'),
+            ),
+          ),
+        ),
+        floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
+      ),
+      Positioned(
+        top: 65,
+        right: 0,
+        child: Visibility(
+          visible: showButtons,
+          child: FloatingActionButton(
+            heroTag: "SOS",
+            onPressed: () {
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => const SOS_confirmation()));
+            },
+            backgroundColor: Colors.red,
+            child: const Icon(Icons.sos),
+          ),
+        ),
+      )
+    ]);
   }
 }
-
