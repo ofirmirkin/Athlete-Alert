@@ -169,9 +169,8 @@ class WatchMapState extends State<WatchMap> {
         ),
         floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
       ),
-      Positioned(
-        top: 65,
-        right: 0,
+      Align(
+        alignment: Alignment.centerRight,
         child: Visibility(
           visible: showButtons,
           child: FloatingActionButton(
