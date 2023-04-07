@@ -1,5 +1,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.software_design">
+    <!--<uses-permission android:name="android.hardware.location.gps" />-->
+    <uses-permission android:name="android.hardware.location" />
    <application
         android:label="software_design"
         android:name="${applicationName}"
