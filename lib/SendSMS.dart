@@ -1,8 +1,6 @@
 import 'package:twilio_flutter/twilio_flutter.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 
-
-
 class SMS {
   late TwilioFlutter twilioFlutter;
 
@@ -17,8 +15,21 @@ class SMS {
   }
 
   void sendSMS() async {
+    /*WatchLocation loc = WatchLocation();
+    print("Hello");
+    LocationData ld = await loc.determinePosition();
+
+    Location location = Location();
+    location.enableBackgroundMode(enable: true);
+    print("Hello!");
+    LocationData ld = await location.getLocation();
+    print("By!");
+    print(ld.latitude);
+*/
+
     twilioFlutter.sendSMS(toNumber: '+34618006882',
-        messageBody: 'EMERGENCY - NAME has send an emergency number to his contacts. He is in this location: LOCATION. Try to make contact immediately or call the emergency services');
+        messageBody: 'EMERGENCY - Your friend needs help and he might be in danger. Try to make contact immediately or call the emergency services');
+
   }
 
 }

@@ -2,6 +2,10 @@
     package="com.example.software_design">
     <!--<uses-permission android:name="android.hardware.location.gps" />-->
     <uses-permission android:name="android.hardware.location" />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_BACKGROUND_LOCATION"/>
    <application
         android:label="software_design"
         android:name="${applicationName}"

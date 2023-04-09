@@ -18,6 +18,7 @@ import 'firebase_options.dart';
 import 'login_page.dart';
 import 'accdetails.dart';
 import 'watchSetTimePage.dart';
+import 'WatchLocation.dart';
 
 // import 'package:timer_button/timer_button.dart';
 
@@ -43,6 +44,8 @@ class WatchMapState extends State<WatchMap> {
 
   @override
   void initState() {
+    WatchLocation loc = WatchLocation();
+    loc.askPermission();
     super.initState();
   }
 
