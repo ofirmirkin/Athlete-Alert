@@ -21,6 +21,7 @@ dependencies:
   geocoding: ^2.0.4
   twilio_flutter: ^0.0.5
   flutter_dotenv: ^5.0.0
+  cloud_firestore: ^4.5.0
 
 dev_dependencies:
   flutter_test:
