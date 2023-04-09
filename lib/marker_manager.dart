@@ -43,14 +43,13 @@ class MarkerManager {
     _counter++;
   }
 
-  void addMarkerFromDB(LatLng point, String markerId, BuildContext context) {
+  void addMarkerFromDB(LatLng point, String markerId, String image, Function onTapFunc, BuildContext context) async {
     _markers.add(
       Marker(
         markerId: MarkerId(markerId),
         position: point,
-        icon: BitmapDescriptor.defaultMarkerWithHue(
-          BitmapDescriptor.hueViolet,
-        ),
+        icon: await BitmapDescriptor.fromAssetImage(
+             const ImageConfiguration(size: Size(32, 32)), "assets/$image"),
         onTap: () {
           Navigator.of(context)
               .push(MaterialPageRoute(builder: (context) => CountdownPage()));

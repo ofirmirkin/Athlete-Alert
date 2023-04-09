@@ -46,6 +46,43 @@ class MapSampleState extends State<MapSample> {
         .push(MaterialPageRoute(builder: (context) => CountdownPage()));
   }
 
+//   void _navigateToNextScreen(BuildContext context) {
+//   showModalBottomSheet(
+//     context: context,
+//     builder: (BuildContext context) {
+//       return Container(
+//         height: 200,
+//         child: Column(
+//           children: <Widget>[
+//             ListTile(
+//               leading: Icon(Icons.access_alarm),
+//               title: Text('Start timer'),
+//               onTap: () {
+//                 Navigator.pop(context);
+//                 // TODO: Add logic to start the timer
+//               },
+//             ),
+//             ListTile(
+//               leading: Icon(Icons.timer_off),
+//               title: Text('Stop timer'),
+//               onTap: () {
+//                 Navigator.pop(context);
+//                 // TODO: Add logic to stop the timer
+//               },
+//             ),
+//             ListTile(
+//               leading: Icon(Icons.cancel),
+//               title: Text('Cancel'),
+//               onTap: () {
+//                 Navigator.pop(context);
+//               },
+//             ),
+//           ],
+//         ),
+//       );
+//     },
+//   );
+// }
 
   @override
   Widget build(BuildContext context) {
@@ -81,74 +118,68 @@ class MapSampleState extends State<MapSample> {
                   context: context,
                   builder: (BuildContext context) {
                     return AlertDialog(
-                        title: Text('Select your Sport'),
-                        content: SingleChildScrollView(
-                          child: ListBody(
-                            children: <Widget>[
-                              GestureDetector(
-                                child: Text('Mountain Biking'),
-                                onTap: () {
-                                  Navigator.of(context).pop('bike.png');
-                                },
-                              ),
-                              GestureDetector(
-                                child: Text('Hiking'),
-                                onTap: () {
-                                  Navigator.of(context).pop('hiking.png');
-                                },
-                              ),
-                              GestureDetector(
-                                child: Text('Kayaking'),
-                                onTap: () {
-                                  Navigator.of(context).pop('kayaking.png');
-                                },
-                              ),
-                              GestureDetector(
-                                child: Text('Kitesurfing'),
-                                onTap: () {
-                                  Navigator.of(context).pop('kitesurfing.png');
-                                },
-                              ),
-                              GestureDetector(
-                                child: Text('Snowboarding'),
-                                onTap: () {
-                                  Navigator.of(context).pop('snowboarding.png');
-                                },
-                              ),
-                              GestureDetector(
-                                child: Text('Surfing'),
-                                onTap: () {
-                                  Navigator.of(context).pop('surfing.png');
-                                },
-                              ),
-                              GestureDetector(
-                                child: Text('Swimming'),
-                                onTap: () {
-                                  Navigator.of(context).pop('swimming.png');
-                                },
-                              ),
-                              // GestureDetector(
-                              //   child: Text('Magic Mushroom'),
-                              //   onTap: () {
-                              //     Navigator.of(context).pop('mushroom.png');
-                              //   },
-                              // ),
-                            ],
-                          ),
+                      title: Text('Select your Sport'),
+                      content: SingleChildScrollView(
+                        child: ListBody(
+                          children: <Widget>[
+                            GestureDetector(
+                              child: Text('Mountain Biking'),
+                              onTap: () {
+                                Navigator.of(context).pop('bike.png');
+                              },
+                            ),
+                            GestureDetector(
+                              child: Text('Hiking'),
+                              onTap: () {
+                                Navigator.of(context).pop('hiking.png');
+                              },
+                            ),
+                            GestureDetector(
+                              child: Text('Kayaking'),
+                              onTap: () {
+                                Navigator.of(context).pop('kayaking.png');
+                              },
+                            ),
+                            GestureDetector(
+                              child: Text('Kitesurfing'),
+                              onTap: () {
+                                Navigator.of(context).pop('kitesurfing.png');
+                              },
+                            ),
+                            GestureDetector(
+                              child: Text('Snowboarding'),
+                              onTap: () {
+                                Navigator.of(context).pop('snowboarding.png');
+                              },
+                            ),
+                            GestureDetector(
+                              child: Text('Surfing'),
+                              onTap: () {
+                                Navigator.of(context).pop('surfing.png');
+                              },
+                            ),
+                            GestureDetector(
+                              child: Text('Swimming'),
+                              onTap: () {
+                                Navigator.of(context).pop('swimming.png');
+                              },
+                            ),
+                          ],
                         ),
-                        shape: RoundedRectangleBorder(
+                      ),
+                      shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(10),
-                        ),
-                        backgroundColor: Colors.cyan,
-                        titleTextStyle: TextStyle(
-                              color: Colors.white,
-                              fontWeight: FontWeight.bold,
-                              fontSize: 20,
-                        ),
-                        contentTextStyle: TextStyle(
-                              color: Colors.white,
-                              fontSize: 18,
-                        ),
+                      ),
+                      backgroundColor: Colors.cyan,
+                      titleTextStyle: TextStyle(
+                        color: Colors.white,
+                        fontWeight: FontWeight.bold,
+                        fontSize: 20,
+                      ),
+                      contentTextStyle: TextStyle(
+                        color: Colors.white,
+                        fontSize: 18,
+                      ),
                     );
                   },
                 ).then((value) {
@@ -162,6 +193,7 @@ class MapSampleState extends State<MapSample> {
                         value,
                       );
                     });
+                    _sendData(point, 'marker', value);
                   }
                 });
               },
@@ -180,11 +212,12 @@ class MapSampleState extends State<MapSample> {
   }
 
   // ******* DB *********
-  Future<void> _sendData(LatLng point, String name) async {
+  Future<void> _sendData(LatLng point, String name, String image) async {
     DatabaseReference ref =
         FirebaseDatabase.instance.ref("pins/${markerManager.counter}");
     await ref.set({
       "name": name,
+      "image": image,
       "lat": point.latitude,
       "long": point.longitude,
       "users": {"1": true}
@@ -199,8 +232,8 @@ class MapSampleState extends State<MapSample> {
       }
       Map data = event.snapshot.value as Map;
       setState(() {
-        markerManager.addMarkerFromDB(
-            LatLng(data['lat'], data['long']), data['name'], context);
+        markerManager.addMarkerFromDB(LatLng(data['lat'], data['long']),
+            data['name'], data['image'], _navigateToNextScreen, context);
       });
     });
     ref.onChildRemoved.listen((event) {
