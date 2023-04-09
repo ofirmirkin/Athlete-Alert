@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'SendSMS.dart';
 
 class SOS_confirmation extends StatelessWidget {
   const SOS_confirmation( {super.key});
@@ -21,6 +22,10 @@ class SOS_confirmation extends StatelessWidget {
                         ),
                 ElevatedButton(
                   onPressed: () {
+
+                    SMS sms = SMS();
+                    sms.sendSMS();
+
                     Navigator.pop(context);
                   },
                   style: ButtonStyle(

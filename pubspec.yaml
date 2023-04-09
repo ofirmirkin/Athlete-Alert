@@ -10,11 +10,13 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
+  twilio_flutter: ^0.0.9
 
   cupertino_icons: ^1.0.2
   google_fonts:
   http: ^0.13.5 
   firebase_auth: ^4.2.10
+  flutter_dotenv: ^5.0.2
 
 dev_dependencies:
   flutter_test:
@@ -32,6 +34,7 @@ dev_dependencies:
   # timer_button: ^2.0.0
 
 flutter:
-
   uses-material-design: true
+  assets:
+    - .env
 
