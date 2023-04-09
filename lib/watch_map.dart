@@ -6,6 +6,7 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 import 'package:geolocator/geolocator.dart';
 import 'SOS_confirmation.dart';
+import 'SendSMS.dart';
 import 'marker_manager.dart';
 import 'firebase_options.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -75,6 +76,8 @@ class WatchMapState extends State<WatchMap> {
           () {
             if (_remainingSeconds < 1) {
               timer.cancel();
+              SMS sms = SMS();
+              sms.sendSMS();
             } else {
               _remainingSeconds = _remainingSeconds - 1;
             }
