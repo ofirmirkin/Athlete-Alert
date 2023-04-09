@@ -28,7 +28,6 @@ dev_dependencies:
 
   flutter_lints: ^2.0.0
   google_maps_flutter: ^2.2.3
-  geolocator: ^9.0.2
   location: ^4.4.0
 
   http: ^0.13.5 
