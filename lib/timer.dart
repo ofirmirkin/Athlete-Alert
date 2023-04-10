@@ -1,6 +1,8 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
-
+import 'SOS_Alert.dart';
+import 'map.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 // void main() => runApp(MyApp());
 
 // class MyApp extends StatelessWidget {
@@ -17,6 +19,9 @@ import 'package:flutter/material.dart';
 // }
 
 class CountdownPage extends StatefulWidget {
+  final LatLng location; // declare a final variable to hold the argument
+  CountdownPage(this.location); // add a constructor to accept the argument
+
   @override
   _CountdownPageState createState() => _CountdownPageState();
 }
@@ -46,6 +51,10 @@ class _CountdownPageState extends State<CountdownPage> {
           () {
             if (_remainingSeconds < 1) {
               timer.cancel();
+              SOS_Alert sosAlert =
+                  SOS_Alert(); // create an instance of the SOS_Alert class
+              sosAlert.sendSMS(duration,
+                  widget.location); // call the sendSMS method on the instance
             } else {
               _remainingSeconds = _remainingSeconds - 1;
             }
