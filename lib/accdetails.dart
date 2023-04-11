@@ -4,8 +4,7 @@ import 'map.dart';
 
 // Everything is hard coded at the moment
 // Need to pull user details from db
-// 
-
+//
 
 class AccDetailsHome extends StatelessWidget {
   const AccDetailsHome({super.key});
@@ -63,7 +62,10 @@ class CustomAppBar extends StatelessWidget {
                 const Spacer(),
                 const Text(
                   "Never Surf Alone",
-                  style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 20),
+                  style: TextStyle(
+                      color: Colors.white,
+                      fontWeight: FontWeight.bold,
+                      fontSize: 20),
                 ),
                 const Spacer(),
                 // Menu icon in top right corner, change to icon button in future
@@ -114,7 +116,10 @@ class MenuAppBar extends StatelessWidget {
                 const Spacer(),
                 const Text(
                   "Account Details",
-                  style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 20),
+                  style: TextStyle(
+                      color: Colors.white,
+                      fontWeight: FontWeight.bold,
+                      fontSize: 20),
                 ),
                 const Spacer(),
                 const SizedBox(width: 50),
@@ -134,8 +139,20 @@ class AccountDetailList extends StatefulWidget {
 }
 
 class _AccountDetailListState extends State<AccountDetailList> {
-  List<String> fieldNames = ['Name', 'Username', 'Birthday', 'Mobile Number', 'Email'];
-  List<String> userData = ['John Doe', 'bigJD_123', '29 February 2030', '189 022 2222', 'JohnDoe@hotmail.ie'];
+  List<String> fieldNames = [
+    'Name',
+    'Username',
+    'Birthday',
+    'Mobile Number',
+    'Email'
+  ];
+  List<String> userData = [
+    'John Doe',
+    'bigJD_123',
+    '29 February 2030',
+    '189 022 2222',
+    'JohnDoe@hotmail.ie'
+  ];
 
   @override
   Widget build(BuildContext context) {
@@ -144,21 +161,20 @@ class _AccountDetailListState extends State<AccountDetailList> {
       itemBuilder: (BuildContext context, int index) {
         return Card(
             child: ListTile(
-              title: Text(
-                fieldNames[index],
-                style: TextStyle(
-                  color: Colors.grey[700],
-                  fontWeight: FontWeight.bold,
-                ),
-                ),
-              subtitle: Text(userData[index]),
-              onTap: () {
-                _editUserName(context, index);
-              },
-              trailing: const Icon(Icons.arrow_forward_ios_rounded),
-              tileColor: const Color.fromARGB(255, 198, 248, 244),
-            )
-          );
+          title: Text(
+            fieldNames[index],
+            style: TextStyle(
+              color: Colors.grey[700],
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+          subtitle: Text(userData[index]),
+          onTap: () {
+            _editUserName(context, index);
+          },
+          trailing: const Icon(Icons.arrow_forward_ios_rounded),
+          tileColor: const Color.fromARGB(255, 198, 248, 244),
+        ));
       },
     );
   }

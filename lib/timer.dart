@@ -68,33 +68,35 @@ class _CountdownPageState extends State<CountdownPage> {
       appBar: AppBar(
         title: Text('Countdown Timer'),
       ),
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            TextField(
-              controller: _durationController,
-              keyboardType: TextInputType.number,
-              decoration: InputDecoration(
-                labelText: 'Enter Duration (in seconds)',
+      body: SafeArea(
+        child: Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: <Widget>[
+              TextField(
+                controller: _durationController,
+                keyboardType: TextInputType.number,
+                decoration: InputDecoration(
+                  labelText: 'Enter Duration (in seconds)',
+                ),
               ),
-            ),
-            SizedBox(height: 16),
-            ElevatedButton(
-              onPressed: _startTimer,
-              child: Text('Start Timer'),
-            ),
-            SizedBox(height: 16),
-            ElevatedButton(
-              onPressed: _stopTimer,
-              child: Text('Stop Timer'),
-            ),
-            SizedBox(height: 32),
-            Text(
-              '$_remainingSeconds',
-              style: TextStyle(fontSize: 72),
-            ),
-          ],
+              SizedBox(height: 16),
+              ElevatedButton(
+                onPressed: _startTimer,
+                child: Text('Start Timer'),
+              ),
+              SizedBox(height: 16),
+              ElevatedButton(
+                onPressed: _stopTimer,
+                child: Text('Stop Timer'),
+              ),
+              SizedBox(height: 32),
+              Text(
+                '$_remainingSeconds',
+                style: TextStyle(fontSize: 72),
+              ),
+            ],
+          ),
         ),
       ),
     );
