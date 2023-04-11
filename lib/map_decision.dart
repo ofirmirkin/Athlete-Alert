@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'map.dart';
 import 'watch_map.dart';
+import'main_page.dart';
 
 // stateless widget
 class MapDecision extends StatelessWidget {
@@ -16,7 +16,7 @@ class MapDecision extends StatelessWidget {
         }
         // Phone-sized device
         else {
-          return MapSample();
+          return MainPage();
         }
       },
     );
