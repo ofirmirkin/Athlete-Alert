@@ -53,7 +53,7 @@ class MarkerManager {
         ),
         onTap: () {
           Navigator.of(context)
-              .push(MaterialPageRoute(builder: (context) => CountdownPage()));
+              .push(MaterialPageRoute(builder: (context) => CountdownPage1()));
         },
       ),
     );

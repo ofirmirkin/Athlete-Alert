@@ -112,12 +112,12 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Button Navigation Demo',
-      home: HomePage(),
+      home: CountdownPage1(),
     );
   }
 }
 
-class HomePage extends StatelessWidget {
+class CountdownPage1 extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(

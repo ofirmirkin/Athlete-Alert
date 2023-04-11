@@ -44,7 +44,7 @@ class MapSampleState extends State<MapSample> {
 
   void _navigateToNextScreen(BuildContext context) {
     Navigator.of(context)
-        .push(MaterialPageRoute(builder: (context) => CountdownPage()));
+        .push(MaterialPageRoute(builder: (context) => CountdownPage1()));
   }
 
   @override
