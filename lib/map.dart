@@ -57,10 +57,10 @@ class MapSampleState extends State<MapSample> {
     //     _navigateToNextScreen, context);
   }
 
-  // void _navigateToNextScreen(BuildContext context) {
-  //   Navigator.of(context)
-  //       .push(MaterialPageRoute(builder: (context) => CountdownPage()));
-  // }
+  void _navigateToNextScreen(BuildContext context) {
+    // Navigator.of(context)
+    //     .push(MaterialPageRoute(builder: (context) => CountdownPage()));
+  }
 
   @override
   Widget build(BuildContext context) {
