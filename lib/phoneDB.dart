@@ -31,209 +31,97 @@ Future<String> readPhoneNum(String userId) async {
   return data['number'];
 }
 
-// class LoginPage extends StatefulWidget {
-//   const LoginPage({Key? key}) : super(key: key);
+// void main() => runApp(new MyApp());
 
-//   @override
-//   State<LoginPage> createState() => _LoginPageState();
-// }
-
-// class _LoginPageState extends State<LoginPage> {
-//   //Controllers
-//   final _emailController = TextEditingController();
-//   final _passwordController = TextEditingController();
-
-//   Future logIn() async {
-//     try {
-//       await FirebaseAuth.instance.signInWithEmailAndPassword(
-//         email: _emailController.text.trim(),
-//         password: _passwordController.text.trim(),
-//       );
-//     } on FirebaseAuthException catch (e) {
-//       print('Failed with error code: ${e.code}');
-//       print(e.message);
-//     }
-//   }
-
-//   @override
-//   void initState() {
-//     super.initState();
-//     determinePosition();
-//   }
-
-//   @override
-//   void dispose() {
-//     _emailController.dispose();
-//     _passwordController.dispose();
-//     super.dispose();
-//   }
-
+// class MyApp extends StatelessWidget {
 //   @override
 //   Widget build(BuildContext context) {
-//     return Scaffold(
-//         backgroundColor: Colors.blueGrey,
-//         body: SafeArea(
-//             child: Center(
-//                 child: SingleChildScrollView(
-//           child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
-//             // ignore: prefer_const_constructors
-//             Icon(
-//               Icons.add_location_alt_sharp,
-//               size: 90,
-//             ),
-//             // ignore: prefer_const_constructors
-//             SizedBox(height: 100),
-//             //TODO Touch up spacing and colour theme for phone version
-//             //Welcome
-//             Text(
-//               'Welcome',
-//               style: GoogleFonts.bebasNeue(
-//                 fontSize: 36,
-//               ),
-//             ),
+//     Color hexToColor(String code) {
+//       return new Color(int.parse(code.substring(1, 7), radix: 16) + 0xFF000000);
+//     }
 
-//             //login or signup button
-//             // IN login page will have a button which leads to forgot password @kru3ish
-//             // ignore: prefer_const_constructors
-//             SizedBox(height: 15),
-
-//             Text(
-//               'Great to see your alive and well',
-//               style: TextStyle(fontSize: 20),
-//             ),
-//             //Signup Button Goes to @KUNAL
-//             SizedBox(height: 25),
-
-//             Padding(
-//               padding: const EdgeInsets.symmetric(horizontal: 25.0),
-//               child: Container(
-//                 decoration: BoxDecoration(
-//                   color: Color.fromARGB(255, 158, 233, 233),
-//                   border: Border.all(color: Colors.white),
-//                   borderRadius: BorderRadius.circular(12),
-//                 ),
-//                 child: Padding(
-//                   padding: const EdgeInsets.only(left: 18.0),
-//                   child: TextField(
-//                     // controller: _emailController,
-//                     //@OFIR ADD ONE FIELD HERE
-//                     // at the moment theres no limit to the
-//                     //character so limit will go off screen
-//                     decoration: InputDecoration(
-//                       border: InputBorder.none,
-//                       hintText: 'Email',
+//     return MaterialApp(
+//         debugShowCheckedModeBanner: false,
+//         title: "End User Page",
+//         home: new Material(
+//             child: new Container(
+//                 padding: const EdgeInsets.all(30.0),
+//                 color: Colors.white,
+//                 child: new Container(
+//                   child: new Center(
+//                       child: new Column(children: [
+//                     new Padding(padding: EdgeInsets.only(top: 140.0)),
+//                     new Text(
+//                       'Name:',
+//                       style: new TextStyle(
+//                           color: hexToColor("#F2A03D"), fontSize: 25.0),
 //                     ),
-//                   ),
-//                 ),
-//               ),
-//             ),
-
-//             SizedBox(height: 25),
-
-//             Padding(
-//               padding: const EdgeInsets.symmetric(horizontal: 25.0),
-//               child: Container(
-//                 decoration: BoxDecoration(
-//                   color: Color.fromARGB(255, 158, 233, 233),
-//                   border: Border.all(color: Colors.white),
-//                   borderRadius: BorderRadius.circular(12),
-//                 ),
-//                 child: Padding(
-//                   padding: const EdgeInsets.only(left: 18.0),
-//                   child: TextField(
-//                     // controller: _passwordController,
-//                     //@Ofir Add a field here
-//                     obscureText: true,
-//                     // at the moment theres no limit to the
-//                     //character so limit will go off screen
-//                     decoration: InputDecoration(
-//                       border: InputBorder.none,
-//                       hintText: 'Password',
-//                     ),
-//                   ),
-//                 ),
-//               ),
-//             ),
-
-//             SizedBox(height: 25),
-
-//             //SizedBox(height: 25),
-
-//             Padding(
-//               padding: const EdgeInsets.symmetric(horizontal: 150.0),
-//               child: GestureDetector(
-//                 onTap: logIn,
-//                 child: Container(
-//                   padding: EdgeInsets.all(20),
-//                   decoration: BoxDecoration(
-//                     color: Colors.grey,
-//                     border: Border.all(color: Colors.white),
-//                     borderRadius: BorderRadius.circular(12),
-//                   ),
-//                   child: Center(
-//                     child: Text('Log In', //@Confirm
-//                         style: TextStyle(
-//                             color: Colors.white, fontWeight: FontWeight.bold)),
-//                   ),
-//                 ),
-//               ),
-//             ),
-
-//             SizedBox(height: 25),
-
-//             SizedBox(height: 25),
-
-//             Row(
-//               mainAxisAlignment: MainAxisAlignment.center,
-//               children: [
-//                 GestureDetector(
-//                   onTap: () {
-//                     Navigator.push(
-//                       context,
-//                       MaterialPageRoute(
-//                         builder: (context) {
-//                           return ForgotPasswordPage();
-//                         },
+//                     new Padding(padding: EdgeInsets.only(top: 50.0)),
+//                     new TextFormField(
+//                       decoration: new InputDecoration(
+//                         labelText: "Enter Name",
+//                         fillColor: Colors.white,
+//                         border: new OutlineInputBorder(
+//                           borderRadius: new BorderRadius.circular(25.0),
+//                           borderSide: new BorderSide(),
+//                         ),
+//                         //fillColor: Colors.green
 //                       ),
-//                     );
-//                   },
-//                   child: Text(
-//                     'Forgot Password?', //Might use for text boxes
-//                     style: TextStyle(
-//                       color: Colors.red,
-//                       fontWeight: FontWeight.bold,
+//                       validator: (val) {
+//                         if (val.length == 0) {
+//                           return "Name cannot be empty";
+//                         } else {
+//                           return null;
+//                         }
+//                       },
+//                       keyboardType: TextInputType.text,
+//                       style: new TextStyle(
+//                         fontFamily: "Poppins",
+//                       ),
 //                     ),
-//                   ),
-//                 ),
-//               ],
-//             ),
-//           ]),
-//         ))));
+//                   ])),
+//                 ))));
 //   }
-//   // --------------- Ask for location permission -----------------
+// }
 
-//   Future<Position> determinePosition() async {
-//     bool serviceEnabled;
-//     LocationPermission permission;
 
-//     serviceEnabled = await Geolocator.isLocationServiceEnabled();
-//     if (!serviceEnabled) {
-//       return Future.error('Location services are disabled.');
+
+// void _editUserName(BuildContext context, int index) async {
+//     String newUserName = await showDialog(
+//       context: context,
+//       builder: (BuildContext context) {
+//         TextEditingController controller =
+//             TextEditingController(text: userData[index]);
+//         return AlertDialog(
+//           title: Text('Edit ${fieldNames[index]}'),
+//           backgroundColor: const Color.fromARGB(255, 198, 248, 244),
+//           content: TextField(
+//             controller: controller,
+//             decoration: InputDecoration(
+//               labelText: 'New ${fieldNames[index]}',
+//             ),
+//           ),
+//           actions: [
+//             TextButton(
+//               onPressed: () {
+//                 Navigator.pop(context);
+//               },
+//               child: const Text('Cancel'),
+//             ),
+//             ElevatedButton(
+//               onPressed: () {
+//                 Navigator.pop(context, controller.text);
+//               },
+//               child: const Text('Save'),
+//             ),
+//           ],
+//         );
+//       },
+//     );
+//     if (newUserName != null) {
+//       setState(() {
+//         userData[index] = newUserName;
+//       });
 //     }
-
-//     permission = await Geolocator.checkPermission();
-//     if (permission == LocationPermission.denied) {
-//       permission = await Geolocator.requestPermission();
-//       if (permission == LocationPermission.denied) {
-//         return Future.error('Location permissions are denied');
-//       }
-//     }
-
-//     if (permission == LocationPermission.deniedForever) {
-//       return Future.error(
-//           'Location permissions are permanently denied, we cannot request permissions.');
-//     }
-
-//     return await Geolocator.getCurrentPosition();
 //   }
 // }
