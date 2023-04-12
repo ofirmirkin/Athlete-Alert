@@ -69,7 +69,7 @@ class MapSampleState extends State<MapSample> {
       appBar: AppBar(
         key: homeScaffoldKey,
         automaticallyImplyLeading: false,
-        backgroundColor: Colors.cyan,
+        backgroundColor: Color.fromRGBO(47, 36, 255, 1),
         flexibleSpace: const CustomAppBar(),
       ),
       //Refactored as stack to allow floating location search button
@@ -199,6 +199,9 @@ class MapSampleState extends State<MapSample> {
             left: 10,
             child: ElevatedButton(
               onPressed: searchLocationHandler,   // Call function for searching location when pressed
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Color.fromRGBO(47, 36, 255, 1),
+              ),
               child: const Icon(Icons.search),    // 'Search' Icon
             ),
           )
