@@ -1,107 +1,6 @@
-import 'dart:async';
 import 'package:flutter/material.dart';
+import 'dart:async';
 import 'package:intl/intl.dart';
-
-
-// void main() => runApp(MyApp());
-
-// class MyApp extends StatelessWidget {
-//   @override
-//   Widget build(BuildContext context) {
-//     return MaterialApp(
-//       title: 'Countdown Timer',
-//       theme: ThemeData(
-//         primarySwatch: Colors.blue,
-//       ),
-//       home: CountdownPage(),
-//     );
-//   }
-// }
-
-class CountdownPage extends StatefulWidget {
-  @override
-  _CountdownPageState createState() => _CountdownPageState();
-}
-
-class _CountdownPageState extends State<CountdownPage> {
-  int _remainingSeconds = 0;
-  Timer _timer = Timer.periodic(Duration.zero, (_) {});
-  final _durationController = TextEditingController();
-
-  @override
-  void dispose() {
-    _timer.cancel();
-    _durationController.dispose();
-    super.dispose();
-  }
-
-  void _startTimer() {
-    int duration = int.tryParse(_durationController.text) ?? 0;
-    if (duration > 0) {
-      setState(() {
-        _remainingSeconds = duration;
-      });
-      const oneSec = const Duration(seconds: 1);
-      _timer = Timer.periodic(
-        oneSec,
-            (Timer timer) => setState(
-              () {
-            if (_remainingSeconds < 1) {
-              timer.cancel();
-            } else {
-              _remainingSeconds = _remainingSeconds - 1;
-            }
-          },
-        ),
-      );
-    }
-  }
-
-  void _stopTimer() {
-    _timer.cancel();
-    setState(() {
-      _remainingSeconds = 0;
-    });
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('Countdown Timer'),
-      ),
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            TextField(
-              controller: _durationController,
-              keyboardType: TextInputType.number,
-              decoration: InputDecoration(
-                labelText: 'Enter Duration (in seconds)',
-              ),
-            ),
-            SizedBox(height: 16),
-            ElevatedButton(
-              onPressed: _startTimer,
-              child: Text('Start Timer'),
-            ),
-            SizedBox(height: 16),
-            ElevatedButton(
-              onPressed: _stopTimer,
-              child: Text('Stop Timer'),
-            ),
-            SizedBox(height: 32),
-            Text(
-              '$_remainingSeconds',
-              style: TextStyle(fontSize: 72),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-}
 
 void main() {
   runApp(MyApp());
@@ -112,17 +11,17 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Button Navigation Demo',
-      home: CountdownPage1(),
+      home: HomePage(),
     );
   }
 }
 
-class CountdownPage1 extends StatelessWidget {
+class HomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        // title: Text('Home'),
+       // title: Text('Home'),
       ),
       body: Center(
         child: Column(
@@ -163,7 +62,7 @@ class CountdownPage1 extends StatelessWidget {
 }
 
 
-//page 1
+//page 1 
 
 class Page1 extends StatefulWidget {
   @override
@@ -198,8 +97,8 @@ class _Page1State extends State<Page1> {
       const oneSec = const Duration(seconds: 1);
       _timer = Timer.periodic(
         oneSec,
-            (Timer timer) => setState(
-              () {
+        (Timer timer) => setState(
+          () {
             if (_remainingSeconds < 1) {
               timer.cancel();
             } else {
@@ -291,7 +190,7 @@ class _Page1State extends State<Page1> {
 }
 
 
-//page 2
+//page 2 
 class TimerPage extends StatefulWidget {
   @override
   _TimerPageState createState() => _TimerPageState();
@@ -394,27 +293,27 @@ class _TimerPageState extends State<TimerPage> {
               }
             },
           ),
-          SizedBox(height: 16),
-          Text(
-            '${_formatTime((_remainingSeconds ~/ 86400))} d ${_formatTime((_remainingSeconds ~/ 3600) % 24)} h ${_formatTime((_remainingSeconds ~/ 60) % 60)} m',
-            style: TextStyle(
-                fontSize: 24,
-                fontWeight: FontWeight.bold
-            ),
-          ),
-          SizedBox(height: 16),
-          ElevatedButton(
-            child: Text('Cancel Timer'),
-            onPressed: _cancelTimer,
-          ),
-        ],
+                SizedBox(height: 16),
+      Text(
+        '${_formatTime((_remainingSeconds ~/ 86400))} d ${_formatTime((_remainingSeconds ~/ 3600) % 24)} h ${_formatTime((_remainingSeconds ~/ 60) % 60)} m',
+        style: TextStyle(
+          fontSize: 24,
+          fontWeight: FontWeight.bold
+        ),
       ),
-    );
-  }
+      SizedBox(height: 16),
+      ElevatedButton(
+        child: Text('Cancel Timer'),
+        onPressed: _cancelTimer,
+      ),
+    ],
+  ),
+);
+}
 
-  @override
-  void dispose() {
-    _timer.cancel();
-    super.dispose();
-  }
+@override
+void dispose() {
+_timer.cancel();
+super.dispose();
+}
 }
