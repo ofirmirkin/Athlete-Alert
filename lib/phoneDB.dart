@@ -31,97 +31,45 @@ Future<String> readPhoneNum(String userId) async {
   return data['number'];
 }
 
-// void main() => runApp(new MyApp());
+class MyButton extends StatefulWidget {
+  @override
+  _MyButtonState createState() => _MyButtonState();
+}
 
-// class MyApp extends StatelessWidget {
-//   @override
-//   Widget build(BuildContext context) {
-//     Color hexToColor(String code) {
-//       return new Color(int.parse(code.substring(1, 7), radix: 16) + 0xFF000000);
-//     }
+class _MyButtonState extends State<MyButton> {
+  String phoneNumber = '';
 
-//     return MaterialApp(
-//         debugShowCheckedModeBanner: false,
-//         title: "End User Page",
-//         home: new Material(
-//             child: new Container(
-//                 padding: const EdgeInsets.all(30.0),
-//                 color: Colors.white,
-//                 child: new Container(
-//                   child: new Center(
-//                       child: new Column(children: [
-//                     new Padding(padding: EdgeInsets.only(top: 140.0)),
-//                     new Text(
-//                       'Name:',
-//                       style: new TextStyle(
-//                           color: hexToColor("#F2A03D"), fontSize: 25.0),
-//                     ),
-//                     new Padding(padding: EdgeInsets.only(top: 50.0)),
-//                     new TextFormField(
-//                       decoration: new InputDecoration(
-//                         labelText: "Enter Name",
-//                         fillColor: Colors.white,
-//                         border: new OutlineInputBorder(
-//                           borderRadius: new BorderRadius.circular(25.0),
-//                           borderSide: new BorderSide(),
-//                         ),
-//                         //fillColor: Colors.green
-//                       ),
-//                       validator: (val) {
-//                         if (val.length == 0) {
-//                           return "Name cannot be empty";
-//                         } else {
-//                           return null;
-//                         }
-//                       },
-//                       keyboardType: TextInputType.text,
-//                       style: new TextStyle(
-//                         fontFamily: "Poppins",
-//                       ),
-//                     ),
-//                   ])),
-//                 ))));
-//   }
-// }
+  void _storePhoneNumber(String number) {
+    setState(() {
+      phoneNumber = number;
+    });
+  }
 
-
-
-// void _editUserName(BuildContext context, int index) async {
-//     String newUserName = await showDialog(
-//       context: context,
-//       builder: (BuildContext context) {
-//         TextEditingController controller =
-//             TextEditingController(text: userData[index]);
-//         return AlertDialog(
-//           title: Text('Edit ${fieldNames[index]}'),
-//           backgroundColor: const Color.fromARGB(255, 198, 248, 244),
-//           content: TextField(
-//             controller: controller,
-//             decoration: InputDecoration(
-//               labelText: 'New ${fieldNames[index]}',
-//             ),
-//           ),
-//           actions: [
-//             TextButton(
-//               onPressed: () {
-//                 Navigator.pop(context);
-//               },
-//               child: const Text('Cancel'),
-//             ),
-//             ElevatedButton(
-//               onPressed: () {
-//                 Navigator.pop(context, controller.text);
-//               },
-//               child: const Text('Save'),
-//             ),
-//           ],
-//         );
-//       },
-//     );
-//     if (newUserName != null) {
-//       setState(() {
-//         userData[index] = newUserName;
-//       });
-//     }
-//   }
-// }
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('My Button'),
+      ),
+      body: Column(
+        children: [
+          TextField(
+            decoration: InputDecoration(
+              hintText: 'Enter phone number',
+            ),
+            onChanged: (value) {
+              _storePhoneNumber(value);
+            },
+          ),
+          SizedBox(height: 16),
+          ElevatedButton(
+            onPressed: () {
+              print(phoneNumber);
+            },
+            child: Text('Store Phone Number'),
+          ),
+        ],
+      ),
+    );
+  }
+}

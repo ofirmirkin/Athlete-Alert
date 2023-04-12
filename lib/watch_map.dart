@@ -69,8 +69,7 @@ class WatchMapState extends State<WatchMap> {
   int userDurarion = 0;
 
   void startTimer(int duration) async {
-    // String phoneNum = await readPhoneNum(user.uid);
-    String phoneNum = "123";
+    String phoneNum = await readPhoneNum(user.uid);
     timerRunning = true;
     if (duration > 0) {
       setState(() {

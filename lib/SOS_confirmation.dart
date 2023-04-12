@@ -48,8 +48,7 @@ class SOS_confirmation extends StatelessWidget {
                   child: const Text('Cancel')),
               IconButton(
                   onPressed: () async {
-                    // String phoneNum = await readPhoneNum(user.uid);
-                    String phoneNum = "123";
+                    String phoneNum = await readPhoneNum(user.uid);
                     SMS sms = SMS();
                     sms.sendSMS(phoneNum);
                   },
