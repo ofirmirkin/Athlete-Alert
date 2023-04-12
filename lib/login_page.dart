@@ -70,9 +70,11 @@ class _LoginPageState extends State<LoginPage> {
                   fontSize: 36,
                 ),
               ),
-            ),
 
-            SizedBox(height: 25),
+              //login or signup button
+              // IN login page will have a button which leads to forgot password @kru3ish
+              // ignore: prefer_const_constructors
+              SizedBox(height: 15),
 
               Text(
                 'Great to see youre alive and well',
@@ -81,22 +83,15 @@ class _LoginPageState extends State<LoginPage> {
               //Signup Button Goes to @KUNAL
               SizedBox(height: 15),
 
-            SizedBox(height: 25),
-
-            //SizedBox(height: 25),
-
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 150.0),
-              child: GestureDetector(
-                onTap: logIn,
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 25.0),
                 child: Container(
-                  padding: EdgeInsets.all(20),
                   decoration: BoxDecoration(
-
+                    
                      color: Colors.white,
                     border: Border.all(color: Colors.blueAccent),
                     borderRadius: BorderRadius.circular(12),
-
+                    
                   ),
                   child: Padding(
                     padding: const EdgeInsets.only(left: 22.0),
@@ -112,7 +107,6 @@ class _LoginPageState extends State<LoginPage> {
                   ),
                 ),
               ),
-            ),
 
               SizedBox(height: 15),
 
@@ -155,7 +149,7 @@ class _LoginPageState extends State<LoginPage> {
 
                 ),
                 );
-
+            
                 }, child: Padding(
                      //alignment: Alignment.centerLeft,
                      padding:const EdgeInsets.only(left: 220.0),
@@ -169,7 +163,7 @@ class _LoginPageState extends State<LoginPage> {
               ),
                   ),
               ],
-
+              
               ),
 
 
@@ -214,11 +208,12 @@ class _LoginPageState extends State<LoginPage> {
 
               SizedBox(height: 15),
 
-
-
+           
+     
           ]),
         ))));
   }
+}
   // --------------- Ask for location permission -----------------
 
   Future<Position> determinePosition() async {
@@ -245,4 +240,4 @@ class _LoginPageState extends State<LoginPage> {
 
     return await Geolocator.getCurrentPosition();
   }
-}
+

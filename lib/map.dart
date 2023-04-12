@@ -178,7 +178,7 @@ class MapSampleState extends State<MapSample> {
               Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [
                 IconButton(
                     onPressed: (() {
-                      _determinePosition();
+                      determinePosition();
                     }),
                     icon: const Icon(Icons.location_pin)),
                 IconButton(
