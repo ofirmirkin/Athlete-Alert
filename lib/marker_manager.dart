@@ -9,7 +9,6 @@ class MarkerManager {
   int _counter = 0;
   //TODO: store counter in the database and fix the bug that downloaded markers are rewritten
 
-
   MarkerManager() {
     _markers = Set<Marker>();
   }
@@ -25,6 +24,10 @@ class MarkerManager {
   void removeAll() {
     _markers.clear();
     _counter = 0;
+  }
+
+  void removeMarker(String markerId) {
+    _markers.removeWhere((marker) => MarkerId(markerId).value == markerId);
   }
 
   void addMarker(LatLng point, String markerId, BuildContext context) {
@@ -44,16 +47,17 @@ class MarkerManager {
     _counter++;
   }
 
-  void addMarkerFromDB(LatLng point, String markerId, String image, Function onTapFunc, BuildContext context) async {
+  void addMarkerFromDB(LatLng point, String markerId, String image,
+      Function onTapFunc, BuildContext context) async {
     _markers.add(
       Marker(
         markerId: MarkerId(markerId),
         position: point,
         consumeTapEvents: true,
         icon: await BitmapDescriptor.fromAssetImage(
-             const ImageConfiguration(size: Size(32, 32)), "assets/$image"),
+            const ImageConfiguration(size: Size(32, 32)), "assets/$image"),
         onTap: () {
-          onTapFunc(context);
+          onTapFunc(context, markerId);
         },
       ),
     );
@@ -73,8 +77,8 @@ class MarkerManager {
     );
   }
 
-  void addCostumeMarker(LatLng point, String markerId, Function onTapFunc, BuildContext context,
-                         String iconName) async {
+  void addCostumeMarker(LatLng point, String markerId, Function onTapFunc,
+      BuildContext context, String iconName) async {
     _markers.add(
       Marker(
         markerId: MarkerId(markerId),
@@ -84,7 +88,7 @@ class MarkerManager {
           onTapFunc(context);
         },
         icon: await BitmapDescriptor.fromAssetImage(
-             const ImageConfiguration(size: Size(32, 32)), "assets/$iconName"),
+            const ImageConfiguration(size: Size(32, 32)), "assets/$iconName"),
       ),
     );
     _counter++;
