@@ -11,10 +11,11 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
+  twilio_flutter: ^0.0.9
 
   cupertino_icons: ^1.0.2
   google_fonts:
-  http: ^0.13.5 
+  http: ^0.13.5
   firebase_auth: ^4.2.10
   cloud_firestore: ^4.4.5
   twilio_flutter: ^0.0.9
@@ -25,7 +26,10 @@ dependencies:
   google_maps_webservice: ^0.0.20-nullsafety.5
   awesome_snackbar_content: ^0.1.2
   google_api_headers: ^1.5.0+1
-  
+
+  flutter_dotenv: ^5.0.2
+  location: ^4.2.0
+  geocoding: ^2.1.0
 
 
 dev_dependencies:
@@ -34,14 +38,19 @@ dev_dependencies:
 
   flutter_lints: ^2.0.0
   google_maps_flutter: ^2.2.3
-  location: ^4.4.0 
-  firebase_core: ^2.7.1 
+  geolocator: ^9.0.2
+  location: ^4.2.0
+
+  http: ^0.13.5
+  firebase_core: ^2.7.1
   firebase_database: ^10.0.15
+  cloud_firestore: ^4.5.0
+  wear: ^1.1.0
+  # timer_button: ^2.0.0
 
 flutter:
-
   uses-material-design: true
   assets:
    - assets/images/logo.png
    - assets/
-
+   - .env

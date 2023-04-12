@@ -53,6 +53,7 @@ class MapSampleState extends State<MapSample> {
   void initState() {
     super.initState();
     _dataOnChange();
+    // determinePosition();
     // markerManager.addUserMarker(const LatLng(53.343667, -6.2544447), 'marker',
     //     _navigateToNextScreen, context);
   }
@@ -324,7 +325,7 @@ class MapSampleState extends State<MapSample> {
 
 // --------------- Ask for location permission -----------------
 
-  Future<Position> _determinePosition() async {
+  Future<Position> determinePosition() async {
     bool serviceEnabled;
     LocationPermission permission;
 
