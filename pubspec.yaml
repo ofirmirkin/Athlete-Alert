@@ -33,6 +33,7 @@ dev_dependencies:
   http: ^0.13.5 
   firebase_core: ^2.7.1 
   firebase_database: ^10.0.15
+  cloud_firestore: ^4.5.0
   wear: ^1.1.0
   # timer_button: ^2.0.0
 
