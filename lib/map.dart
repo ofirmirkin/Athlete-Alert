@@ -7,6 +7,14 @@ import 'package:flutter_google_places/flutter_google_places.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'timer.dart';
 import 'marker_manager.dart';
+import 'firebase_options.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_database/firebase_database.dart';
+import 'firebase_options.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'package:never_surf_alone/main_page.dart';
+import 'firebase_options.dart';
+import 'login_page.dart';
 import 'accdetails.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
@@ -15,7 +23,7 @@ import 'package:google_maps_webservice/places.dart';
 
 import 'package:never_surf_alone/location_services.dart';
 import 'firebase_options.dart';
-import 'package:firebase_core/firebase_core.dart'; 
+import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:never_surf_alone/main_page.dart';
 import 'login_page.dart';
@@ -25,7 +33,7 @@ class MapSample extends StatefulWidget {
   State<MapSample> createState() => MapSampleState();
 }
 
-const kGoogleApiKey = 'AIzaSyCqz6Y9rQo9PnOV33HOpInCSm-2K1ImYLs';  // Api key for use in map 
+const kGoogleApiKey = 'AIzaSyCqz6Y9rQo9PnOV33HOpInCSm-2K1ImYLs';  // Api key for use in map
 final homeScaffoldKey = GlobalKey<ScaffoldState>();
 
 class MapSampleState extends State<MapSample> {
@@ -81,11 +89,88 @@ class MapSampleState extends State<MapSample> {
                   myLocationButtonEnabled: true,
                   initialCameraPosition: initialCameraPosition,
                   onTap: (point) {
-                    setState(() {
-                      markerManager.addMarker(
-                          point, "marker${markerManager.counter}", context);
+                    showDialog(
+                      context: context,
+                      builder: (BuildContext context) {
+                        return AlertDialog(
+                          title: Text('Select your Sport'),
+                          content: SingleChildScrollView(
+                            child: ListBody(
+                              children: <Widget>[
+                                GestureDetector(
+                                  child: Text('Mountain Biking'),
+                                  onTap: () {
+                                    Navigator.of(context).pop('bike.png');
+                                  },
+                                ),
+                                GestureDetector(
+                                  child: Text('Hiking'),
+                                  onTap: () {
+                                    Navigator.of(context).pop('hiking.png');
+                                  },
+                                ),
+                                GestureDetector(
+                                  child: Text('Kayaking'),
+                                  onTap: () {
+                                    Navigator.of(context).pop('kayaking.png');
+                                  },
+                                ),
+                                GestureDetector(
+                                  child: Text('Kitesurfing'),
+                                  onTap: () {
+                                    Navigator.of(context).pop('kitesurfing.png');
+                                  },
+                                ),
+                                GestureDetector(
+                                  child: Text('Snowboarding'),
+                                  onTap: () {
+                                    Navigator.of(context).pop('snowboarding.png');
+                                  },
+                                ),
+                                GestureDetector(
+                                  child: Text('Surfing'),
+                                  onTap: () {
+                                    Navigator.of(context).pop('surfing.png');
+                                  },
+                                ),
+                                GestureDetector(
+                                  child: Text('Swimming'),
+                                  onTap: () {
+                                    Navigator.of(context).pop('swimming.png');
+                                  },
+                                ),
+                              ],
+                            ),
+                          ),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                          backgroundColor: Colors.cyan,
+                          titleTextStyle: TextStyle(
+                            color: Colors.white,
+                            fontWeight: FontWeight.bold,
+                            fontSize: 20,
+                          ),
+                          contentTextStyle: TextStyle(
+                            color: Colors.white,
+                            fontSize: 18,
+                          ),
+                        );
+                      },
+                    ).then((value) {
+                      if (value != null) {
+                        setState(() {
+                          markerManager.addCostumeMarker(
+                            point,
+                            "marker${markerManager.counter}",
+                            _navigateToNextScreen,
+                            context,
+                            value,
+                          );
+                        });
+                        _sendData(point, 'marker${markerManager.counter}', value);
+                      }
                     });
-                    _sendData(point, 'marker${markerManager.counter}');
                   },
                 ),
               ),
@@ -182,15 +267,20 @@ class MapSampleState extends State<MapSample> {
   }
 
   // ******* DB *********
-  Future<void> _sendData(LatLng point, String name) async {
+  Future<void> _sendData(LatLng point, String name, String image) async {
     DatabaseReference ref =
         FirebaseDatabase.instance.ref("pins/${markerManager.counter}");
     await ref.set({
       "name": name,
+      "image": image,
       "lat": point.latitude,
       "long": point.longitude,
-      "users": {"1": true}
+      "users": {"1": true},
     });
+
+    //increment the pin counter in the db
+    DatabaseReference counterRef = FirebaseDatabase.instance.ref("counter/");
+    counterRef.child("count").set(ServerValue.increment(1));
   }
 
   Future<void> _dataOnChange() async {
@@ -201,8 +291,8 @@ class MapSampleState extends State<MapSample> {
       }
       Map data = event.snapshot.value as Map;
       setState(() {
-        markerManager.addMarkerFromDB(
-            LatLng(data['lat'], data['long']), data['name'], context);
+        markerManager.addMarkerFromDB(LatLng(data['lat'], data['long']),
+            data['name'], data['image'], _navigateToNextScreen, context);
       });
     });
     ref.onChildRemoved.listen((event) {
@@ -210,25 +300,24 @@ class MapSampleState extends State<MapSample> {
         markerManager.removeAll();
       });
     });
+
+    //to get the count of current pins in the db so we don't overwrite
+    DatabaseReference counterRef = FirebaseDatabase.instance.ref("counter/");
+    counterRef.child("count").get().then((DataSnapshot snapshot) {
+      int count = snapshot.value != null ? snapshot.value as int : 0;
+      markerManager.setCounter(count);
+    });
   }
 
-  // Function to delete data from the database
+  //Function to delete data from the database
   Future<void> _deleteData() async {
     await FirebaseDatabase.instance.ref("pins/").remove();
     setState(() {
       markerManager.removeAll();
     });
+    DatabaseReference counterRef = FirebaseDatabase.instance.ref("counter/");
+    counterRef.child("count").set(0);
   }
-
-  // void _readData() async {
-  //   DatabaseReference ref = FirebaseDatabase.instance.ref("pins/");
-  //   DatabaseEvent event = await ref.once();
-  //   if (event.snapshot.value == null) {
-  //     return;
-  //   }
-  //   Map data = event.snapshot.value as Map;
-  //   markerManager.addMarker(LatLng(data['lat'], data['long']), data['name']);
-  // }
 
 // --------------- Ask for location permission -----------------
 
