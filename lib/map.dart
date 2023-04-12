@@ -17,6 +17,7 @@ import 'package:never_surf_alone/main_page.dart';
 import 'firebase_options.dart';
 import 'login_page.dart';
 import 'accdetails.dart';
+import 'phoneDB.dart';
 
 class MapSample extends StatefulWidget {
   @override
@@ -92,6 +93,19 @@ class MapSampleState extends State<MapSample> {
                   _deleteData();
                 },
                 icon: const Icon(Icons.refresh)),
+            IconButton(
+              onPressed: () async {
+                sendPhoneNum('+353 123456');
+              },
+              icon: const Icon(Icons.arrow_upward),
+            ),
+            IconButton(
+              onPressed: () async {
+                String phoneNum = await readPhoneNum(user.uid);
+                print("---------------- $phoneNum");
+              },
+              icon: const Icon(Icons.arrow_downward),
+            ),
           ]),
         ],
       ),
