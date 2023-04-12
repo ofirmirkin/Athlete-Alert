@@ -1,29 +1,44 @@
 import 'dart:async';
+import 'dart:math';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_google_places/flutter_google_places.dart';
 // ignore: depend_on_referenced_packages
 import 'package:google_maps_flutter/google_maps_flutter.dart';
-import 'package:never_surf_alone/location_services.dart';
 import 'timer.dart';
-import 'package:geolocator/geolocator.dart';
 import 'marker_manager.dart';
 import 'firebase_options.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'firebase_options.dart';
-
 import 'package:firebase_core/firebase_core.dart';
 import 'package:never_surf_alone/main_page.dart';
 import 'firebase_options.dart';
 import 'login_page.dart';
 import 'accdetails.dart';
+import 'package:geolocator/geolocator.dart';
+import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
+import 'package:google_api_headers/google_api_headers.dart';
+import 'package:google_maps_webservice/places.dart';
+
+import 'package:never_surf_alone/location_services.dart';
+import 'firebase_options.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_database/firebase_database.dart';
+import 'package:never_surf_alone/main_page.dart';
+import 'login_page.dart';
 
 class MapSample extends StatefulWidget {
   @override
   State<MapSample> createState() => MapSampleState();
 }
 
+const kGoogleApiKey = 'AIzaSyCqz6Y9rQo9PnOV33HOpInCSm-2K1ImYLs';  // Api key for use in map
+final homeScaffoldKey = GlobalKey<ScaffoldState>();
+
 class MapSampleState extends State<MapSample> {
+  final Mode _mode = Mode.overlay;
+
   MarkerManager markerManager = MarkerManager();
   final user = FirebaseAuth.instance.currentUser!;
   late GoogleMapController _controller;
@@ -44,8 +59,8 @@ class MapSampleState extends State<MapSample> {
   }
 
   void _navigateToNextScreen(BuildContext context) {
-    Navigator.of(context)
-        .push(MaterialPageRoute(builder: (context) => CountdownPage()));
+    // Navigator.of(context)
+    //     .push(MaterialPageRoute(builder: (context) => CountdownPage()));
   }
 
   @override
@@ -53,61 +68,223 @@ class MapSampleState extends State<MapSample> {
     _dataOnChange();
     return Scaffold(
       appBar: AppBar(
+        key: homeScaffoldKey,
         automaticallyImplyLeading: false,
-        backgroundColor: Colors.cyan,
+        backgroundColor: Color.fromRGBO(47, 36, 255, 1),
         flexibleSpace: const CustomAppBar(),
       ),
-      body: Column(
+      //Refactored as stack to allow floating location search button
+      body: Stack(
         children: [
-          Expanded(
-            child: GoogleMap(
-              // mapType: MapType.normal,
-              mapType: MapType.satellite,
-              markers: markerManager.markers,
-              myLocationEnabled: true,
-              myLocationButtonEnabled: true,
-              initialCameraPosition: initialCameraPosition,
-              onMapCreated: (GoogleMapController controller) {
-                _controller = controller;
-              },
-              // onLongPress: (point) {
-              //   setState(() {
-              //     markerManager.addUserMarker(
-              //         point, 'marker', _navigateToNextScreen, context);
-              //   });
-              //   _sendData(point, 'redPin');
-              // },
-              onTap: (point) {
-                setState(() {
-                  markerManager.addMarker(
-                      point, "marker${markerManager.counter}", context);
-                });
-                _sendData(point, 'marker${markerManager.counter}');
-              },
-            ),
+          Column(
+            children: [
+              Expanded(
+                child: GoogleMap(
+                  // mapType: MapType.normal,
+                  onMapCreated: (GoogleMapController controller) {
+                    _controller = controller;
+                  },
+                  mapType: MapType.satellite,
+                  markers: markerManager.markers,
+                  myLocationEnabled: true,
+                  myLocationButtonEnabled: true,
+                  initialCameraPosition: initialCameraPosition,
+                  onTap: (point) {
+                    showDialog(
+                      context: context,
+                      builder: (BuildContext context) {
+                        return AlertDialog(
+                          title: Text('Select your Sport'),
+                          content: SingleChildScrollView(
+                            child: ListBody(
+                              children: <Widget>[
+                                GestureDetector(
+                                  child: Text('Mountain Biking'),
+                                  onTap: () {
+                                    Navigator.of(context).pop('bike.png');
+                                  },
+                                ),
+                                GestureDetector(
+                                  child: Text('Hiking'),
+                                  onTap: () {
+                                    Navigator.of(context).pop('hiking.png');
+                                  },
+                                ),
+                                GestureDetector(
+                                  child: Text('Kayaking'),
+                                  onTap: () {
+                                    Navigator.of(context).pop('kayaking.png');
+                                  },
+                                ),
+                                GestureDetector(
+                                  child: Text('Kitesurfing'),
+                                  onTap: () {
+                                    Navigator.of(context).pop('kitesurfing.png');
+                                  },
+                                ),
+                                GestureDetector(
+                                  child: Text('Snowboarding'),
+                                  onTap: () {
+                                    Navigator.of(context).pop('snowboarding.png');
+                                  },
+                                ),
+                                GestureDetector(
+                                  child: Text('Surfing'),
+                                  onTap: () {
+                                    Navigator.of(context).pop('surfing.png');
+                                  },
+                                ),
+                                GestureDetector(
+                                  child: Text('Swimming'),
+                                  onTap: () {
+                                    Navigator.of(context).pop('swimming.png');
+                                  },
+                                ),
+                              ],
+                            ),
+                          ),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                          backgroundColor: Colors.cyan,
+                          titleTextStyle: TextStyle(
+                            color: Colors.white,
+                            fontWeight: FontWeight.bold,
+                            fontSize: 20,
+                          ),
+                          contentTextStyle: TextStyle(
+                            color: Colors.white,
+                            fontSize: 18,
+                          ),
+                        );
+                      },
+                    ).then((value) {
+                      if (value != null) {
+                        setState(() {
+                          markerManager.addCostumeMarker(
+                            point,
+                            "marker${markerManager.counter}",
+                            _navigateToNextScreen,
+                            context,
+                            value,
+                          );
+                        });
+                        _sendData(point, 'marker${markerManager.counter}', value);
+                      }
+                    });
+                  },
+                ),
+              ),
+              Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [
+                IconButton(
+                    onPressed: (() {
+                      determinePosition();
+                    }),
+                    icon: const Icon(Icons.location_pin)),
+                IconButton(
+                    onPressed: () async {
+                      _deleteData();
+                    },
+                    icon: const Icon(Icons.refresh)),
+                // IconButton(
+                //     onPressed: () {
+                //       // _readData();
+                //     },
+                //     icon: const Icon(Icons.arrow_downward))
+              ]),
+            ],
           ),
-          Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [
-            IconButton(
-                onPressed: () async {
-                  _deleteData();
-                },
-                icon: const Icon(Icons.refresh)),
-          ]),
+          // Elevated button for searching location
+          Positioned(
+            top: 5,     // Postion of button
+            left: 10,
+            child: ElevatedButton(
+              onPressed: searchLocationHandler,   // Call function for searching location when pressed
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Color.fromRGBO(47, 36, 255, 1),
+              ),
+              child: const Icon(Icons.search),    // 'Search' Icon
+            ),
+          )
         ],
       ),
     );
   }
 
+  //For showing autocompletion suggestions
+  Future<void> searchLocationHandler() async {
+    Prediction? p = await PlacesAutocomplete.show(
+      context: context,
+      apiKey: kGoogleApiKey,
+      onError: onError,
+      mode: _mode,
+      language: 'en',
+      strictbounds: false,
+      types: [""],
+      decoration: InputDecoration(
+        hintText: 'Search Location',
+        focusedBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(20),
+          borderSide: const BorderSide(color: Colors.white),
+        ),
+      ),
+      components: [
+        Component(Component.country, 'IE'), //Currently just shows locations in Ireland ('IE')
+      ],
+    );
+
+    displayPrediction(p!, homeScaffoldKey.currentState);
+  }
+
+  void onError(PlacesAutocompleteResponse response) {
+    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+      elevation: 0,
+      behavior: SnackBarBehavior.floating,
+      backgroundColor: Colors.transparent,
+      content: AwesomeSnackbarContent(
+        title: 'Message',
+        message: response.errorMessage!,
+        contentType: ContentType.failure,
+      ),
+    ));
+
+    // homeScaffoldKey.currentState!.showSnackBar(SnackBar(content: Text(response.errorMessage!)));
+  }
+
+// Displays Predictions when searching for location, moves map to location selected
+  Future<void> displayPrediction(
+      Prediction p, ScaffoldState? currentState) async {
+    GoogleMapsPlaces places = GoogleMapsPlaces(
+        apiKey: kGoogleApiKey,
+        apiHeaders: await const GoogleApiHeaders().getHeaders());
+
+    PlacesDetailsResponse detail = await places.getDetailsByPlaceId(p.placeId!);
+
+    final lat = detail.result.geometry!.location.lat;   //Get Lat & Lng from location selected
+    final lng = detail.result.geometry!.location.lng;
+
+    setState(() {});
+
+    //Animate Map camera to given coordinates
+    _controller
+        .animateCamera(CameraUpdate.newLatLngZoom(LatLng(lat, lng), 14.0));
+  }
+
   // ******* DB *********
-  Future<void> _sendData(LatLng point, String name) async {
+  Future<void> _sendData(LatLng point, String name, String image) async {
     DatabaseReference ref =
         FirebaseDatabase.instance.ref("pins/${markerManager.counter}");
     await ref.set({
       "name": name,
+      "image": image,
       "lat": point.latitude,
       "long": point.longitude,
-      "users": {"1": true}
+      "users": {"1": true},
     });
+
+    //increment the pin counter in the db
+    DatabaseReference counterRef = FirebaseDatabase.instance.ref("counter/");
+    counterRef.child("count").set(ServerValue.increment(1));
   }
 
   Future<void> _dataOnChange() async {
@@ -118,8 +295,8 @@ class MapSampleState extends State<MapSample> {
       }
       Map data = event.snapshot.value as Map;
       setState(() {
-        markerManager.addMarkerFromDB(
-            LatLng(data['lat'], data['long']), data['name'], context);
+        markerManager.addMarkerFromDB(LatLng(data['lat'], data['long']),
+            data['name'], data['image'], _navigateToNextScreen, context);
       });
     });
     ref.onChildRemoved.listen((event) {
@@ -127,25 +304,24 @@ class MapSampleState extends State<MapSample> {
         markerManager.removeAll();
       });
     });
+
+    //to get the count of current pins in the db so we don't overwrite
+    DatabaseReference counterRef = FirebaseDatabase.instance.ref("counter/");
+    counterRef.child("count").get().then((DataSnapshot snapshot) {
+      int count = snapshot.value != null ? snapshot.value as int : 0;
+      markerManager.setCounter(count);
+    });
   }
 
-  // Function to delete data from the database
+  //Function to delete data from the database
   Future<void> _deleteData() async {
     await FirebaseDatabase.instance.ref("pins/").remove();
     setState(() {
       markerManager.removeAll();
     });
+    DatabaseReference counterRef = FirebaseDatabase.instance.ref("counter/");
+    counterRef.child("count").set(0);
   }
-
-  // void _readData() async {
-  //   DatabaseReference ref = FirebaseDatabase.instance.ref("pins/");
-  //   DatabaseEvent event = await ref.once();
-  //   if (event.snapshot.value == null) {
-  //     return;
-  //   }
-  //   Map data = event.snapshot.value as Map;
-  //   markerManager.addMarker(LatLng(data['lat'], data['long']), data['name']);
-  // }
 
 // --------------- Ask for location permission -----------------
 

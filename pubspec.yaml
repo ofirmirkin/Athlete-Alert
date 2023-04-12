@@ -7,6 +7,7 @@ version: 1.0.0+1
 environment:
   sdk: '>=2.19.0 <3.0.0'
 
+
 dependencies:
   flutter:
     sdk: flutter
@@ -14,12 +15,21 @@ dependencies:
 
   cupertino_icons: ^1.0.2
   google_fonts:
-  http: ^0.13.5 
+  http: ^0.13.5
   firebase_auth: ^4.2.10
-  flutter_dotenv: ^5.0.2
+  cloud_firestore: ^4.4.5
+  flutter_typeahead: ^4.3.7
+  get: ^4.6.5
   geolocator: ^9.0.2
+  flutter_google_places: ^0.3.0
+  google_maps_webservice: ^0.0.20-nullsafety.5
+  awesome_snackbar_content: ^0.1.2
+  google_api_headers: ^1.5.0+1
+
+  flutter_dotenv: ^5.0.2
   location: ^4.2.0
   geocoding: ^2.1.0
+
 
 dev_dependencies:
   flutter_test:
@@ -30,8 +40,8 @@ dev_dependencies:
   geolocator: ^9.0.2
   location: ^4.2.0
 
-  http: ^0.13.5 
-  firebase_core: ^2.7.1 
+  http: ^0.13.5
+  firebase_core: ^2.7.1
   firebase_database: ^10.0.15
   cloud_firestore: ^4.5.0
   wear: ^1.1.0
@@ -40,5 +50,6 @@ dev_dependencies:
 flutter:
   uses-material-design: true
   assets:
-    - .env
-
+   - assets/images/logo.png
+   - assets/
+   - .env

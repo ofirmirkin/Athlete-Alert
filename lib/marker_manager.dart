@@ -9,6 +9,7 @@ class MarkerManager {
   int _counter = 0;
   //TODO: store counter in the database and fix the bug that downloaded markers are rewritten
 
+
   MarkerManager() {
     _markers = Set<Marker>();
   }
@@ -34,7 +35,7 @@ class MarkerManager {
         icon: BitmapDescriptor.defaultMarkerWithHue(
           BitmapDescriptor.hueViolet,
         ),
-          /*onTap: () {
+        /*onTap: () {
             Navigator.of(context)
                 .push(MaterialPageRoute(builder: (context) => CountdownPage()));
           },*/
@@ -43,17 +44,16 @@ class MarkerManager {
     _counter++;
   }
 
-  void addMarkerFromDB(LatLng point, String markerId, BuildContext context) {
+  void addMarkerFromDB(LatLng point, String markerId, String image, Function onTapFunc, BuildContext context) async {
     _markers.add(
       Marker(
         markerId: MarkerId(markerId),
         position: point,
-        icon: BitmapDescriptor.defaultMarkerWithHue(
-          BitmapDescriptor.hueViolet,
-        ),
+        consumeTapEvents: true,
+        icon: await BitmapDescriptor.fromAssetImage(
+             const ImageConfiguration(size: Size(32, 32)), "assets/$image"),
         onTap: () {
-          Navigator.of(context)
-              .push(MaterialPageRoute(builder: (context) => CountdownPage()));
+          onTapFunc(context);
         },
       ),
     );
@@ -71,5 +71,22 @@ class MarkerManager {
         },
       ),
     );
+  }
+
+  void addCostumeMarker(LatLng point, String markerId, Function onTapFunc, BuildContext context,
+                         String iconName) async {
+    _markers.add(
+      Marker(
+        markerId: MarkerId(markerId),
+        position: point,
+        consumeTapEvents: true,
+        onTap: () {
+          onTapFunc(context);
+        },
+        icon: await BitmapDescriptor.fromAssetImage(
+             const ImageConfiguration(size: Size(32, 32)), "assets/$iconName"),
+      ),
+    );
+    _counter++;
   }
 }

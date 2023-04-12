@@ -12,10 +12,10 @@ class AccDetailsHome extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.cyanAccent,
+      backgroundColor: Colors.white,
       appBar: AppBar(
         automaticallyImplyLeading: false,
-        backgroundColor: Colors.cyan,
+        backgroundColor: Color.fromRGBO(47, 36, 255, 1),
         flexibleSpace: const MenuAppBar(),
       ),
       body: const AccountDetailList(),
@@ -35,7 +35,7 @@ class CustomAppBar extends StatelessWidget {
         ),
         Expanded(
           child: Container(
-            color: Colors.cyan,
+            color: Color.fromRGBO(47, 36, 255, 1),
             child: Row(
               children: [
                 const SizedBox(
@@ -55,17 +55,14 @@ class CustomAppBar extends StatelessWidget {
                         radius: 20,
                         backgroundImage: NetworkImage(
                             //placeholder profile picture
-                            'https://marketplace.canva.com/EAFEits4-uw/1/0/1600w/canva-boy-cartoon-gamer-animated-twitch-profile-photo-oEqs2yqaL8s.jpg'),
-                        backgroundColor: Colors.cyanAccent,
+                            'https://instagram.fdub7-1.fna.fbcdn.net/v/t51.2885-19/209080492_326970612307483_2835102815111713539_n.jpg?stp=dst-jpg_s150x150&_nc_ht=instagram.fdub7-1.fna.fbcdn.net&_nc_cat=107&_nc_ohc=E6zekHs1LOQAX9rFNyF&edm=AOQ1c0wBAAAA&ccb=7-5&oh=00_AfAS_SZjw3bS7BgKN8Tx748405DyIrODI4F4x1ANbWE_Gw&oe=643C9480&_nc_sid=8fd12b'),
+                        backgroundColor: Colors.white,
                       )),
                 ),
                 const Spacer(),
                 const Text(
-                  "Never Surf Alone",
-                  style: TextStyle(
-                      color: Colors.white,
-                      fontWeight: FontWeight.bold,
-                      fontSize: 20),
+                  "Athlete Alert",
+                  style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 20),
                 ),
                 const Spacer(),
                 // Menu icon in top right corner, change to icon button in future
@@ -98,7 +95,7 @@ class MenuAppBar extends StatelessWidget {
         ),
         Expanded(
           child: Container(
-            color: Colors.cyan,
+            color:  Color.fromRGBO(47, 36, 255, 1),
             child: Row(
               children: [
                 IconButton(
@@ -154,27 +151,37 @@ class _AccountDetailListState extends State<AccountDetailList> {
     'JohnDoe@hotmail.ie'
   ];
 
+
+//IconData(0xee35, fontFamily: 'MaterialIcons')
   @override
   Widget build(BuildContext context) {
     return ListView.builder(
+      padding: const EdgeInsets.only(top: 10),
       itemCount: userData.length,
-      itemBuilder: (BuildContext context, int index) {
+      itemBuilder: (BuildContext context, int index)
+      {
         return Card(
             child: ListTile(
-          title: Text(
-            fieldNames[index],
-            style: TextStyle(
-              color: Colors.grey[700],
-              fontWeight: FontWeight.bold,
-            ),
-          ),
-          subtitle: Text(userData[index]),
-          onTap: () {
-            _editUserName(context, index);
-          },
-          trailing: const Icon(Icons.arrow_forward_ios_rounded),
-          tileColor: const Color.fromARGB(255, 198, 248, 244),
-        ));
+              title: Text(
+                fieldNames[index],
+                style: TextStyle(
+                  color: Colors.grey[700],
+                  fontWeight: FontWeight.bold,
+                ),
+                ),
+          //       shape: RoundedRectangleBorder(
+          //   borderRadius: BorderRadius.circular(80),
+          // ),
+              subtitle: Text(userData[index]),
+              onTap: () {
+                _editUserName(context, index);
+              },
+              trailing: const Icon(Icons.arrow_forward_ios_rounded),
+              tileColor: const Color.fromARGB(255, 164, 195, 248),
+
+            )
+
+        );
       },
     );
   }
@@ -187,7 +194,7 @@ class _AccountDetailListState extends State<AccountDetailList> {
             TextEditingController(text: userData[index]);
         return AlertDialog(
           title: Text('Edit ${fieldNames[index]}'),
-          backgroundColor: const Color.fromARGB(255, 198, 248, 244),
+          backgroundColor: const Color.fromARGB(255, 164, 195, 248),
           content: TextField(
             controller: controller,
             decoration: InputDecoration(
