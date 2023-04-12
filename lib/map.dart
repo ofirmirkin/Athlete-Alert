@@ -46,44 +46,6 @@ class MapSampleState extends State<MapSample> {
         .push(MaterialPageRoute(builder: (context) => CountdownPage()));
   }
 
-//   void _navigateToNextScreen(BuildContext context) {
-//   showModalBottomSheet(
-//     context: context,
-//     builder: (BuildContext context) {
-//       return Container(
-//         height: 200,
-//         child: Column(
-//           children: <Widget>[
-//             ListTile(
-//               leading: Icon(Icons.access_alarm),
-//               title: Text('Start timer'),
-//               onTap: () {
-//                 Navigator.pop(context);
-//                 // TODO: Add logic to start the timer
-//               },
-//             ),
-//             ListTile(
-//               leading: Icon(Icons.timer_off),
-//               title: Text('Stop timer'),
-//               onTap: () {
-//                 Navigator.pop(context);
-//                 // TODO: Add logic to stop the timer
-//               },
-//             ),
-//             ListTile(
-//               leading: Icon(Icons.cancel),
-//               title: Text('Cancel'),
-//               onTap: () {
-//                 Navigator.pop(context);
-//               },
-//             ),
-//           ],
-//         ),
-//       );
-//     },
-//   );
-// }
-
   @override
   Widget build(BuildContext context) {
     _dataOnChange();
@@ -193,7 +155,7 @@ class MapSampleState extends State<MapSample> {
                         value,
                       );
                     });
-                    _sendData(point, 'marker', value);
+                    _sendData(point, 'marker${markerManager.counter}', value);
                   }
                 });
               },
@@ -205,6 +167,11 @@ class MapSampleState extends State<MapSample> {
                   _determinePosition();
                 }),
                 icon: const Icon(Icons.location_pin)),
+            IconButton(
+                onPressed: () async {
+                  _deleteData();
+                },
+                icon: const Icon(Icons.refresh)),
           ]),
         ],
       ),
@@ -220,8 +187,12 @@ class MapSampleState extends State<MapSample> {
       "image": image,
       "lat": point.latitude,
       "long": point.longitude,
-      "users": {"1": true}
+      "users": {"1": true},
     });
+    
+    //increment the pin counter in the db
+    DatabaseReference counterRef = FirebaseDatabase.instance.ref("counter/");
+    counterRef.child("count").set(ServerValue.increment(1));
   }
 
   Future<void> _dataOnChange() async {
@@ -241,25 +212,24 @@ class MapSampleState extends State<MapSample> {
         markerManager.removeAll();
       });
     });
+    
+    //to get the count of current pins in the db so we don't overwrite
+    DatabaseReference counterRef = FirebaseDatabase.instance.ref("counter/");
+    counterRef.child("count").get().then((DataSnapshot snapshot) {
+      int count = snapshot.value != null ? snapshot.value as int : 0;
+      markerManager.setCounter(count);
+    });
   }
 
   //Function to delete data from the database
-  // Future<void> _deleteData() async {
-  // await FirebaseDatabase.instance.ref("pins/").remove();
-  // setState(() {
-  // markerManager.removeAll();
-  // });
-  // }
-
-  // void _readData() async {
-  //   DatabaseReference ref = FirebaseDatabase.instance.ref("pins/");
-  //   DatabaseEvent event = await ref.once();
-  //   if (event.snapshot.value == null) {
-  //     return;
-  //   }
-  //   Map data = event.snapshot.value as Map;
-  //   markerManager.addMarker(LatLng(data['lat'], data['long']), data['name']);
-  // }
+  Future<void> _deleteData() async {
+    await FirebaseDatabase.instance.ref("pins/").remove();
+    setState(() {
+      markerManager.removeAll();
+    });
+    DatabaseReference counterRef = FirebaseDatabase.instance.ref("counter/");
+    counterRef.child("count").set(0);
+  }
 
 // --------------- Ask for location permission -----------------
 

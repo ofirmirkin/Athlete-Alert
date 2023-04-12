@@ -8,6 +8,7 @@ class MarkerManager {
   late Set<Marker> _markers;
   int _counter = 0;
   //TODO: store counter in the database and fix the bug that downloaded markers are rewritten
+  
 
   MarkerManager() {
     _markers = Set<Marker>();
@@ -48,11 +49,11 @@ class MarkerManager {
       Marker(
         markerId: MarkerId(markerId),
         position: point,
+        consumeTapEvents: true,
         icon: await BitmapDescriptor.fromAssetImage(
              const ImageConfiguration(size: Size(32, 32)), "assets/$image"),
         onTap: () {
-          Navigator.of(context)
-              .push(MaterialPageRoute(builder: (context) => CountdownPage()));
+          onTapFunc(context);
         },
       ),
     );
@@ -82,7 +83,6 @@ class MarkerManager {
         onTap: () {
           onTapFunc(context);
         },
-        //icon: markerIcon,
         icon: await BitmapDescriptor.fromAssetImage(
              const ImageConfiguration(size: Size(32, 32)), "assets/$iconName"),
       ),
