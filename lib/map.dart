@@ -38,6 +38,7 @@ class MapSampleState extends State<MapSample> {
   void initState() {
     super.initState();
     _dataOnChange();
+    // determinePosition();
     // markerManager.addUserMarker(const LatLng(53.343667, -6.2544447), 'marker',
     //     _navigateToNextScreen, context);
   }
@@ -87,20 +88,10 @@ class MapSampleState extends State<MapSample> {
           ),
           Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [
             IconButton(
-                onPressed: (() {
-                  _determinePosition();
-                }),
-                icon: const Icon(Icons.location_pin)),
-            IconButton(
                 onPressed: () async {
                   _deleteData();
                 },
                 icon: const Icon(Icons.refresh)),
-            // IconButton(
-            //     onPressed: () {
-            //       // _readData();
-            //     },
-            //     icon: const Icon(Icons.arrow_downward))
           ]),
         ],
       ),
@@ -158,7 +149,7 @@ class MapSampleState extends State<MapSample> {
 
 // --------------- Ask for location permission -----------------
 
-  Future<Position> _determinePosition() async {
+  Future<Position> determinePosition() async {
     bool serviceEnabled;
     LocationPermission permission;
 
