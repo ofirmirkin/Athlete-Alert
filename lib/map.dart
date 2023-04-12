@@ -38,6 +38,7 @@ class MapSampleState extends State<MapSample> {
   void initState() {
     super.initState();
     _dataOnChange();
+    _determinePosition();
     // markerManager.addUserMarker(const LatLng(53.343667, -6.2544447), 'marker',
     //     _navigateToNextScreen, context);
   }
