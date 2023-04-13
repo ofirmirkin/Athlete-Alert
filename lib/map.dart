@@ -231,14 +231,29 @@ class MapSampleState extends State<MapSample> {
               mainAxisSize: MainAxisSize.min,
               children: [
                 TextButton.icon(
-                  icon: Icon(Icons.edit, color: Colors.white),
+                  icon: Icon(Icons.access_time, color: Colors.white),
                   label: Text(
-                    'Set Timer',
+                    'Set Timer Now',
                     style: TextStyle(color: Colors.white),
                   ),
                   onPressed: () {
-                    Navigator.of(context).pop();
-                    _setTimer();
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => Page1()),
+                    );
+                  },
+                ),
+                TextButton.icon(
+                  icon: Icon(Icons.calendar_today, color: Colors.white),
+                  label: Text(
+                    'Set Future Time',
+                    style: TextStyle(color: Colors.white),
+                  ),
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => TimerPage()),
+                    );
                   },
                 ),
                 SizedBox(height: 10),
@@ -267,6 +282,11 @@ class MapSampleState extends State<MapSample> {
 
   void _setTimer() {
     ////*********USE THIS TO GET TO TIMER PAGE****************
+    //CountDownPage()
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => CountDownPage()),
+    );
   }
 
   //For showing autocompletion suggestions
