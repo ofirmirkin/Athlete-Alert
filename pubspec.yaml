@@ -35,6 +35,7 @@ dev_dependencies:
   firebase_database: ^10.0.15
   cloud_firestore: ^4.5.0
   wear: ^1.1.0
+  shared_preferences: ^2.1.0
   # timer_button: ^2.0.0
 
 flutter:
