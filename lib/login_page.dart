@@ -4,8 +4,8 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'forgot-password.dart';
-import 'signup.dart';
 import 'package:geolocator/geolocator.dart';
+import 'signup.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({Key? key}) : super(key: key);
@@ -47,23 +47,27 @@ class _LoginPageState extends State<LoginPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        backgroundColor: Colors.blueGrey,
+        //backgroundColor: Colors.indigoAccent[700],
+        backgroundColor: Color.fromRGBO(47, 36, 255, 1),
         body: SafeArea(
             child: Center(
                 child: SingleChildScrollView(
           child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
             // ignore: prefer_const_constructors
-            Icon(
-              Icons.add_location_alt_sharp,
-              size: 90,
-            ),
+            // Icon(
+            //   Icons.add_location_alt_outlined,
+            //   color: Colors.white,
+            //   size: 90,
+            // ),
+            Image.asset('assets/images/logo.png'), // height: 222 , width: 300),
             // ignore: prefer_const_constructors
-            SizedBox(height: 100),
+            SizedBox(height: 15),
             //TODO Touch up spacing and colour theme for phone version
             //Welcome
             Text(
               'Welcome',
               style: GoogleFonts.bebasNeue(
+                color: Colors.white,
                 fontSize: 36,
               ),
             ),
@@ -74,22 +78,22 @@ class _LoginPageState extends State<LoginPage> {
             SizedBox(height: 15),
 
             Text(
-              'Great to see your alive and well',
-              style: TextStyle(fontSize: 20),
+              'Great to see youre alive and well',
+              style: TextStyle(fontSize: 15, color: Colors.white),
             ),
             //Signup Button Goes to @KUNAL
-            SizedBox(height: 25),
+            SizedBox(height: 15),
 
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 25.0),
               child: Container(
                 decoration: BoxDecoration(
-                  color: Color.fromARGB(255, 158, 233, 233),
-                  border: Border.all(color: Colors.white),
+                  color: Colors.white,
+                  border: Border.all(color: Colors.blueAccent),
                   borderRadius: BorderRadius.circular(12),
                 ),
                 child: Padding(
-                  padding: const EdgeInsets.only(left: 18.0),
+                  padding: const EdgeInsets.only(left: 22.0),
                   child: TextField(
                     controller: _emailController,
                     // at the moment theres no limit to the
@@ -103,18 +107,19 @@ class _LoginPageState extends State<LoginPage> {
               ),
             ),
 
-            SizedBox(height: 25),
+            SizedBox(height: 15),
 
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 25.0),
               child: Container(
                 decoration: BoxDecoration(
-                  color: Color.fromARGB(255, 158, 233, 233),
-                  border: Border.all(color: Colors.white),
+                  //color: Color.fromARGB(255, 158, 233, 233),
+                  color: Colors.white,
+                  border: Border.all(color: Colors.blueAccent),
                   borderRadius: BorderRadius.circular(12),
                 ),
                 child: Padding(
-                  padding: const EdgeInsets.only(left: 18.0),
+                  padding: const EdgeInsets.only(left: 22.0),
                   child: TextField(
                     controller: _passwordController,
                     obscureText: true,
@@ -129,18 +134,47 @@ class _LoginPageState extends State<LoginPage> {
               ),
             ),
 
-            SizedBox(height: 25),
+            SizedBox(height: 10),
 
-            //SizedBox(height: 25),
+            Row(
+              //mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                GestureDetector(
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) {
+                          return ForgotPasswordPage();
+                        },
+                      ),
+                    );
+                  },
+                  child: Padding(
+                    //alignment: Alignment.centerLeft,
+                    padding: const EdgeInsets.only(left: 220.0),
+                    child: Text(
+                      'Forgot your Password?',
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+
+            SizedBox(height: 15),
 
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 150.0),
               child: GestureDetector(
                 onTap: logIn,
                 child: Container(
-                  padding: EdgeInsets.all(20),
+                  padding: EdgeInsets.all(10),
                   decoration: BoxDecoration(
-                    color: Colors.grey,
+                    color: Colors.blueAccent,
                     border: Border.all(color: Colors.white),
                     borderRadius: BorderRadius.circular(12),
                   ),
@@ -153,12 +187,12 @@ class _LoginPageState extends State<LoginPage> {
               ),
             ),
 
-            SizedBox(height: 25),
+            SizedBox(height: 15),
 
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Text('Dont Have an Account?',
+                Text('Dont Have an Account?  ',
                     style: TextStyle(
                         color: Colors.white, fontWeight: FontWeight.bold)),
                 GestureDetector(
@@ -175,67 +209,43 @@ class _LoginPageState extends State<LoginPage> {
                   child: Text(
                     'Sign Up Now',
                     style: TextStyle(
-                      color: Colors.black,
+                      color: Colors.white,
                       fontWeight: FontWeight.bold,
+                      decoration: TextDecoration.underline,
                     ),
                   ),
                 ),
               ],
             ),
 
-            SizedBox(height: 25),
-
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                GestureDetector(
-                  onTap: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) {
-                          return ForgotPasswordPage();
-                        },
-                      ),
-                    );
-                  },
-                  child: Text(
-                    'Forgot Password?',
-                    style: TextStyle(
-                      color: Colors.red,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                ),
-              ],
-            ),
+            SizedBox(height: 15),
           ]),
         ))));
   }
-  // --------------- Ask for location permission -----------------
+}
+// --------------- Ask for location permission -----------------
 
-  Future<Position> determinePosition() async {
-    bool serviceEnabled;
-    LocationPermission permission;
+Future<Position> determinePosition() async {
+  bool serviceEnabled;
+  LocationPermission permission;
 
-    serviceEnabled = await Geolocator.isLocationServiceEnabled();
-    if (!serviceEnabled) {
-      return Future.error('Location services are disabled.');
-    }
-
-    permission = await Geolocator.checkPermission();
-    if (permission == LocationPermission.denied) {
-      permission = await Geolocator.requestPermission();
-      if (permission == LocationPermission.denied) {
-        return Future.error('Location permissions are denied');
-      }
-    }
-
-    if (permission == LocationPermission.deniedForever) {
-      return Future.error(
-          'Location permissions are permanently denied, we cannot request permissions.');
-    }
-
-    return await Geolocator.getCurrentPosition();
+  serviceEnabled = await Geolocator.isLocationServiceEnabled();
+  if (!serviceEnabled) {
+    return Future.error('Location services are disabled.');
   }
+
+  permission = await Geolocator.checkPermission();
+  if (permission == LocationPermission.denied) {
+    permission = await Geolocator.requestPermission();
+    if (permission == LocationPermission.denied) {
+      return Future.error('Location permissions are denied');
+    }
+  }
+
+  if (permission == LocationPermission.deniedForever) {
+    return Future.error(
+        'Location permissions are permanently denied, we cannot request permissions.');
+  }
+
+  return await Geolocator.getCurrentPosition();
 }
