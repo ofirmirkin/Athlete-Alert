@@ -67,7 +67,7 @@ class _LogInWatch extends State<LogInWatch> {
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
-        toolbarHeight: 45.0,
+        toolbarHeight: 37.0,
         title: const Text('Login'),
       ),
       body: Center(
