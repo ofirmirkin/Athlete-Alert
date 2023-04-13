@@ -44,8 +44,6 @@ class WatchMapState extends State<WatchMap> {
 
   @override
   void initState() {
-    WatchLocation loc = WatchLocation();
-    loc.askPermission();
     super.initState();
   }
 
