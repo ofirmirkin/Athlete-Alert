@@ -21,7 +21,28 @@ class _LogInWatch extends State<LogInWatch> {
         email: _emailController.text.trim(),
         password: _passwordController.text.trim(),
       );
+
+      ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+              duration: const Duration(seconds: 2),
+              content: Container(
+                alignment: Alignment.center,
+                child: const Text("👌"),
+              )
+          )
+      );
+
     } on FirebaseAuthException catch (e) {
+
+      ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+              content: Container(
+                alignment: Alignment.center,
+                child: const Text('User not found'),
+              )
+          )
+      );
+
       print('Failed with error code: ${e.code}');
       print(e.message);
     }
