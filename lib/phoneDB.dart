@@ -31,12 +31,12 @@ Future<String> readPhoneNum(String userId) async {
   return data['number'];
 }
 
-class MyButton extends StatefulWidget {
+class EnterPhoneNum extends StatefulWidget {
   @override
-  _MyButtonState createState() => _MyButtonState();
+  _EnterPhoneNumState createState() => _EnterPhoneNumState();
 }
 
-class _MyButtonState extends State<MyButton> {
+class _EnterPhoneNumState extends State<EnterPhoneNum> {
   String phoneNumber = '';
 
   void _storePhoneNumber(String number) {
@@ -49,11 +49,12 @@ class _MyButtonState extends State<MyButton> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('My Button'),
+        title: const Text('Enter your emergency phone number'),
       ),
       body: Column(
         children: [
           TextField(
+            keyboardType: TextInputType.number,
             decoration: InputDecoration(
               hintText: 'Enter phone number',
             ),
@@ -64,7 +65,8 @@ class _MyButtonState extends State<MyButton> {
           SizedBox(height: 16),
           ElevatedButton(
             onPressed: () {
-              print(phoneNumber);
+              print("---------------- $phoneNumber");
+              sendPhoneNum(phoneNumber);
             },
             child: Text('Store Phone Number'),
           ),

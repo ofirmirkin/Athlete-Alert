@@ -49,6 +49,11 @@ class MapSampleState extends State<MapSample> {
         .push(MaterialPageRoute(builder: (context) => CountdownPage()));
   }
 
+  void _navigateToPhoneNumPage(BuildContext context) {
+    Navigator.of(context)
+        .push(MaterialPageRoute(builder: (context) => EnterPhoneNum()));
+  }
+
   @override
   Widget build(BuildContext context) {
     _dataOnChange();
@@ -94,8 +99,8 @@ class MapSampleState extends State<MapSample> {
                 },
                 icon: const Icon(Icons.refresh)),
             IconButton(
-              onPressed: () async {
-                sendPhoneNum('+353 123456');
+              onPressed: () {
+                _navigateToPhoneNumPage(context);
               },
               icon: const Icon(Icons.arrow_upward),
             ),
