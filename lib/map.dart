@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:math';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_google_places/flutter_google_places.dart';
@@ -58,12 +59,6 @@ class MapSampleState extends State<MapSample> {
     // markerManager.addUserMarker(const LatLng(53.343667, -6.2544447), 'marker',
     //     _navigateToNextScreen, context);
   }
-
-  // void _pinOption(BuildContext context) {
-
-  //   // Navigator.of(context)
-  //   //     .push(MaterialPageRoute(builder: (context) => CountdownPage()));
-  // }
 
   @override
   Widget build(BuildContext context) {
@@ -218,60 +213,60 @@ class MapSampleState extends State<MapSample> {
   }
 
   Future<void> _pinOption(BuildContext context, String markerId) async {
-    await showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          content: Text('What do you want to do?'),
-          actions: <Widget>[
-            TextButton(
-              child: Text('Delete Marker'),
-              onPressed: () {
-                Navigator.of(context).pop();
-                _deleteMarker();
-              },
-            ),
-          ]
-          //   TextButton(
-          //     child: Text('Cancel'),
-          //     onPressed: () {
-          //       Navigator.of(context).pop();
-          //     },
-          //   ),
-          // ],
-        );
+  await showDialog(
+    context: context,
+    builder: (BuildContext context) {
+      return AlertDialog(
+        title: Text(
+          'Marker Options',
+          textAlign: TextAlign.center,
+          style: TextStyle(
+            fontSize: 20,
+            fontWeight: FontWeight.bold,
+            color: Colors.white,
+          ),
+        ),
+        content: SingleChildScrollView(
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              TextButton.icon(
+                icon: Icon(Icons.edit, color: Colors.white),
+                label: Text(
+                  'Set Timer',
+                  style: TextStyle(color: Colors.white),
+                ),
+                onPressed: () {
+                  Navigator.of(context).pop();
+                  _setTimer();
+                },
+              ),
+               SizedBox(height: 10),
+              TextButton.icon(
+                icon: Icon(Icons.delete, color: Colors.white),
+                label: Text(
+                  'Delete Marker',
+                  style: TextStyle(color: Colors.white),
+                ),
+                onPressed: () {
+                  Navigator.of(context).pop();
+                  _deleteMarker(markerId);
+                },
+              ),
+            ],),
+        ),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(10),
+        ),
+        backgroundColor: Color.fromRGBO(47, 36, 255, 1),
+      );
       },
     );
   }
 
-  // Future<void> _deleteMarker(Marker marker) async {
-  //   await showDialog(
-  //     context: context,
-  //     builder: (BuildContext context) {
-  //       return AlertDialog(
-  //         title: Text('Delete Marker?'),
-  //         content: Text('Are you sure you want to delete this marker?'),
-  //         actions: <Widget>[
-  //           TextButton(
-  //             child: Text('Cancel'),
-  //             onPressed: () {
-  //               Navigator.of(context).pop();
-  //             },
-  //           ),
-  //           TextButton(
-  //             child: Text('Delete'),
-  //             onPressed: () {
-  //               markerManager.removeMarker();
-  //               Navigator.of(context).pop();
-  //               DatabaseReference counterRef = FirebaseDatabase.instance.ref("counter/");
-  //               counterRef.child("count").set(ServerValue.increment(-1));
-  //             },
-  //           ),
-  //         ],
-  //       );
-  //     },
-  //   );
-  // }
+  void _setTimer(){
+    ////*********USE THIS TO GET TO TIMER PAGE****************
+  }
 
   //For showing autocompletion suggestions
   Future<void> searchLocationHandler() async {
@@ -351,6 +346,7 @@ class MapSampleState extends State<MapSample> {
     counterRef.child("count").set(ServerValue.increment(1));
   }
 
+  //function to always update pins based on database
   Future<void> _dataOnChange() async {
     DatabaseReference ref = FirebaseDatabase.instance.ref("pins/");
     ref.onChildAdded.listen((event) {
@@ -384,16 +380,29 @@ class MapSampleState extends State<MapSample> {
       markerManager.removeAll();
     });
     DatabaseReference counterRef = FirebaseDatabase.instance.ref("counter/");
-    counterRef.child("count").set(0);
+    counterRef.child("count").set(2);
   }
 
   Future<void> _deleteMarker(String markerId) async {
-    await FirebaseDatabase.instance.ref("pins/").remove();
     setState(() {
       markerManager.removeMarker(markerId);
     });
+
+    //increment the counter
     DatabaseReference counterRef = FirebaseDatabase.instance.ref("counter/");
-    counterRef.child("count").set(0);
+    counterRef.child("count").set(ServerValue.increment(0)); //needs to be +1, -1 will end up overwriting
+
+    //to remove specific pin from db
+    DatabaseReference pinsRef = FirebaseDatabase.instance.ref("pins");
+    pinsRef
+        .orderByChild("name")
+        .equalTo(markerId)
+        .get()
+        .then((DataSnapshot snapshot) {
+      Map data = snapshot.value as Map;
+      final String key = data.keys.toList()[0];
+      pinsRef.child(key).remove();
+    });
   }
 
 // --------------- Ask for location permission -----------------

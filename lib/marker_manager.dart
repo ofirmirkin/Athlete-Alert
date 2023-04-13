@@ -6,7 +6,7 @@ import 'timer.dart';
 
 class MarkerManager {
   late Set<Marker> _markers;
-  int _counter = 0;
+  int _counter = 2;
   //TODO: store counter in the database and fix the bug that downloaded markers are rewritten
 
   MarkerManager() {
@@ -23,11 +23,11 @@ class MarkerManager {
 
   void removeAll() {
     _markers.clear();
-    _counter = 0;
+    //_counter = 0;
   }
 
   void removeMarker(String markerId) {
-    _markers.removeWhere((marker) => MarkerId(markerId).value == markerId);
+    _markers.removeWhere((marker) => marker.markerId.value == markerId);
   }
 
   void addMarker(LatLng point, String markerId, BuildContext context) {
