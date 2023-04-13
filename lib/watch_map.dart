@@ -8,6 +8,8 @@ import 'package:geolocator/geolocator.dart';
 import 'SOS_confirmation.dart';
 import 'SendSMS.dart';
 import 'marker_manager.dart';
+import 'phoneDB.dart';
+
 import 'firebase_options.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_database/firebase_database.dart';
@@ -33,7 +35,7 @@ class WatchMapState extends State<WatchMap> {
   bool showButtons = true;
   // WatchTimerManager timerManager = WatchTimerManager();
   MarkerManager markerManager = MarkerManager();
-  // final user = FirebaseAuth.instance.currentUser!;
+  final user = FirebaseAuth.instance.currentUser!;
   late GoogleMapController _controller;
 
   // Initial position of the map
@@ -44,8 +46,6 @@ class WatchMapState extends State<WatchMap> {
 
   @override
   void initState() {
-    WatchLocation loc = WatchLocation();
-    loc.askPermission();
     super.initState();
   }
 
@@ -66,7 +66,8 @@ class WatchMapState extends State<WatchMap> {
   int defautDuration = 900;
   int userDurarion = 0;
 
-  void startTimer(int duration) {
+  void startTimer(int duration) async {
+    String phoneNum = await readPhoneNum(user.uid);
     timerRunning = true;
     if (duration > 0) {
       setState(() {
@@ -80,7 +81,7 @@ class WatchMapState extends State<WatchMap> {
             if (_remainingSeconds < 1) {
               timer.cancel();
               SMS sms = SMS();
-              sms.sendSMS();
+              sms.sendSMS(phoneNum, context);
             } else {
               _remainingSeconds = _remainingSeconds - 1;
             }
@@ -182,10 +183,8 @@ class WatchMapState extends State<WatchMap> {
           child: FloatingActionButton.small(
             heroTag: "SOS",
             onPressed: () {
-              Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) => const SOS_confirmation()));
+              Navigator.push(context,
+                  MaterialPageRoute(builder: (context) => SOS_confirmation()));
             },
             backgroundColor: Colors.red,
             child: const Icon(Icons.sos),

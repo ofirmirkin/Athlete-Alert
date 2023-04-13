@@ -27,6 +27,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:never_surf_alone/main_page.dart';
 import 'login_page.dart';
+import 'phoneDB.dart';
 
 class MapSample extends StatefulWidget {
   @override
@@ -61,6 +62,11 @@ class MapSampleState extends State<MapSample> {
   void _navigateToNextScreen(BuildContext context) {
     // Navigator.of(context)
     //     .push(MaterialPageRoute(builder: (context) => CountdownPage()));
+  }
+
+  void _navigateToPhoneNumPage(BuildContext context) {
+    Navigator.of(context)
+        .push(MaterialPageRoute(builder: (context) => EnterPhoneNum()));
   }
 
   @override

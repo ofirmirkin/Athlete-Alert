@@ -5,7 +5,6 @@ class WatchLocation {
 
   WatchLocation() {
     location = Location();
-    location.enableBackgroundMode(enable: true);
   }
 
   void askPermission() async {
@@ -16,7 +15,7 @@ class WatchLocation {
     if (!serviceEnabled) {
       serviceEnabled = await location.requestService();
       if (!serviceEnabled) {
-        Future.error('Location services are disabled.');
+        return Future.error('Location services are disabled.');
       }
     }
 
@@ -24,9 +23,10 @@ class WatchLocation {
     if (permissionGranted == PermissionStatus.denied) {
       permissionGranted = await location.requestPermission();
       if (permissionGranted != PermissionStatus.granted) {
-        Future.error('Location permissions are denied');
+        return Future.error('Location permissions are denied');
       }
     }
+    location.enableBackgroundMode(enable: true);
   }
 
   Future<LocationData> determinePosition() {
