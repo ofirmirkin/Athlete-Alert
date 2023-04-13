@@ -81,7 +81,7 @@ class WatchMapState extends State<WatchMap> {
             if (_remainingSeconds < 1) {
               timer.cancel();
               SMS sms = SMS();
-              sms.sendSMS(phoneNum);
+              sms.sendSMS(phoneNum, context);
             } else {
               _remainingSeconds = _remainingSeconds - 1;
             }

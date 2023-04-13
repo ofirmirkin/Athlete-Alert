@@ -29,10 +29,10 @@ class SOS_confirmation extends StatelessWidget {
                 ),
               ),
               ElevatedButton(
-                onPressed: () {
-                  String number = '+34618006882';
+                onPressed: () async {
+                  String phoneNum = await readPhoneNum(user.uid);
                   SMS sms = SMS();
-                  sms.sendSMS(number);
+                  sms.sendSMS(phoneNum, context);
 
                   Navigator.pop(context);
                 },
@@ -45,14 +45,8 @@ class SOS_confirmation extends StatelessWidget {
                   onPressed: () {
                     Navigator.pop(context);
                   },
-                  child: const Text('Cancel')),
-              IconButton(
-                  onPressed: () async {
-                    String phoneNum = await readPhoneNum(user.uid);
-                    SMS sms = SMS();
-                    sms.sendSMS(phoneNum);
-                  },
-                  icon: const Icon(Icons.home)),
+                  child: const Text('Cancel')
+              ),
             ],
           ),
         ),

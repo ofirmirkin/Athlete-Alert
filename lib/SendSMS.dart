@@ -1,3 +1,5 @@
+import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:twilio_flutter/twilio_flutter.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 
@@ -15,11 +17,20 @@ class SMS {
         );
   }
 
-  void sendSMS(String number) async {
+  void sendSMS(String number, BuildContext context) async {
     twilioFlutter.sendSMS(
         toNumber: number,
         messageBody:
-            "EMERGENCY - Your friend needs help and he might be in danger. Try to make contact immediately or call the emergency services");
+            "EMERGENCY - Your friend needs help and he might be in danger. Try to make contact immediately or call the emergency services"
+    );
+    ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+            content: Container(
+              alignment: Alignment.center,
+              child: const Text('SMS sent!'),
+            )
+        )
+    );
   }
 }
 
