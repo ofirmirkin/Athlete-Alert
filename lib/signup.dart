@@ -1,6 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'phoneDB.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class SignUpPage extends StatefulWidget {
@@ -29,8 +30,13 @@ class _SignUpPageState extends State<SignUpPage> {
           .createUserWithEmailAndPassword(
               email: _usernameController.text.trim(),
               password: _passwordController.text.trim());
+      Navigator.push(
+        context,
+        MaterialPageRoute(builder: (context) => EnterPhoneNum()),
+      );
 
-      print('User created with Email: ${userCredential.user!.email} and Password: ${_passwordController.text.trim()}');
+      print(
+          'User created with Email: ${userCredential.user!.email} and Password: ${_passwordController.text.trim()}');
 
       // Create user document in Firestore
       await _usersCollection.doc(userCredential.user!.uid).set({
@@ -127,18 +133,18 @@ class _SignUpPageState extends State<SignUpPage> {
                 ),
                 SizedBox(height: 25),
 
-                // Emergency contact number field
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 25.0),
-                  child: TextField(
-                    controller: _emergencyContactController,
-                    decoration: InputDecoration(
-                      border: OutlineInputBorder(),
-                      labelText: 'Emergency Contact Number',
-                    ),
-                  ),
-                ),
-                SizedBox(height: 25),
+                // // Emergency contact number field
+                // Padding(
+                //   padding: const EdgeInsets.symmetric(horizontal: 25.0),
+                //   child: TextField(
+                //     controller: _emergencyContactController,
+                //     decoration: InputDecoration(
+                //       border: OutlineInputBorder(),
+                //       labelText: 'Emergency Contact Number',
+                //     ),
+                //   ),
+                // ),
+                // SizedBox(height: 25),
 
                 // Sign up button
                 ElevatedButton(
@@ -154,9 +160,34 @@ class _SignUpPageState extends State<SignUpPage> {
                     // create user
                     await _createUser();
 
-                    Navigator.pop(context);
+                    // Navigator.pop(context);
                   },
                   child: Text('Sign Up'),
+
+                  // Row(
+                  //   mainAxisAlignment: MainAxisAlignment.center,
+                  //   children: [
+                  //     GestureDetector(
+                  //       onTap: () {
+                  //         Navigator.push(
+                  //           context,
+                  //           MaterialPageRoute(
+                  //             builder: (context) {
+                  //               return EnterPhoneNum();
+                  //             },
+                  //           ),
+                  //         );
+                  //       },
+                  //       child: Text(
+                  //         'Sign Up',
+                  //         style: TextStyle(
+                  //           color: Colors.black,
+                  //           fontWeight: FontWeight.bold,
+                  //         ),
+                  //       ),
+                  //     ),
+                  //   ],
+                  // ),
                 ),
               ],
             ),

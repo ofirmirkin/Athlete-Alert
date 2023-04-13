@@ -67,6 +67,8 @@ class _EnterPhoneNumState extends State<EnterPhoneNum> {
             onPressed: () {
               print("---------------- $phoneNumber");
               sendPhoneNum(phoneNumber);
+              Navigator.pop(context);
+              Navigator.pop(context);
             },
             child: Text('Store Phone Number'),
           ),

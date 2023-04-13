@@ -4,6 +4,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'forgot-password.dart';
+import 'signup.dart';
 import 'package:geolocator/geolocator.dart';
 
 class LoginPage extends StatefulWidget {
@@ -160,10 +161,25 @@ class _LoginPageState extends State<LoginPage> {
                 Text('Dont Have an Account?',
                     style: TextStyle(
                         color: Colors.white, fontWeight: FontWeight.bold)),
-                Text(' Signup Now',
+                GestureDetector(
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) {
+                          return SignUpPage();
+                        },
+                      ),
+                    );
+                  },
+                  child: Text(
+                    'Sign Up Now',
                     style: TextStyle(
-                        color: Color.fromARGB(255, 2, 128, 232),
-                        fontWeight: FontWeight.bold)),
+                      color: Colors.black,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ),
               ],
             ),
 
