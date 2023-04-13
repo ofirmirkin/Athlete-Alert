@@ -6,7 +6,7 @@ import 'timer.dart';
 
 class MarkerManager {
   late Set<Marker> _markers;
-  int _counter = 2;
+  int _counter = 0;
   //TODO: store counter in the database and fix the bug that downloaded markers are rewritten
 
   MarkerManager() {
@@ -23,11 +23,7 @@ class MarkerManager {
 
   void removeAll() {
     _markers.clear();
-    //_counter = 0;
-  }
-
-  void removeMarker(String markerId) {
-    _markers.removeWhere((marker) => marker.markerId.value == markerId);
+    _counter = 0;
   }
 
   void addMarker(LatLng point, String markerId, BuildContext context) {
@@ -38,7 +34,7 @@ class MarkerManager {
         icon: BitmapDescriptor.defaultMarkerWithHue(
           BitmapDescriptor.hueViolet,
         ),
-        /*onTap: () {
+          /*onTap: () {
             Navigator.of(context)
                 .push(MaterialPageRoute(builder: (context) => CountdownPage()));
           },*/
@@ -47,17 +43,17 @@ class MarkerManager {
     _counter++;
   }
 
-  void addMarkerFromDB(LatLng point, String markerId, String image,
-      Function onTapFunc, BuildContext context) async {
+  void addMarkerFromDB(LatLng point, String markerId, BuildContext context) {
     _markers.add(
       Marker(
         markerId: MarkerId(markerId),
         position: point,
-        consumeTapEvents: true,
-        icon: await BitmapDescriptor.fromAssetImage(
-            const ImageConfiguration(size: Size(32, 32)), "assets/$image"),
+        icon: BitmapDescriptor.defaultMarkerWithHue(
+          BitmapDescriptor.hueViolet,
+        ),
         onTap: () {
-          onTapFunc(context, markerId);
+          Navigator.of(context)
+              .push(MaterialPageRoute(builder: (context) => CountdownPage()));
         },
       ),
     );
@@ -75,22 +71,5 @@ class MarkerManager {
         },
       ),
     );
-  }
-
-  void addCostumeMarker(LatLng point, String markerId, Function onTapFunc,
-      BuildContext context, String iconName) async {
-    _markers.add(
-      Marker(
-        markerId: MarkerId(markerId),
-        position: point,
-        consumeTapEvents: true,
-        onTap: () {
-          onTapFunc(context);
-        },
-        icon: await BitmapDescriptor.fromAssetImage(
-            const ImageConfiguration(size: Size(32, 32)), "assets/$iconName"),
-      ),
-    );
-    _counter++;
   }
 }

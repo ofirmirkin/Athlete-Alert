@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:never_surf_alone/main_page.dart';
+import 'package:never_surf_alone/menu-page.dart';
+import 'login_page.dart';
 import 'map.dart';
 
 // Everything is hard coded at the moment
 // Need to pull user details from db
-//
+// 
+
 
 class AccDetailsHome extends StatelessWidget {
   const AccDetailsHome({super.key});
@@ -12,10 +15,10 @@ class AccDetailsHome extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: Colors.cyanAccent,
       appBar: AppBar(
         automaticallyImplyLeading: false,
-        backgroundColor: Color.fromRGBO(47, 36, 255, 1),
+        backgroundColor: Colors.cyan,
         flexibleSpace: const MenuAppBar(),
       ),
       body: const AccountDetailList(),
@@ -35,7 +38,7 @@ class CustomAppBar extends StatelessWidget {
         ),
         Expanded(
           child: Container(
-            color: Color.fromRGBO(47, 36, 255, 1),
+            color: Colors.cyan,
             child: Row(
               children: [
                 const SizedBox(
@@ -55,22 +58,27 @@ class CustomAppBar extends StatelessWidget {
                         radius: 20,
                         backgroundImage: NetworkImage(
                             //placeholder profile picture
-                            'https://instagram.fdub7-1.fna.fbcdn.net/v/t51.2885-19/209080492_326970612307483_2835102815111713539_n.jpg?stp=dst-jpg_s150x150&_nc_ht=instagram.fdub7-1.fna.fbcdn.net&_nc_cat=107&_nc_ohc=E6zekHs1LOQAX9rFNyF&edm=AOQ1c0wBAAAA&ccb=7-5&oh=00_AfAS_SZjw3bS7BgKN8Tx748405DyIrODI4F4x1ANbWE_Gw&oe=643C9480&_nc_sid=8fd12b'),
-                        backgroundColor: Colors.white,
+                            'https://marketplace.canva.com/EAFEits4-uw/1/0/1600w/canva-boy-cartoon-gamer-animated-twitch-profile-photo-oEqs2yqaL8s.jpg'),
+                        backgroundColor: Colors.cyanAccent,
                       )),
                 ),
                 const Spacer(),
                 const Text(
-                  "Athlete Alert",
+                  "Never Surf Alone",
                   style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 20),
                 ),
                 const Spacer(),
                 // Menu icon in top right corner, change to icon button in future
-                const Icon(
-                  Icons.menu,
-                  size: 40,
-                  color: Colors.white,
-                ),
+                IconButton(
+                    onPressed: () {
+                      Navigator.push(context,
+                          MaterialPageRoute(builder: (context) {
+                        return NavDrawer();
+                      },
+                          ),
+                      );
+                    },
+                    icon: Icon(Icons.menu)),
                 const SizedBox(
                   width: 10,
                 ),
@@ -95,7 +103,7 @@ class MenuAppBar extends StatelessWidget {
         ),
         Expanded(
           child: Container(
-            color:  Color.fromRGBO(47, 36, 255, 1),
+            color: Colors.cyan,
             child: Row(
               children: [
                 IconButton(
@@ -113,10 +121,7 @@ class MenuAppBar extends StatelessWidget {
                 const Spacer(),
                 const Text(
                   "Account Details",
-                  style: TextStyle(
-                      color: Colors.white,
-                      fontWeight: FontWeight.bold,
-                      fontSize: 20),
+                  style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 20),
                 ),
                 const Spacer(),
                 const SizedBox(width: 50),
@@ -136,30 +141,14 @@ class AccountDetailList extends StatefulWidget {
 }
 
 class _AccountDetailListState extends State<AccountDetailList> {
-  List<String> fieldNames = [
-    'Name',
-    'Username',
-    'Birthday',
-    'Mobile Number',
-    'Email'
-  ];
-  List<String> userData = [
-    'John Doe',
-    'bigJD_123',
-    '29 February 2030',
-    '189 022 2222',
-    'JohnDoe@hotmail.ie'
-  ];
+  List<String> fieldNames = ['Name', 'Birthday', 'Mobile Number', 'Email'];
+  List<String> userData = ['John Doe', '29 February 2030', '189 022 2222', AutofillHints.email];
 
-
-//IconData(0xee35, fontFamily: 'MaterialIcons')
   @override
   Widget build(BuildContext context) {
     return ListView.builder(
-      padding: const EdgeInsets.only(top: 10),
       itemCount: userData.length,
-      itemBuilder: (BuildContext context, int index)
-      {
+      itemBuilder: (BuildContext context, int index) {
         return Card(
             child: ListTile(
               title: Text(
@@ -169,19 +158,14 @@ class _AccountDetailListState extends State<AccountDetailList> {
                   fontWeight: FontWeight.bold,
                 ),
                 ),
-          //       shape: RoundedRectangleBorder(
-          //   borderRadius: BorderRadius.circular(80),
-          // ),
               subtitle: Text(userData[index]),
               onTap: () {
                 _editUserName(context, index);
               },
               trailing: const Icon(Icons.arrow_forward_ios_rounded),
-              tileColor: const Color.fromARGB(255, 164, 195, 248),
-
+              tileColor: const Color.fromARGB(255, 198, 248, 244),
             )
-
-        );
+          );
       },
     );
   }
@@ -194,7 +178,7 @@ class _AccountDetailListState extends State<AccountDetailList> {
             TextEditingController(text: userData[index]);
         return AlertDialog(
           title: Text('Edit ${fieldNames[index]}'),
-          backgroundColor: const Color.fromARGB(255, 164, 195, 248),
+          backgroundColor: const Color.fromARGB(255, 198, 248, 244),
           content: TextField(
             controller: controller,
             decoration: InputDecoration(
