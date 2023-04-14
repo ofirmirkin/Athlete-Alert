@@ -28,6 +28,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:never_surf_alone/main_page.dart';
 import 'login_page.dart';
+import 'phoneDB.dart';
 
 class MapSample extends StatefulWidget {
   @override
@@ -58,6 +59,16 @@ class MapSampleState extends State<MapSample> {
     // determinePosition();
     // markerManager.addUserMarker(const LatLng(53.343667, -6.2544447), 'marker',
     //     _navigateToNextScreen, context);
+  }
+
+  void _navigateToNextScreen(BuildContext context) {
+    // Navigator.of(context)
+    //     .push(MaterialPageRoute(builder: (context) => CountdownPage()));
+  }
+
+  void _navigateToPhoneNumPage(BuildContext context) {
+    Navigator.of(context)
+        .push(MaterialPageRoute(builder: (context) => EnterPhoneNum()));
   }
 
   @override

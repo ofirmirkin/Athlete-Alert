@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'WatchMainPage.dart';
 import 'watch_map.dart';
 import'main_page.dart';
 
@@ -12,7 +13,7 @@ class MapDecision extends StatelessWidget {
 
         // Watch-sized device
         if (constraints.maxWidth < 300) {
-          return WatchMap();
+          return WatchMainPage();
         }
         // Phone-sized device
         else {
