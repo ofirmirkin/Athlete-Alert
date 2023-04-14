@@ -14,9 +14,15 @@ class AccDetailsHome extends StatelessWidget {
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
-        automaticallyImplyLeading: false,
         backgroundColor: Color.fromRGBO(47, 36, 255, 1),
-        flexibleSpace: const MenuAppBar(),
+        title: const Text(
+                  "Account Details",
+                  style: TextStyle(
+                      color: Colors.white,
+                      fontWeight: FontWeight.bold,
+                      fontSize: 20),
+                ),
+        centerTitle: true,
       ),
       body: const AccountDetailList(),
     );
@@ -100,10 +106,10 @@ class MenuAppBar extends StatelessWidget {
               children: [
                 IconButton(
                     onPressed: () {
-                      Navigator.push(context,
-                          MaterialPageRoute(builder: (context) {
-                        return const MainPage();
-                      }));
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => MapSample()),
+                      );
                     },
                     icon: const Icon(
                       Icons.arrow_back_ios_new_rounded,
