@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:never_surf_alone/main_page.dart';
 import 'map.dart';
+import 'menu-page.dart';
 
 // Everything is hard coded at the moment
 // Need to pull user details from db
@@ -72,10 +72,18 @@ class CustomAppBar extends StatelessWidget {
                 ),
                 const Spacer(),
                 // Menu icon in top right corner, change to icon button in future
-                const Icon(
-                  Icons.menu,
-                  size: 40,
-                  color: Colors.white,
+                IconButton(
+                  onPressed: () {
+                    Navigator.push(context,
+                          MaterialPageRoute(builder: (context) {
+                        return NavDrawer();
+                    }));
+                  },
+                  icon: const Icon(
+                    Icons.menu,
+                    size: 40,
+                    color: Colors.white,
+                  ),
                 ),
                 const SizedBox(
                   width: 10,

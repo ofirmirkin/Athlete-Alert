@@ -186,6 +186,7 @@ class MapSampleState extends State<MapSample> {
                   },
                 ),
               ),
+              /* BACKEND BUTTONS FOR HARD RESETS
               Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [
                 IconButton(
                     onPressed: (() {
@@ -203,6 +204,7 @@ class MapSampleState extends State<MapSample> {
                 //     },
                 //     icon: const Icon(Icons.arrow_downward))
               ]),
+              */
             ],
           ),
           // Elevated button for searching location
