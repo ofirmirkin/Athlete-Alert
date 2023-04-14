@@ -224,53 +224,69 @@ class MapSampleState extends State<MapSample> {
   }
 
   Future<void> _pinOption(BuildContext context, String markerId) async {
-  await showDialog(
-    context: context,
-    builder: (BuildContext context) {
-      return AlertDialog(
-        title: Text(
-          'Marker Options',
-          textAlign: TextAlign.center,
-          style: TextStyle(
-            fontSize: 20,
-            fontWeight: FontWeight.bold,
-            color: Colors.white,
+    await showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text(
+            'Marker Options',
+            textAlign: TextAlign.center,
+            style: TextStyle(
+              fontSize: 20,
+              fontWeight: FontWeight.bold,
+              color: Colors.white,
+            ),
           ),
-        ),
-        content: SingleChildScrollView(
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              TextButton.icon(
-                icon: Icon(Icons.edit, color: Colors.white),
-                label: Text(
-                  'Set Timer',
-                  style: TextStyle(color: Colors.white),
+          content: SingleChildScrollView(
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                TextButton.icon(
+                  icon: Icon(Icons.access_time, color: Colors.white),
+                  label: Text(
+                    'Set Timer Now',
+                    style: TextStyle(color: Colors.white),
+                  ),
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => Page1()),
+                    );
+                  },
                 ),
-                onPressed: () {
-                  Navigator.of(context).pop();
-                  _setTimer();
-                },
-              ),
-               SizedBox(height: 10),
-              TextButton.icon(
-                icon: Icon(Icons.delete, color: Colors.white),
-                label: Text(
-                  'Delete Marker',
-                  style: TextStyle(color: Colors.white),
+                TextButton.icon(
+                  icon: Icon(Icons.calendar_today, color: Colors.white),
+                  label: Text(
+                    'Set Future Time',
+                    style: TextStyle(color: Colors.white),
+                  ),
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => TimerPage()),
+                    );
+                  },
                 ),
-                onPressed: () {
-                  Navigator.of(context).pop();
-                  _deleteMarker(markerId);
-                },
-              ),
-            ],),
-        ),
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(10),
-        ),
-        backgroundColor: Color.fromRGBO(47, 36, 255, 1),
-      );
+                SizedBox(height: 10),
+                TextButton.icon(
+                  icon: Icon(Icons.delete, color: Colors.white),
+                  label: Text(
+                    'Delete Marker',
+                    style: TextStyle(color: Colors.white),
+                  ),
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                    _deleteMarker(markerId);
+                  },
+                ),
+              ],
+            ),
+          ),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(10),
+          ),
+          backgroundColor: Color.fromRGBO(47, 36, 255, 1),
+        );
       },
     );
   }
