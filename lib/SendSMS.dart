@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:location/location.dart';
 import 'package:never_surf_alone/phoneDB.dart';
 import 'package:twilio_flutter/twilio_flutter.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
@@ -20,11 +21,18 @@ class SMS {
 
   void sendSMS(BuildContext context) async {
     String phoneNum = await readPhoneNum(user.uid);
-
+    String? email = user.email;
+/*
+    Location location = Location();
+    print("Hello!");
+    LocationData ld = await location.getLocation();
+    print("By!");
+    print(ld.latitude);
+*/
     twilioFlutter.sendSMS(
         toNumber: phoneNum,
         messageBody:
-            "EMERGENCY - Your friend needs help and he might be in danger. Try to make contact immediately or call the emergency services"
+            "\n\nEMERGENCY: Your friend ($email) needs help and he might be in danger.\nTry to make contact immediately or call the emergency services"
     );
     ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
