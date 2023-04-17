@@ -95,6 +95,7 @@ class _LoginPageState extends State<LoginPage> {
                 child: Padding(
                   padding: const EdgeInsets.only(left: 22.0),
                   child: TextField(
+                    keyboardType: TextInputType.emailAddress,
                     controller: _emailController,
                     // at the moment theres no limit to the
                     //character so limit will go off screen

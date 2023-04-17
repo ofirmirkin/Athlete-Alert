@@ -60,7 +60,7 @@ class _EnterPhoneNumState extends State<EnterPhoneNum> {
             SizedBox(
               width: 250,
               child: TextField(
-                keyboardType: TextInputType.number,
+                keyboardType: TextInputType.phone,
                 decoration: const InputDecoration(
                   hintText: 'Enter phone number',
                 ),

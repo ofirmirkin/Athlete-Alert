@@ -24,7 +24,7 @@ class _LogInWatch extends State<LogInWatch> {
 
       ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-              duration: const Duration(seconds: 2),
+              duration: const Duration(seconds: 1),
               content: Container(
                 alignment: Alignment.center,
                 child: const Text("👌"),
