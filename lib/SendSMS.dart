@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:never_surf_alone/phoneDB.dart';
 import 'package:twilio_flutter/twilio_flutter.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 
@@ -17,9 +18,11 @@ class SMS {
         );
   }
 
-  void sendSMS(String number, BuildContext context) async {
+  void sendSMS(BuildContext context) async {
+    String phoneNum = await readPhoneNum(user.uid);
+
     twilioFlutter.sendSMS(
-        toNumber: number,
+        toNumber: phoneNum,
         messageBody:
             "EMERGENCY - Your friend needs help and he might be in danger. Try to make contact immediately or call the emergency services"
     );

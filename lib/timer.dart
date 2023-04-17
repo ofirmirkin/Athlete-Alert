@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'dart:async';
 import 'package:intl/intl.dart';
+import 'package:never_surf_alone/phoneDB.dart';
+import 'SendSMS.dart';
 
 class CountDownPage extends StatelessWidget {
   @override
@@ -71,6 +73,7 @@ class _Page1State extends State<Page1> {
   }
 
   void _startTimer() {
+
     int hours = int.tryParse(_hoursController.text) ?? 0;
     int minutes = int.tryParse(_minutesController.text) ?? 0;
     int seconds = int.tryParse(_secondsController.text) ?? 0;
@@ -86,6 +89,9 @@ class _Page1State extends State<Page1> {
           () {
             if (_remainingSeconds < 1) {
               timer.cancel();
+
+              SMS sms = SMS();
+              sms.sendSMS(context);
             } else {
               _remainingSeconds = _remainingSeconds - 1;
             }

@@ -30,9 +30,8 @@ class SOS_confirmation extends StatelessWidget {
               ),
               ElevatedButton(
                 onPressed: () async {
-                  String phoneNum = await readPhoneNum(user.uid);
                   SMS sms = SMS();
-                  sms.sendSMS(phoneNum, context);
+                  sms.sendSMS(context);
 
                   Navigator.pop(context);
                 },
