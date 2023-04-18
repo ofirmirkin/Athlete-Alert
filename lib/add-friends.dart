@@ -33,6 +33,7 @@ class _FriendsPageState extends State<FriendsPage> {
       length: 2,
       child: Scaffold(
         appBar: AppBar(
+          backgroundColor:  Color.fromRGBO(47, 36, 255, 1),   //Background colour at add friends
           title: Text('Friends'),
           bottom: TabBar(
             tabs: [

@@ -30,7 +30,8 @@ class _SignUpPageState extends State<SignUpPage> {
               email: _usernameController.text.trim(),
               password: _passwordController.text.trim());
 
-      print('User created with Email: ${userCredential.user!.email} and Password: ${_passwordController.text.trim()}');
+      print(
+          'User created with Email: ${userCredential.user!.email} and Password: ${_passwordController.text.trim()}');
 
       // Create user document in Firestore
       await _usersCollection.doc(userCredential.user!.uid).set({
@@ -63,7 +64,7 @@ class _SignUpPageState extends State<SignUpPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.blueGrey,
+      backgroundColor: Color.fromRGBO(47, 36, 255, 1),
       body: SafeArea(
         child: Center(
           child: SingleChildScrollView(
@@ -73,14 +74,18 @@ class _SignUpPageState extends State<SignUpPage> {
                 // App icon
                 Icon(
                   Icons.add_location_alt_sharp,
-                  size: 90,
+                  color: Colors.white,
+                  size: 100,
                 ),
-                SizedBox(height: 100),
+                SizedBox(
+                  height: 50,
+                ),
 
                 // Welcome text
                 Text(
                   'Sign Up',
                   style: GoogleFonts.bebasNeue(
+                    color: Colors.white,
                     fontSize: 36,
                   ),
                 ),
@@ -89,11 +94,21 @@ class _SignUpPageState extends State<SignUpPage> {
                 // Username field
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 25.0),
-                  child: TextField(
-                    controller: _usernameController,
-                    decoration: InputDecoration(
-                      border: OutlineInputBorder(),
-                      labelText: 'Username',
+                  child: Container(
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      border: Border.all(color: Colors.blueAccent),
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                    child: Padding(
+                      padding: const EdgeInsets.only(left: 22.0),
+                      child: TextField(
+                        controller: _usernameController,
+                        decoration: InputDecoration(
+                          border: InputBorder.none,
+                          labelText: 'Username',
+                        ),
+                      ),
                     ),
                   ),
                 ),
@@ -102,12 +117,22 @@ class _SignUpPageState extends State<SignUpPage> {
                 // Password field
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 25.0),
-                  child: TextField(
-                    controller: _passwordController,
-                    obscureText: true,
-                    decoration: InputDecoration(
-                      border: OutlineInputBorder(),
-                      labelText: 'Password',
+                  child: Container(
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      border: Border.all(color: Colors.blueAccent),
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 25.0),
+                      child: TextField(
+                        controller: _passwordController,
+                        obscureText: true,
+                        decoration: InputDecoration(
+                          border: InputBorder.none,
+                          labelText: 'Password',
+                        ),
+                      ),
                     ),
                   ),
                 ),
@@ -116,12 +141,22 @@ class _SignUpPageState extends State<SignUpPage> {
                 // Confirm password field
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 25.0),
-                  child: TextField(
-                    controller: _confirmPasswordController,
-                    obscureText: true,
-                    decoration: InputDecoration(
-                      border: OutlineInputBorder(),
-                      labelText: 'Confirm Password',
+                  child: Container(
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      border: Border.all(color: Colors.blueAccent),
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 25.0),
+                      child: TextField(
+                        controller: _confirmPasswordController,
+                        obscureText: true,
+                        decoration: InputDecoration(
+                          border: InputBorder.none,
+                          labelText: 'Confirm Password',
+                        ),
+                      ),
                     ),
                   ),
                 ),
@@ -130,14 +165,25 @@ class _SignUpPageState extends State<SignUpPage> {
                 // Emergency contact number field
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 25.0),
-                  child: TextField(
-                    controller: _emergencyContactController,
-                    decoration: InputDecoration(
-                      border: OutlineInputBorder(),
-                      labelText: 'Emergency Contact Number',
+                  child: Container(
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      border: Border.all(color: Colors.blueAccent),
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 25.0),
+                      child: TextField(
+                        controller: _emergencyContactController,
+                        decoration: InputDecoration(
+                          border: InputBorder.none,
+                          labelText: 'Emergency Contact Number',
+                        ),
+                      ),
                     ),
                   ),
                 ),
+
                 SizedBox(height: 25),
 
                 // Sign up button

@@ -6,15 +6,17 @@ class NavDrawer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Drawer(
+      backgroundColor:  Colors.white,
       child: ListView(
         physics: BouncingScrollPhysics(),
         shrinkWrap: true,
         padding: EdgeInsets.zero,
         children: <Widget>[
           DrawerHeader(
-            child: Text(
+             child: Text(
               'Menu',
-              style: TextStyle(color: Colors.greenAccent, fontSize: 25),
+              //style: TextStyle(color: Colors.white, fontSize: 25),
+              style: TextStyle(color: Colors.white, fontSize: 25),
             ),
             decoration: BoxDecoration(
                 color: Colors.blueAccent,

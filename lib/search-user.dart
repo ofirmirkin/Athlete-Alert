@@ -43,6 +43,7 @@ class _SearchFriendsPageState extends State<SearchFriendsPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        backgroundColor: Color.fromRGBO(47, 36, 255, 1),
         title: Text('Search Friends'),
       ),
       body: Column(
