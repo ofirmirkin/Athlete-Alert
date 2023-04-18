@@ -67,6 +67,7 @@ class WatchMapState extends State<WatchMap> {
   int userDurarion = 0;
 
   void startTimer(int duration) async {
+    String phoneNum = await readPhoneNum(user.uid);
     timerRunning = true;
     if (duration > 0) {
       setState(() {
@@ -79,8 +80,9 @@ class WatchMapState extends State<WatchMap> {
           () {
             if (_remainingSeconds < 1) {
               timer.cancel();
+
               SMS sms = SMS();
-              sms.sendSMS(context);
+              sms.sendSMS_watch(context, phoneNum);
             } else {
               _remainingSeconds = _remainingSeconds - 1;
             }

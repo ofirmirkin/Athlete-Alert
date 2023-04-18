@@ -91,7 +91,7 @@ class _Page1State extends State<Page1> {
               timer.cancel();
 
               SMS sms = SMS();
-              sms.sendSMS(context);
+              sms.sendSMS_phone(context);
             } else {
               _remainingSeconds = _remainingSeconds - 1;
             }
