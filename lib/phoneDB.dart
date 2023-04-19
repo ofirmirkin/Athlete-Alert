@@ -49,28 +49,42 @@ class _EnterPhoneNumState extends State<EnterPhoneNum> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Enter your emergency phone number'),
+        backgroundColor: const Color.fromRGBO(47, 36, 255, 1),
+        title: const Text('Emergency Contact Information'),
+        centerTitle: true,
       ),
-      body: Column(
-        children: [
-          TextField(
-            keyboardType: TextInputType.number,
-            decoration: InputDecoration(
-              hintText: 'Enter phone number',
+      body: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            SizedBox(
+              width: 250,
+              child: TextField(
+                keyboardType: TextInputType.phone,
+                decoration: const InputDecoration(
+                  hintText: 'Enter phone number',
+                ),
+                onChanged: (value) {
+                  _storePhoneNumber(value);
+                },
+              ),
             ),
-            onChanged: (value) {
-              _storePhoneNumber(value);
-            },
-          ),
-          SizedBox(height: 16),
-          ElevatedButton(
-            onPressed: () {
-              print("---------------- $phoneNumber");
-              sendPhoneNum(phoneNumber);
-            },
-            child: Text('Store Phone Number'),
-          ),
-        ],
+            const SizedBox(height: 16),
+            ElevatedButton(
+              onPressed: () {
+                print("---------------- $phoneNumber");
+                sendPhoneNum(phoneNumber);
+                Navigator.pop(context);
+                Navigator.pop(context);
+              },
+              style: ElevatedButton.styleFrom(
+                backgroundColor:
+                    Color.fromRGBO(47, 36, 255, 1), // Background color
+              ),
+              child: const Text('Save Emergency Contact'),
+            ),
+          ],
+        ),
       ),
     );
   }

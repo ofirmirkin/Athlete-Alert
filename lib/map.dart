@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:math';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_google_places/flutter_google_places.dart';
@@ -34,7 +35,8 @@ class MapSample extends StatefulWidget {
   State<MapSample> createState() => MapSampleState();
 }
 
-const kGoogleApiKey = 'AIzaSyCqz6Y9rQo9PnOV33HOpInCSm-2K1ImYLs';  // Api key for use in map
+const kGoogleApiKey =
+    'AIzaSyCqz6Y9rQo9PnOV33HOpInCSm-2K1ImYLs'; // Api key for use in map
 final homeScaffoldKey = GlobalKey<ScaffoldState>();
 
 class MapSampleState extends State<MapSample> {
@@ -125,13 +127,15 @@ class MapSampleState extends State<MapSample> {
                                 GestureDetector(
                                   child: Text('Kitesurfing'),
                                   onTap: () {
-                                    Navigator.of(context).pop('kitesurfing.png');
+                                    Navigator.of(context)
+                                        .pop('kitesurfing.png');
                                   },
                                 ),
                                 GestureDetector(
                                   child: Text('Snowboarding'),
                                   onTap: () {
-                                    Navigator.of(context).pop('snowboarding.png');
+                                    Navigator.of(context)
+                                        .pop('snowboarding.png');
                                   },
                                 ),
                                 GestureDetector(
@@ -152,7 +156,7 @@ class MapSampleState extends State<MapSample> {
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(10),
                           ),
-                          backgroundColor: Colors.cyan,
+                          backgroundColor: Color.fromRGBO(47, 36, 255, 1),
                           titleTextStyle: TextStyle(
                             color: Colors.white,
                             fontWeight: FontWeight.bold,
@@ -170,17 +174,19 @@ class MapSampleState extends State<MapSample> {
                           markerManager.addCostumeMarker(
                             point,
                             "marker${markerManager.counter}",
-                            _navigateToNextScreen,
+                            _pinOption,
                             context,
                             value,
                           );
                         });
-                        _sendData(point, 'marker${markerManager.counter}', value);
+                        _sendData(
+                            point, 'marker${markerManager.counter}', value);
                       }
                     });
                   },
                 ),
               ),
+              /* BACKEND BUTTONS FOR HARD RESETS
               Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [
                 IconButton(
                     onPressed: (() {
@@ -198,23 +204,97 @@ class MapSampleState extends State<MapSample> {
                 //     },
                 //     icon: const Icon(Icons.arrow_downward))
               ]),
+              */
             ],
           ),
           // Elevated button for searching location
           Positioned(
-            top: 5,     // Postion of button
+            top: 5, // Postion of button
             left: 10,
             child: ElevatedButton(
-              onPressed: searchLocationHandler,   // Call function for searching location when pressed
+              onPressed:
+                  searchLocationHandler, // Call function for searching location when pressed
               style: ElevatedButton.styleFrom(
                 backgroundColor: Color.fromRGBO(47, 36, 255, 1),
               ),
-              child: const Icon(Icons.search),    // 'Search' Icon
+              child: const Icon(Icons.search), // 'Search' Icon
             ),
           )
         ],
       ),
     );
+  }
+
+  Future<void> _pinOption(BuildContext context, String markerId) async {
+    await showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text(
+            'Marker Options',
+            textAlign: TextAlign.center,
+            style: TextStyle(
+              fontSize: 20,
+              fontWeight: FontWeight.bold,
+              color: Colors.white,
+            ),
+          ),
+          content: SingleChildScrollView(
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                TextButton.icon(
+                  icon: Icon(Icons.access_time, color: Colors.white),
+                  label: Text(
+                    'Set Timer Now',
+                    style: TextStyle(color: Colors.white),
+                  ),
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => Page1()),
+                    );
+                  },
+                ),
+                TextButton.icon(
+                  icon: Icon(Icons.calendar_today, color: Colors.white),
+                  label: Text(
+                    'Set Future Time',
+                    style: TextStyle(color: Colors.white),
+                  ),
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => TimerPage()),
+                    );
+                  },
+                ),
+                SizedBox(height: 10),
+                TextButton.icon(
+                  icon: Icon(Icons.delete, color: Colors.white),
+                  label: Text(
+                    'Delete Marker',
+                    style: TextStyle(color: Colors.white),
+                  ),
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                    _deleteMarker(markerId);
+                  },
+                ),
+              ],
+            ),
+          ),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(10),
+          ),
+          backgroundColor: Color.fromRGBO(47, 36, 255, 1),
+        );
+      },
+    );
+  }
+
+  void _setTimer(){
+    ////*********USE THIS TO GET TO TIMER PAGE****************
   }
 
   //For showing autocompletion suggestions
@@ -235,7 +315,8 @@ class MapSampleState extends State<MapSample> {
         ),
       ),
       components: [
-        Component(Component.country, 'IE'), //Currently just shows locations in Ireland ('IE')
+        Component(Component.country,
+            'IE'), //Currently just shows locations in Ireland ('IE')
       ],
     );
 
@@ -266,7 +347,8 @@ class MapSampleState extends State<MapSample> {
 
     PlacesDetailsResponse detail = await places.getDetailsByPlaceId(p.placeId!);
 
-    final lat = detail.result.geometry!.location.lat;   //Get Lat & Lng from location selected
+    final lat = detail
+        .result.geometry!.location.lat; //Get Lat & Lng from location selected
     final lng = detail.result.geometry!.location.lng;
 
     setState(() {});
@@ -293,6 +375,7 @@ class MapSampleState extends State<MapSample> {
     counterRef.child("count").set(ServerValue.increment(1));
   }
 
+  //function to always update pins based on database
   Future<void> _dataOnChange() async {
     DatabaseReference ref = FirebaseDatabase.instance.ref("pins/");
     ref.onChildAdded.listen((event) {
@@ -302,7 +385,7 @@ class MapSampleState extends State<MapSample> {
       Map data = event.snapshot.value as Map;
       setState(() {
         markerManager.addMarkerFromDB(LatLng(data['lat'], data['long']),
-            data['name'], data['image'], _navigateToNextScreen, context);
+            data['name'], data['image'], _pinOption, context);
       });
     });
     ref.onChildRemoved.listen((event) {
@@ -326,7 +409,29 @@ class MapSampleState extends State<MapSample> {
       markerManager.removeAll();
     });
     DatabaseReference counterRef = FirebaseDatabase.instance.ref("counter/");
-    counterRef.child("count").set(0);
+    counterRef.child("count").set(2);
+  }
+
+  Future<void> _deleteMarker(String markerId) async {
+    setState(() {
+      markerManager.removeMarker(markerId);
+    });
+
+    //increment the counter
+    DatabaseReference counterRef = FirebaseDatabase.instance.ref("counter/");
+    counterRef.child("count").set(ServerValue.increment(0)); //needs to be +1, -1 will end up overwriting
+
+    //to remove specific pin from db
+    DatabaseReference pinsRef = FirebaseDatabase.instance.ref("pins");
+    pinsRef
+        .orderByChild("name")
+        .equalTo(markerId)
+        .get()
+        .then((DataSnapshot snapshot) {
+      Map data = snapshot.value as Map;
+      final String key = data.keys.toList()[0];
+      pinsRef.child(key).remove();
+    });
   }
 
 // --------------- Ask for location permission -----------------

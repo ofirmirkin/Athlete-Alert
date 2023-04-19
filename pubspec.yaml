@@ -29,6 +29,8 @@ dependencies:
   flutter_dotenv: ^5.0.2
   location: ^4.2.0
   geocoding: ^2.1.0
+  package_info_plus: ^3.1.0
+  permission_handler: ^10.2.0
 
 
 dev_dependencies:
@@ -51,5 +53,6 @@ flutter:
   uses-material-design: true
   assets:
    - assets/images/logo.png
+   - assets/images/waves2.jpg
    - assets/
    - .env

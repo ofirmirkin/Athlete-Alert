@@ -9,7 +9,6 @@ import 'package:firebase_auth/firebase_auth.dart';
 
 class SOS_confirmation extends StatelessWidget {
   SOS_confirmation({super.key});
-  final user = FirebaseAuth.instance.currentUser!;
 
   @override
   Widget build(BuildContext context) {
@@ -31,8 +30,9 @@ class SOS_confirmation extends StatelessWidget {
               ElevatedButton(
                 onPressed: () async {
                   String phoneNum = await readPhoneNum(user.uid);
+
                   SMS sms = SMS();
-                  sms.sendSMS(phoneNum, context);
+                  sms.sendSMS_watch(context, phoneNum);
 
                   Navigator.pop(context);
                 },
